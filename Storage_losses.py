@@ -4,7 +4,7 @@ Created on Mon Jul 25 08:59:02 2022
 
 @author: Fardin Ghaffari
 """
-#Storage losses
+"Storage losses"
 
 import math
 import numpy as np
@@ -15,7 +15,7 @@ from scipy.optimize import curve_fit
 import csv
 from scipy import integrate
 
-#CONSTANTS 
+"=================CONSTANTS=================="
 
 
 SOLAR_INPUT                             = 1361              #[W/m^2]
@@ -29,8 +29,7 @@ MOLAR_MASS_H2                           = 2                 #[g/mole]
 MOLAR_MASS_O2                           = 32                #[g/mole]
 
 
-
-#Variables
+"=================Variables=================="
 
 LOX_tank = {"steel_wall" : { #steel tank wall
                 "inner_radius" : 2,#[m]

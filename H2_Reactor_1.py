@@ -22,9 +22,8 @@ from scipy.optimize import fsolve
 from scipy.optimize import curve_fit
 import csv
 from scipy import integrate
-
-
-
+import beneficiation_placeholder
+from beneficiation_placeholder import *
 
 
 
@@ -72,7 +71,7 @@ energy_to_heat_regolith_batch = 20 #[kWh]
 fill_level = 0.75   
 oxygen_production_rate = 274 #[kg/day] (100 t/year)
 total_batch_reaction_time = 5.5 #[h]
-ilmenite_percentage = 0.9 #how much ilmenite is in the regolith
+ilmenite_percentage = post_benef_ilmenite_grade #how much ilmenite is in the regolith
 
 #Reactor Heat-up variables
 reactor_heat_up_time = 18000 #[s]
@@ -237,14 +236,14 @@ def energy_to_heat_regolith_batch_calculation(mass_regolith_batch):
     ydata = Cp_data[:,1]
     
     #plot the data
-    plt.figure(1,dpi=120)
+    """plt.figure(1,dpi=120)
     plt.title("Cp(T) of lunar regolith")
     plt.xlabel("Temperature [K]")
     plt.ylabel(Cp_rawdata[0][1])
     #plt.xlim(0,3)
     #plt.ylim(0,2)
     #plt.yscale("log")
-    plt.plot(xdata,ydata,label="Experimental data")
+    plt.plot(xdata,ydata,label="Experimental data")"""
     
     
     #Define fitting function
@@ -257,8 +256,8 @@ def energy_to_heat_regolith_batch_calculation(mass_regolith_batch):
     
     #Evaluate and plot function with the optimal parameters
     funcdata = func(xdata,popt[0],popt[1],popt[2],popt[3],popt[4],popt[5])
-    plt.plot(xdata,funcdata,label="Model")
-    plt.legend()
+    """plt.plot(xdata,funcdata,label="Model")
+    plt.legend()"""
     
     
     
@@ -339,15 +338,15 @@ water_out_moles_batch, oxygen_out_moles_batch, oxygen_out_kg_batch, total_energy
 #print("total_energy_used_by_reactor =",total_energy_used_by_reactor)
 #print("total_energy_used_by_reactor_per_kg_regolith =",total_energy_used_by_reactor_per_kg_regolith)
 #print("oxygen_out_kg_batch =", oxygen_out_kg_batch)
-#print("total_energy_used_by_reactor_per_kg_O2 =", total_energy_used_by_reactor_per_kg_O2)
-
+print("total_energy_used_by_reactor_per_kg_O2 =", total_energy_used_by_reactor_per_kg_O2)
+"""
 energy_comparison = plt.figure()
 ax = energy_comparison.add_axes([0,0,2,2])
 energy_sinks = ["energy to heat H2", "energy to heat insulation", "energy endothermic reaction", "heat lost over insulation", "energy to heat up regolith"]
 energies = [energy_to_heat_hydrogen, total_energy_to_heat_insulation, energy_endothermic_ilmenite_H2_reaction, Q_total_lost, energy_to_heat_regolith_batch]
 ax.bar(energy_sinks, energies)
 ax.set_ylabel('kWh')
-plt.show
+plt.show"""
 
 #What is missing:
 #- reactor efficiency for in the shadow
