@@ -48,7 +48,7 @@ HEAT_CAPACITY_HYDROGEN                  = 14500             #[J/(kg*K)] Assumed 
 MOLAR_MASS_H2                           = 2                 #[g/mole]
 MOLAR_MASS_ILMENITE                     = 151.71            #[g/mole]
 MOLAR_MASS_O2                           = 32                #[g/mole]
-DELTA_H_REACTION_ILMENITE_HYDROGEN      = 0.0125            #[kWh/mole]
+DELTA_H_REACTION_ILMENITE_HYDROGEN      = 0.003            #[kWh/mole]
 HEAT_CAPACITY_CFI                       = 1130              #[J/(kg*K)] Assumed to be constant (conservative assumption)
 HEAT_CAPACITY_HTMLI                     = 586               #[J/(kg*K)] Assumed to be constant (conservative assumption)
 
@@ -227,29 +227,47 @@ def energy_to_heat_regolith_batch_calculation(mass_regolith_batch):
     #Energy to heat regolith batch
     
     
-        #Import Cp(T) data of lunar regolith
-        
-        
+    #Import Cp(T) data of lunar regolith
     with open("Cp_Data_Lunar_Regolith.csv", "r") as i:
         #save data into list
         Cp_rawdata = list(csv.reader(i,delimiter = ";"))
+
+    #Import Cp(T) data of ilmenite
+    with open("Cp_Data_Ilmenite.csv", "r") as i:
+        #save data into list
+        Cp_ilmenite_rawdata = list(csv.reader(i,delimiter = ";"))
     
-    #save data into np.array
+    #save cp(T) of lunar regolith into np.array
     Cp_data = np.array(Cp_rawdata[1:],dtype=float)
     xdata = Cp_data[:,0]
     ydata = Cp_data[:,1]
     
+    #save cp(T) of ilmenite into np.array
+    Cp_data_ilmenite = np.array(Cp_ilmenite_rawdata[1:],dtype=float)
+    xdata_ilmenite = Cp_data_ilmenite[:,0]
+    ydata_ilmenite = Cp_data_ilmenite[:,2]
+
     #plot the data
-    """plt.figure(1,dpi=120)
+    plt.figure(1,dpi=120)
     plt.title("Cp(T) of lunar regolith")
     plt.xlabel("Temperature [K]")
     plt.ylabel(Cp_rawdata[0][1])
     #plt.xlim(0,3)
     #plt.ylim(0,2)
     #plt.yscale("log")
-    plt.plot(xdata,ydata,label="Experimental data")"""
+    plt.plot(xdata,ydata,label="Experimental data")
     
-    
+    #plot the data
+    plt.figure(2,dpi=120)
+    plt.title("Cp(T) of ilmenite")
+    plt.xlabel("Temperature [K]")
+    plt.ylabel(Cp_ilmenite_rawdata[0][1])
+    #plt.xlim(0,3)
+    #plt.ylim(0,2)
+    #plt.yscale("log")
+    plt.plot(xdata_ilmenite,ydata_ilmenite,label="Experimental data")
+
+
     #Define fitting function
     def func(T,a,b,c,d,e,f):
         return a + b*T + c*T**2 + d*T**3 + e*T**4 + f*T**5
@@ -333,13 +351,13 @@ water_out_moles_batch, oxygen_out_moles_batch, oxygen_out_kg_batch, total_energy
 #print("Q_out_added_heat_up = ",Q_out_added_heat_up)
 #print("Q_lost_during_reaction = ",Q_lost_during_reaction)
 #print("reactor_efficiency =", reactor_efficiency)
-#print("mass_regolith_batch=",mass_regolith_batch)
+print("mass_regolith_batch=",mass_regolith_batch)
 #print("reactor_chamber_radius = ", reactor_chamber_radius)
 #print("reactor_insulation_mass =", reactor_insulation_mass)
 #print("energy_to_heat_hydrogen = ",energy_to_heat_hydrogen)
 #print("T_outer_surface_HTMLI =", T_outer_surface_HTMLI)
 #print("Q_flux_out = ",Q_flux_out)
-#print("total_energy_used_by_reactor =",total_energy_used_by_reactor)
+print("total_energy_used_by_reactor =",total_energy_used_by_reactor)
 #print("total_energy_used_by_reactor_per_kg_regolith =",total_energy_used_by_reactor_per_kg_regolith)
 #print("oxygen_out_kg_batch =", oxygen_out_kg_batch)
 #print("total_energy_used_by_reactor_per_kg_O2 =", total_energy_used_by_reactor_per_kg_O2)
