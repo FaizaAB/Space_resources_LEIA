@@ -24,6 +24,8 @@ import csv
 from scipy import integrate
 import beneficiation_placeholder
 from beneficiation_placeholder import *
+import os
+
 
 
 
@@ -341,7 +343,7 @@ def energy_per_kg_O2(ilmenite_moles_batch, total_energy_used_by_reactor):
 ilmenite_grade_list = []
 rego_heat_list = []
 
-for i in range (1,99):
+for i in range (1,5):
     
     ilmenite_percentage = i/100 #convert from percent to ratio
 
@@ -383,10 +385,11 @@ for i in range (1,99):
     rego_heat_list.append(total_energy_used_by_reactor_per_kg_regolith)
     ilmenite_grade_list.append(i)
     
-
+#cwd = os.getcwd()    
 df = pandas.DataFrame(data={"col1": ilmenite_grade_list, "col2": rego_heat_list})
+#file_path = cwd+"/rego_heat_list.csv"
 df.to_csv("rego_heat_list.csv", sep=',',index=False)
-
+#print(file_path)
 
 'READOUTS and GRAPHS'
 '=================='
