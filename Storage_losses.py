@@ -180,6 +180,7 @@ def lox_tank_geometry_calculation():
     LOX_tank["support_beam"]["mass"] = support_beam_mass
     LOX_tank["liquid_oxygen"]["mass"] = LOX_mass
     
+
 def heat_transfer_coefficient_calculation():
     
     #Calculates the heat heat transfer coefficient between inner tank wall and LOX
