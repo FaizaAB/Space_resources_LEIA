@@ -87,6 +87,20 @@ LOX_tank = {"steel_wall" : { #steel tank wall
 
 
 
+
+zero_boil_off_system = {"cryocooler_efficiency": 0.1,#[-]
+                        "T_cold_reservoir_carnot_cycle": 80,#[-]
+                        "T_hot_reservoir_carnot_cycle": 300,#[-]
+                        "LOX_storage_time": 720,#[hours] We assume 1 month of storage time
+                        "mLOX_produced_in_storage_time": 8220,#[kg] We assume a production rate of 100 t/year = 274 kg/day
+                        "COP_Carnot": 0,#[-]
+                        "COP": 0,#[-]
+                        "Power_consumption" : 0,#[W]
+                        "Energy": 0,#[kWh]
+                        "Energy_per_kg_LOX": 0,#[kWh/kg LOX]
+                        }
+
+
 lunar_surface = {"relevant_radius" : 10,#[m]
                  "relevant_area" : 0,#[m^2]
                  "temperature_in_sunlight" : 400,#[K]
@@ -373,10 +387,11 @@ def heat_flux_into_tank_calculation():
     #RETURNING VALUES TO DICTIONARY
     heat_fluxes["Q_flux_into_tank_sunlight"] = Q_flux_into_tank_sunlight
     heat_fluxes["Q_flux_into_tank_shadow"] = Q_flux_into_tank_shadow
-    
+    print(Q_flux_into_tank_sunlight)
+    print(Q_flux_into_tank_shadow)
 
 
-def boil_offf_rate_calculation():
+def boil_off_rate_calculation():
     
     #VARIABLE INITIALIZATION
     Q_flux_into_tank_sunlight = heat_fluxes["Q_flux_into_tank_sunlight"]
@@ -404,9 +419,38 @@ def boil_offf_rate_calculation():
     LOX_tank["boil_off_rate_%_per_month_shadow"] = boil_off_rate_percent_per_month_shadow
 
     
+def zero_boil_off_system_power_consumption():
 
 
+    #VARIABLE INITIALIZATION
+    cryocooler_efficiency = zero_boil_off_system["cryocooler_efficiency"]
+    T_cold_reservoir_carnot_cycle = zero_boil_off_system["T_cold_reservoir_carnot_cycle"]
+    T_hot_reservoir_carnot_cycle = zero_boil_off_system["T_hot_reservoir_carnot_cycle"]
+    LOX_storage_time = zero_boil_off_system["LOX_storage_time"]
+    mLOX_produced_in_storage_time = zero_boil_off_system["mLOX_produced_in_storage_time"]
+    COP_Carnot = zero_boil_off_system["COP_Carnot"]
+    COP = zero_boil_off_system["COP"]
+    Power_consumption = zero_boil_off_system["Power_consumption"]
+    Energy = zero_boil_off_system["Energy"]
+    Energy_per_kg_LOX = zero_boil_off_system["Energy_per_kg_LOX"]
+    Q_flux_into_tank_sunlight = heat_fluxes["Q_flux_into_tank_sunlight"]
 
+    #CALCULATION
+    COP_Carnot = T_cold_reservoir_carnot_cycle/(T_hot_reservoir_carnot_cycle - T_cold_reservoir_carnot_cycle)
+    COP = cryocooler_efficiency * COP_Carnot
+    Power_consumption = Q_flux_into_tank_sunlight/COP
+    Energy = Power_consumption*LOX_storage_time/1000 #/1000 to convert from Wh to kWh
+    Energy_per_kg_LOX = Energy/mLOX_produced_in_storage_time
+
+    #print("Energy_per_kg_LOX =",Energy_per_kg_LOX)
+
+
+    #RETURNING VALUES TO DICTIONARY
+    zero_boil_off_system["COP_Carnot"] = COP_Carnot
+    zero_boil_off_system["COP"] = COP
+    zero_boil_off_system["Power_consumption"] = Power_consumption
+    zero_boil_off_system["Energy"] = Energy
+    zero_boil_off_system["Energy_per_kg_LOX"] = Energy_per_kg_LOX
 
 
 def __main__():
@@ -417,8 +461,12 @@ def __main__():
     solar_and_lunar_heat_flux_calculation()
     outer_surface_heat_balance()
     heat_flux_into_tank_calculation()
-    boil_offf_rate_calculation()
+    boil_off_rate_calculation()
+    zero_boil_off_system_power_consumption()
     
-    
+    "================READOUTS==============="
+    print("LOX_mass =", LOX_tank["liquid_oxygen"]["mass"])
+
+
 __main__()
 
