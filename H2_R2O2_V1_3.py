@@ -62,10 +62,7 @@ benef_ilmenite_recovery= 0.51
 post_benef_ilmenite_grade = pre_benef_ilmenite_grade*benef_ilmenite_recovery/benef_rego_preserved
 
 
-LOX_boil_off_sun = LOX_tank["boil_off_rate_%_per_month_sunlight"]/100 #/100 to convert from % to ratio
-LOX_boil_off_shade = LOX_tank["boil_off_rate_%_per_month_shadow"]/100 #/100 to convert from % to ratio
-LOX_boil_off = LOX_boil_off_sun
-print("LOX_boil_off=",LOX_boil_off)
+
 '================================== (end parameters)'
 
 
@@ -111,13 +108,12 @@ L_out_dioxy_mols  = L_in_dioxy_mols
 S_in_dioxy_mols = L_out_dioxy_mols
 #print("dioxy mols out of L", L_out_dioxy_mols)
 S_in_dioxy_kg = S_in_dioxy_mols*dioxygen_molar_kg_mass
-
+S_out_dioxy_kg = S_in_dioxy_kg 
 #print("S_in_mols", S_in_dioxy_mols)
 #print("S_in_kg", S_in_dioxy_kg)
 #print("S_in_g", round(S_in_dioxy_kg*1000,1))
-S_out_dioxy_mols = S_in_dioxy_mols*(1-LOX_boil_off)
-S_out_dioxy_kg = S_out_dioxy_mols*dioxygen_molar_kg_mass
-LOX_loss = (S_in_dioxy_kg-S_out_dioxy_kg)
+
+
 
 
 
@@ -138,14 +134,13 @@ T_energy = X_in_regolith * rego_tran
 R_energy = R_in_regolith * rego_heat 
 E_energy = E_in_water_mols * water_elec 
 L_energy = L_in_dioxy_mols * dioxy_liq
-
-
+S_energy = S_out_dioxy_kg * storage_cooling
  
-Energy_chain_name = ["X_energy","T_energy","R_energy","E_energy","L_energy"] 
-Energy_chain = [X_energy,T_energy,R_energy,E_energy,L_energy] 
+Energy_chain_name = ["X_energy","T_energy","R_energy","E_energy","L_energy","S_energy"] 
+Energy_chain = [X_energy,T_energy,R_energy,E_energy,L_energy,S_energy] 
 
 ## (4.3) Total Energy per Batch 
-Total_energy = (X_energy + T_energy +R_energy +E_energy +L_energy)
+Total_energy = (X_energy + T_energy +R_energy +E_energy +L_energy + S_energy)
 
 
 
@@ -176,6 +171,8 @@ T_energy_per_kg_LOX = T_energy/S_out_dioxy_kg
 R_energy_per_kg_LOX = R_energy/S_out_dioxy_kg
 E_energy_per_kg_LOX = E_energy/S_out_dioxy_kg
 L_energy_per_kg_LOX = L_energy/S_out_dioxy_kg
+S_energy_per_kg_LOX = S_energy/S_out_dioxy_kg
+
 Total_energy_per_kg_LOX = Total_energy/S_out_dioxy_kg
 
 
@@ -198,7 +195,7 @@ print("total energy req per batch (kWh): " , round(Total_energy,2))
 print("mols o2 produced by Electro: " ,round(S_in_dioxy_mols,2)) 
 print("mass o2 after electro g: " ,round(S_in_dioxy_kg*1000,2))
 #print("Energy per mol dioxy (kWh/mol): " , round(Total_energy/S_out_dioxy_mols,2))
-print("loss of LOX in storage g: ",round(LOX_loss*1000,2))
+
 
 print("Stored LOX final g: ",round(S_out_dioxy_kg*1000,2))
 print("Energy per kg dioxy (kWh/kg): " , round(Total_energy/S_out_dioxy_kg,0))
@@ -220,8 +217,8 @@ print("R_energy:", round(R_energy,3))
 
 #This way to plot things shows in visual studio code
 total_energy_comparison = plt.figure(1)
-energy_consumers = ["X","T","R","E","L","total"]
-energy = [X_energy_per_kg_LOX,T_energy_per_kg_LOX,R_energy_per_kg_LOX,E_energy_per_kg_LOX,L_energy_per_kg_LOX,Total_energy_per_kg_LOX]
+energy_consumers = ["X","T","R","E","L","S"]
+energy = [X_energy_per_kg_LOX,T_energy_per_kg_LOX,R_energy_per_kg_LOX,E_energy_per_kg_LOX,L_energy_per_kg_LOX,S_energy_per_kg_LOX]
 plt.bar(energy_consumers, energy)
 plt.title('Energy comparison between different process steps')
 plt.xlabel('Process steps')
@@ -272,7 +269,7 @@ def energy_as_func_of_ilmenite():
     R_energy_list = []
     E_energy_list = []
     L_energy_list = []
-
+    S_energy_list = []
 
     for i in range (1,max_pre_benef_ilmenite_grade):
         
@@ -307,9 +304,8 @@ def energy_as_func_of_ilmenite():
         L_out_dioxy_mols  = L_in_dioxy_mols 
         S_in_dioxy_mols = L_out_dioxy_mols
         S_in_dioxy_kg = S_in_dioxy_mols*dioxygen_molar_kg_mass
-        S_out_dioxy_mols = L_out_dioxy_mols*(1-LOX_boil_off)
-        S_out_dioxy_kg = S_out_dioxy_mols*dioxygen_molar_kg_mass
-        LOX_loss = (L_out_dioxy_mols-S_out_dioxy_mols)/dioxygen_molar_kg_mass
+        S_out_dioxy_kg = S_in_dioxy_kg
+        
         
         # (4) Energy Accounting
         
@@ -319,14 +315,16 @@ def energy_as_func_of_ilmenite():
         R_energy=0
         E_energy=0
         L_energy=0
-        
+        S_energy=0
+
         ## (4.2) calculate Energy per step
         X_energy = X_in_regolith * rego_exca
         T_energy = X_in_regolith * rego_tran 
         R_energy = R_in_regolith * rego_heat 
         E_energy = E_in_water_mols * water_elec 
         L_energy = L_in_dioxy_mols * dioxy_liq
-        Total_energy = (X_energy + T_energy +R_energy +E_energy +L_energy)
+        S_energy = S_out_dioxy_kg * storage_cooling
+        Total_energy = (X_energy + T_energy +R_energy +E_energy +L_energy +S_energy)
         
         
         #report result
@@ -341,7 +339,7 @@ def energy_as_func_of_ilmenite():
         R_energy_list.append(R_energy/S_out_dioxy_kg)
         E_energy_list.append(E_energy/S_out_dioxy_kg)
         L_energy_list.append(L_energy/S_out_dioxy_kg)
-
+        S_energy_list.append(S_energy/S_out_dioxy_kg)
         
 
     #Convert to numpy array to use in stacked bar figure
@@ -350,7 +348,7 @@ def energy_as_func_of_ilmenite():
     R_energy_list = np.array(R_energy_list) 
     E_energy_list = np.array(E_energy_list) 
     L_energy_list = np.array(L_energy_list) 
-
+    S_energy_list = np.array(S_energy_list) 
         
     
 
@@ -373,6 +371,7 @@ def energy_as_func_of_ilmenite():
     plt.bar(ilmenite_grade_list, R_energy_list, bottom=T_energy_list+X_energy_list, color='red', label='R_energy')
     plt.bar(ilmenite_grade_list, E_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list, color='green', label='E_energy')
     plt.bar(ilmenite_grade_list, L_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list+E_energy_list, color='blue', label='L_energy')
+    plt.bar(ilmenite_grade_list, S_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list+E_energy_list+L_energy_list, color='orange', label='S_energy')
     plt.title('Energy consumption of the different processes depending on ilmenite concentration')
     plt.xlabel('ilmenite %')
     plt.ylabel('kWh/kg LOX')
