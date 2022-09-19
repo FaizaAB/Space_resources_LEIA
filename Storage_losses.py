@@ -32,7 +32,7 @@ MOLAR_MASS_O2                           = 32                #[g/mole]
 "=================Variables=================="
 
 LOX_tank = {"steel_wall" : { #steel tank wall
-                "inner_radius" : 1,#[m]
+                "inner_radius" : 1.18,#[m]
                 "thickness" :  0.004,#[m]
                 "outer_radius" : 0,#[m]
                 "mass" : 0,#[kg]
@@ -90,7 +90,7 @@ LOX_tank = {"steel_wall" : { #steel tank wall
 
 zero_boil_off_system = {"cryocooler_efficiency": 0.1,#[-]
                         "T_cold_reservoir_carnot_cycle": 80,#[-]
-                        "T_hot_reservoir_carnot_cycle": 300,#[-]
+                        "T_hot_reservoir_carnot_cycle": 233,#[-] Based on ISS radiators
                         "LOX_storage_time": 720,#[hours] We assume 1 month of storage time
                         "mLOX_produced_in_storage_time": 8220,#[kg] We assume a production rate of 100 t/year = 274 kg/day
                         "COP_Carnot": 0,#[-]
@@ -174,6 +174,7 @@ def lox_tank_geometry_calculation():
     volume = 4/3 * math.pi * steel_wall_inner_radius**3
     LOX_mass = volume * LOX_DENSITY
     
+
     #support beam geometry calculation
     support_beam_radius = steel_wall_inner_radius/10
     support_beam_cross_section_area = math.pi * support_beam_radius**2
@@ -387,8 +388,7 @@ def heat_flux_into_tank_calculation():
     #RETURNING VALUES TO DICTIONARY
     heat_fluxes["Q_flux_into_tank_sunlight"] = Q_flux_into_tank_sunlight
     heat_fluxes["Q_flux_into_tank_shadow"] = Q_flux_into_tank_shadow
-    print(Q_flux_into_tank_sunlight)
-    print(Q_flux_into_tank_shadow)
+    
 
 
 def boil_off_rate_calculation():
@@ -434,11 +434,12 @@ def zero_boil_off_system_power_consumption():
     Energy = zero_boil_off_system["Energy"]
     Energy_per_kg_LOX = zero_boil_off_system["Energy_per_kg_LOX"]
     Q_flux_into_tank_sunlight = heat_fluxes["Q_flux_into_tank_sunlight"]
+    Q_flux_into_tank_shadow = heat_fluxes["Q_flux_into_tank_shadow"]
 
     #CALCULATION
     COP_Carnot = T_cold_reservoir_carnot_cycle/(T_hot_reservoir_carnot_cycle - T_cold_reservoir_carnot_cycle)
     COP = cryocooler_efficiency * COP_Carnot
-    Power_consumption = Q_flux_into_tank_sunlight/COP
+    Power_consumption = 0.5*(Q_flux_into_tank_sunlight + Q_flux_into_tank_shadow)/COP #assuming the tank is in sunlight and shadow for half the time each
     Energy = Power_consumption*LOX_storage_time/1000 #/1000 to convert from Wh to kWh
     Energy_per_kg_LOX = Energy/mLOX_produced_in_storage_time
 
@@ -465,7 +466,15 @@ def __main__():
     zero_boil_off_system_power_consumption()
     
     "================READOUTS==============="
-    print("LOX_mass =", LOX_tank["liquid_oxygen"]["mass"])
+    #print("LOX_mass =", LOX_tank["liquid_oxygen"]["mass"])
+    #print("mLOX_produced_in_storage_time = ", zero_boil_off_system["mLOX_produced_in_storage_time"])
+    #print("Q_flux_into_tank_sunlight =", heat_fluxes["Q_flux_into_tank_sunlight"])
+    #print("Q_flux_into_tank_shadow =", heat_fluxes["Q_flux_into_tank_shadow"])
+    #print("Power_consumption =", zero_boil_off_system["Power_consumption"])
+    #print("Energy =", zero_boil_off_system["Energy"])
+    #print("Energy_per_kg_LOX =", zero_boil_off_system["Energy_per_kg_LOX"])
+
+
 
 
 __main__()
