@@ -8,7 +8,7 @@ Created on Thu Aug 11 10:08:38 2022
 #This module calculates the energy that is needed to electrolyse 1 mol of water
 
 #VARIABLES
-energy_content_H2 = 33.3 #[kWh/kg]
+energy_content_H2 = 39.7 #[kWh/kg]
 molar_weight_H2 = 0.002 #[kg/mol]
 system_efficiency = 0.6 #[-] (from HyLYZER datasheet)
 efficiency_reduction = 0.11 #[-] (from Beth Lomax paper)
