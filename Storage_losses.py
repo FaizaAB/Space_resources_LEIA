@@ -103,8 +103,8 @@ zero_boil_off_system = {"cryocooler_efficiency": 0.1,#[-]
 
 lunar_surface = {"relevant_radius" : 10,#[m]
                  "relevant_area" : 0,#[m^2]
-                 "temperature_in_sunlight" : 400,#[K]
-                 "temperature_in_shadow" : 140,#[K]
+                 "temperature_in_sunlight" : 372,#[K]
+                 "temperature_in_shadow" : 92,#[K]
                  "EMISSIVITY" : 0.95,#[-]
                  "REFLECTIVITY" : 0.15,#[-]
                  "view_factor" : {
@@ -472,7 +472,7 @@ def __main__():
     #print("Q_flux_into_tank_shadow =", heat_fluxes["Q_flux_into_tank_shadow"])
     #print("Power_consumption =", zero_boil_off_system["Power_consumption"])
     #print("Energy =", zero_boil_off_system["Energy"])
-    #print("Energy_per_kg_LOX =", zero_boil_off_system["Energy_per_kg_LOX"])
+    print("Energy_per_kg_LOX =", zero_boil_off_system["Energy_per_kg_LOX"])
 
 
 
