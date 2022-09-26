@@ -68,17 +68,18 @@ reactor_height_above_surface = 1 #[m]
 relevant_lunar_surface_radius = 10 #[m]
 relevant_lunar_surface_area = math.pi * relevant_lunar_surface_radius**2 #[m^2]
 T_inner_wall_CFI = 1173 #[K]
-batch_reaction_time = 1800 #[s]
-energy_to_heat_regolith_batch = 20 #[kWh]
-fill_level = 0.1   
+batch_reaction_time = 9000 #[s]
+energy_to_heat_regolith_batch = 0 #[kWh]
+fill_level = 0.7   
 oxygen_production_rate = 274 #[kg/day] (100 t/year)
-total_batch_reaction_time = 5.5 #[h]
+total_batch_reaction_time = 7.5 #[h]
 
 
 #ilmenite_percentage = post_benef_ilmenite_grade #how much ilmenite is in the regolith
 
 ilmenite_percentage = 0.5  ## DL added this as workaround for glitch on 18/8/2022
 ilmenite_percentage_for_reactor_sizing = 0.5
+ilmenite_conversion_ratio = 0.5
 #Reactor Heat-up variables
 reactor_heat_up_time = 18000 #[s]
 T_reduction_regolith_batch = 1173 #[K] Temperature of regolith during reduction
@@ -94,7 +95,7 @@ def reactor_geometry_calculation():
     
     #Calculation of reactor and insulation size, surface area of of reactor and mass of insulation
     
-    reactor_chamber_radius = (3 * oxygen_production_rate * total_batch_reaction_time/(4 * math.pi * fill_level * REGOLITH_DENSITY * 24 * ilmenite_percentage_for_reactor_sizing * 0.5 * MOLAR_MASS_O2/MOLAR_MASS_ILMENITE))**(1/3)
+    reactor_chamber_radius = (3 * oxygen_production_rate * total_batch_reaction_time/(4 * math.pi * fill_level * REGOLITH_DENSITY * 24 * ilmenite_conversion_ratio * ilmenite_percentage_for_reactor_sizing * 0.5 * MOLAR_MASS_O2/MOLAR_MASS_ILMENITE))**(1/3) #factor 0.5 is because for every mol of ilmenite, 0.5 mol O2 are created
     #print("reactor_chamber_radius =", reactor_chamber_radius)
     inner_radius_CFI = reactor_chamber_radius #[m]
     outer_radius_CFI = inner_radius_CFI + CFI_thickness #[m]
