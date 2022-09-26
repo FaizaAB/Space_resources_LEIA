@@ -99,7 +99,7 @@ B_out_regolith = benef1.B_out_regolith
 R_in_regolith = B_out_regolith  ## all figures here are kg
 
 B_out_ilmenite_mols = B_out_ilmenite/ilmenite_molar_kg_mass
-R_out_water_mols = B_out_ilmenite_mols          ## Later must substract unreacted ilmenite
+R_out_water_mols = B_out_ilmenite_mols*0.5   # 50 % ilmenite reacts, for 2.5 h reaction time. Might have to model the dependence
 
 E_in_water_mols = R_out_water_mols 
 E_out_dioxy_mols = E_in_water_mols*1/2
@@ -297,7 +297,7 @@ def energy_as_func_of_ilmenite():
 
 
         B_out_ilmenite_mols = B_out_ilmenite/ilmenite_molar_kg_mass
-        R_out_water_mols = B_out_ilmenite_mols          ## Later must substract unreacted ilmenite
+        R_out_water_mols = B_out_ilmenite_mols*0.5          # 50 % ilmenite reacts, for 2.5 h reaction time. Might have to model the dependence
         E_in_water_mols = R_out_water_mols 
         E_out_dioxy_mols = E_in_water_mols*1/2
         L_in_dioxy_mols = E_out_dioxy_mols

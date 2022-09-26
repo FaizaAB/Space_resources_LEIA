@@ -96,7 +96,6 @@ def reactor_geometry_calculation():
     #Calculation of reactor and insulation size, surface area of of reactor and mass of insulation
     
     reactor_chamber_radius = (3 * oxygen_production_rate * total_batch_reaction_time/(4 * math.pi * fill_level * REGOLITH_DENSITY * 24 * ilmenite_conversion_ratio * ilmenite_percentage_for_reactor_sizing * 0.5 * MOLAR_MASS_O2/MOLAR_MASS_ILMENITE))**(1/3) #factor 0.5 is because for every mol of ilmenite, 0.5 mol O2 are created
-    #print("reactor_chamber_radius =", reactor_chamber_radius)
     inner_radius_CFI = reactor_chamber_radius #[m]
     outer_radius_CFI = inner_radius_CFI + CFI_thickness #[m]
     inner_radius_HTMLI = outer_radius_CFI #[m]
@@ -131,8 +130,19 @@ def energy_to_heat_hydrogen_func(ilmenite_mass_batch):
     #Hydrogen heat-up calculation
     #m_H2_per_batch = 5 * ilmenite_mass_batch * MOLAR_MASS_H2/MOLAR_MASS_ILMENITE #Factor of 5 because hydrogen reactor does not run stochiometrically, also to account for hydrogen losses or unwanted reactions
     m_H2_per_batch = 5 * mass_regolith_batch * 0.1 * MOLAR_MASS_H2/MOLAR_MASS_ILMENITE #Mass of hydrogen decoupled from ilmenite %, calculated for 10% ilmenite and 5 times more hydrogen than stochiometrically needed
-    energy_to_heat_hydrogen = HEAT_CAPACITY_HYDROGEN * (400) * m_H2_per_batch /(3.6e6) # [kWh]
+    #energy_to_heat_hydrogen = HEAT_CAPACITY_HYDROGEN * (400) * m_H2_per_batch /(3.6e6) # [kWh]
     #print("energy_to_heat_hydrogen =",energy_to_heat_hydrogen)
+
+    #New hydrogen heat-up calculation
+    mass_flow_hydrogen = 0.012 #[kg/s]
+    T_post_heater = 1173 #[K]
+    T_pre_heater = 980 #[K]
+    power_to_heat_hydrogen = HEAT_CAPACITY_HYDROGEN*mass_flow_hydrogen*(T_post_heater-T_pre_heater)/1000 #/1000 to account for g/mol
+    energy_to_heat_hydrogen = power_to_heat_hydrogen*batch_reaction_time/1000 #/1000 to convert to kWh
+    print("power_to_heat_hydrogen =",power_to_heat_hydrogen)
+    print("energy_to_heat_hydrogen =",energy_to_heat_hydrogen)
+
+
     return m_H2_per_batch, energy_to_heat_hydrogen
 
 
