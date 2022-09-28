@@ -293,6 +293,7 @@ def energy_as_func_of_ilmenite():
         B_out_regolith = B_out_ilmenite + B_out_gangue
         R_in_regolith = B_out_regolith
         
+        post_benef_ilmenite_grade = i*benef1.enrichment_factor
         
 
 
@@ -320,7 +321,7 @@ def energy_as_func_of_ilmenite():
         ## (4.2) calculate Energy per step
         X_energy = X_in_regolith * rego_exca
         T_energy = X_in_regolith * rego_tran 
-        R_energy = R_in_regolith * rego_heat 
+        R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade-1]
         E_energy = E_in_water_mols * water_elec 
         L_energy = L_in_dioxy_mols * dioxy_liq
         S_energy = S_out_dioxy_kg * storage_cooling
