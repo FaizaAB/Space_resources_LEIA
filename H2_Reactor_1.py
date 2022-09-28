@@ -176,10 +176,9 @@ def energy_to_heat_hydrogen_func(ilmenite_mass_batch):
     #print("mass_flow_hydrogen =",mass_flow_hydrogen)
     T_post_heater = 1173 #[K]
     T_pre_heater = 980 #[K]
-    power_to_heat_hydrogen = HEAT_CAPACITY_HYDROGEN*mass_flow_hydrogen*(T_post_heater-T_pre_heater)/1000 #/1000 to account for g/mol
-    energy_to_heat_hydrogen = power_to_heat_hydrogen*batch_reaction_time/1000 #/1000 to convert to kWh
+    power_to_heat_hydrogen = HEAT_CAPACITY_HYDROGEN*mass_flow_hydrogen*(T_post_heater-T_pre_heater)/1000 #[kW] /1000 to convert from W to kW
+    energy_to_heat_hydrogen = power_to_heat_hydrogen*batch_reaction_time_in_hours #/1000 to convert to kWh
     #print("power_to_heat_hydrogen =",power_to_heat_hydrogen)
-    #print("energy_to_heat_hydrogen =",energy_to_heat_hydrogen)
 
 
     return energy_to_heat_hydrogen
@@ -382,8 +381,16 @@ def energy_per_kg_O2(ilmenite_moles_batch, total_energy_used_by_reactor, ilmenit
 
 
 
+def power_requirements(total_energy_to_heat_insulation, energy_to_heat_regolith_batch, Q_out_added_heat_up,energy_to_heat_hydrogen,Q_lost_during_reaction,energy_endothermic_ilmenite_H2_reaction):
+    
+    #Power requirements during heat-up phase
+    power_heat_up_phase = (total_energy_to_heat_insulation+energy_to_heat_regolith_batch+Q_out_added_heat_up)/reactor_heat_up_time_in_hours
+    #print("power_heat_up_phase=",power_heat_up_phase)
 
+    #Power requirements during reaction phase
+    power_reaction_phase = (energy_to_heat_hydrogen+Q_lost_during_reaction+energy_endothermic_ilmenite_H2_reaction)/batch_reaction_time_in_hours
 
+    return power_heat_up_phase, power_reaction_phase
     
 #main part of the module
 
@@ -430,6 +437,9 @@ for i in range (1,99):
     total_energy_used_by_reactor, total_energy_used_by_reactor_per_kg_regolith = total_energy_used_by_reactor_func(total_energy_to_heat_insulation, energy_to_heat_regolith_batch, energy_endothermic_ilmenite_H2_reaction, Q_total_lost, energy_to_heat_hydrogen, mass_regolith_batch)
 
     water_out_moles_batch, oxygen_out_moles_batch, oxygen_out_kg_batch, total_energy_used_by_reactor_per_kg_O2 = energy_per_kg_O2(ilmenite_moles_batch, total_energy_used_by_reactor, ilmenite_conversion_percentage)
+
+    power_heat_up_phase,power_reaction_phase = power_requirements(total_energy_to_heat_insulation, energy_to_heat_regolith_batch, Q_out_added_heat_up,energy_to_heat_hydrogen,Q_lost_during_reaction,energy_endothermic_ilmenite_H2_reaction)
+
 
 
     #print(ilmenite_percentage)
