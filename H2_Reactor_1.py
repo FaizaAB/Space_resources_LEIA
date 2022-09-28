@@ -39,18 +39,18 @@ VIEW_FACTOR_SUN_REACTOR                 = 0.5               #[-]
 REFLECTIVITY_HTMLI                      = 0.9               #[-]   HTMLI (High-temperature multilayer insulation)
 EMISSIVITY_HTMLI                        = 0.1               #[-]
 ABSORBTIVITY_HTMLI                      = 0.1               #[-]
-λ_HTMLI                                 = 0.01              #[W/(m*K)] Thermal conductivity of HTMLI
+λ_HTMLI                                 = 0.03              #[W/(m*K)] Thermal conductivity of HTMLI
 λ_CFI                                   = 0.1               #[W/(m*K)] Thermal conductivity of CFI (ceramic fibre insulation)
-T_LUNAR_SURFACE_IN_SUNLIGHT             = 400               #[K]
-T_LUNAR_SURFACE_IN_SHADOW               = 140               #[K]
+T_LUNAR_SURFACE_IN_SUNLIGHT             = 372               #[K]
+T_LUNAR_SURFACE_IN_SHADOW               = 92                #[K]
 REGOLITH_DENSITY                        = 1500              #[kg/m^3]
 DENSITY_CFI                             = 2730              #[kg/m^3]
-DENSITY_HTMLI                           = 160               #[kg/m^3]
+DENSITY_HTMLI                           = 72                #[kg/m^3]
 HEAT_CAPACITY_HYDROGEN                  = 14500             #[J/(kg*K)] Assumed to be constant (conservative assumption)
-MOLAR_MASS_H2                           = 2                 #[g/mole]
-MOLAR_MASS_ILMENITE                     = 151.71            #[g/mole]
-MOLAR_MASS_O2                           = 32                #[g/mole]
-DELTA_H_REACTION_ILMENITE_HYDROGEN      = 0.003            #[kWh/mole]
+MOLAR_MASS_H2                           = 2                 #[g/mol]
+MOLAR_MASS_ILMENITE                     = 151.71            #[g/mol]
+MOLAR_MASS_O2                           = 32                #[g/mol]
+DELTA_H_REACTION_ILMENITE_HYDROGEN      = 0.003             #[kWh/mol]
 HEAT_CAPACITY_CFI                       = 1130              #[J/(kg*K)] Assumed to be constant (conservative assumption)
 HEAT_CAPACITY_HTMLI                     = 586               #[J/(kg*K)] Assumed to be constant (conservative assumption)
 
@@ -62,8 +62,8 @@ HEAT_CAPACITY_HTMLI                     = 586               #[J/(kg*K)] Assumed 
 #Variables
 
 
-CFI_thickness = 0.01 #[m] Ceramic insulation thickness
-HTMLI_thickness = 0.01 #[m] HTMLI insulation thickness
+CFI_thickness = 0.05 #[m] Ceramic insulation thickness
+HTMLI_thickness = 0.05 #[m] HTMLI insulation thickness
 reactor_height_above_surface = 1 #[m]
 relevant_lunar_surface_radius = 10 #[m]
 relevant_lunar_surface_area = math.pi * relevant_lunar_surface_radius**2 #[m^2]
@@ -251,7 +251,7 @@ def energy_losses_during_heat_up_calculation(Q_flux_solar, Q_flux_lunar_surface_
 
     #Losses over insulation during heat-up calculation
     T_incoming_regolith_batch = 273 #[K] Temperature of incoming regolith batch
-    T_inner_wall_CFI_heat_up = T_incoming_regolith_batch+100 #[K]+100 because otherwise too optimistic for the way heat-up is calculated
+    T_inner_wall_CFI_heat_up = T_incoming_regolith_batch+500 #[K]+500 because Insulation is assumed to still be hot from last batch
     Q_out_added_heat_up = 0
     t = 0
     while t <= 4:
@@ -269,7 +269,7 @@ def energy_losses_during_heat_up_calculation(Q_flux_solar, Q_flux_lunar_surface_
         
         #The heat flux is added up for every second, which results in the total heat lost during heat up
         Q_out_added_heat_up += Q_flux_out_heat_up * 3600
-        T_inner_wall_CFI_heat_up += 200
+        T_inner_wall_CFI_heat_up += 100
       
         t += 1
 
@@ -468,12 +468,12 @@ df.to_csv("rego_heat_list.csv", sep=';',index=False)
 #print("total_energy_used_by_reactor_per_kg_O2 =", total_energy_used_by_reactor_per_kg_O2)
 #print("energy_to_heat_hydrogen=",energy_to_heat_hydrogen)
 
-"""energy_comparison = plt.figure()
+energy_comparison = plt.figure()
 energy_sinks = ["energy to heat H2", "energy to heat insulation", "energy endothermic reaction", "heat lost over insulation", "energy to heat up regolith"]
 energies = [energy_to_heat_hydrogen, total_energy_to_heat_insulation, energy_endothermic_ilmenite_H2_reaction, Q_total_lost, energy_to_heat_regolith_batch]
 plt.bar(energy_sinks, energies)
 plt.ylabel('kWh')
-plt.show()"""
+plt.show()
 
 #What is missing:
 #- reactor efficiency for in the shadow
