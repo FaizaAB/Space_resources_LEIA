@@ -69,7 +69,7 @@ relevant_lunar_surface_radius = 10 #[m]
 relevant_lunar_surface_area = math.pi * relevant_lunar_surface_radius**2 #[m^2]
 T_inner_wall_CFI = 1173 #[K]
 energy_to_heat_regolith_batch = 0 #[kWh]
-fill_level = 0.7   
+fill_level = 0.5   
 oxygen_production_rate = 274 #[kg/day] (100 t/year)
 
 
@@ -175,7 +175,7 @@ def energy_to_heat_hydrogen_func(ilmenite_mass_batch):
     #New hydrogen heat-up calculation:
     #print("mass_flow_hydrogen =",mass_flow_hydrogen)
     T_post_heater = 1173 #[K]
-    T_pre_heater = 980 #[K]
+    T_pre_heater = 450 #[K]
     power_to_heat_hydrogen = HEAT_CAPACITY_HYDROGEN*mass_flow_hydrogen*(T_post_heater-T_pre_heater)/1000 #[kW] /1000 to convert from W to kW
     energy_to_heat_hydrogen = power_to_heat_hydrogen*batch_reaction_time_in_hours #/1000 to convert to kWh
     #print("power_to_heat_hydrogen =",power_to_heat_hydrogen)
@@ -385,10 +385,11 @@ def power_requirements(total_energy_to_heat_insulation, energy_to_heat_regolith_
     
     #Power requirements during heat-up phase
     power_heat_up_phase = (total_energy_to_heat_insulation+energy_to_heat_regolith_batch+Q_out_added_heat_up)/reactor_heat_up_time_in_hours
-    #print("power_heat_up_phase=",power_heat_up_phase)
+    print("power_heat_up_phase=",power_heat_up_phase)
 
     #Power requirements during reaction phase
     power_reaction_phase = (energy_to_heat_hydrogen+Q_lost_during_reaction+energy_endothermic_ilmenite_H2_reaction)/batch_reaction_time_in_hours
+    print("power_reaction_phase=",power_reaction_phase)
 
     return power_heat_up_phase, power_reaction_phase
     
@@ -464,7 +465,7 @@ df.to_csv("rego_heat_list.csv", sep=';',index=False)
 #print("Q_total_lost = ",Q_total_lost)
 #print("reactor_efficiency =", reactor_efficiency)
 #print("mass_regolith_batch=",mass_regolith_batch)
-#print("reactor_chamber_radius = ", reactor_chamber_radius)
+print("reactor_chamber_radius = ", reactor_chamber_radius)
 #print("reactor_insulation_mass =", reactor_insulation_mass)
 #print("energy_to_heat_hydrogen = ",energy_to_heat_hydrogen)
 #print("T_outer_surface_HTMLI =", T_outer_surface_HTMLI)

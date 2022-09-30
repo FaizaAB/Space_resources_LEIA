@@ -217,12 +217,12 @@ print("ilmenite_conversion:",round(ilmenite_conversion))
 
 #This way to plot things shows in visual studio code
 total_energy_comparison = plt.figure(1)
-energy_consumers = ["X","T","R","E","L","S"]
+energy_consumers = ["Excavation","Transportation","Hydrogen Reduction Reactor","Electrolysis","Liquefaction","Storage"]
 energy = [X_energy_per_kg_LOX,T_energy_per_kg_LOX,R_energy_per_kg_LOX,E_energy_per_kg_LOX,L_energy_per_kg_LOX,S_energy_per_kg_LOX]
 plt.bar(energy_consumers, energy)
-plt.title('Energy comparison between different process steps')
+#plt.title('Energy comparison between different process steps')
 plt.xlabel('Process steps')
-plt.ylabel('kWh/kg LOX')
+plt.ylabel('Energy consumption [kWh/kg LOX]')
 plt.show()
 
 #Show or hide individual steps energy use
@@ -358,24 +358,24 @@ def energy_as_func_of_ilmenite():
     x = ilmenite_grade_list
     y = energy_as_func_of_ilmenite_list
     plt.plot(x, y, '-ok')
-    plt.title('Energy as a function of ilmenite %')
-    plt.xlabel('ilmenite %')
-    plt.ylabel('kWh/kg LOX')
+    #plt.title('Energy as a function of ilmenite %')
+    plt.xlabel('ilmenite weight %')
+    plt.ylabel('Energy consumption [kWh/kg LOX]')
     plt.show()
     
     #Stacked bar graph: Figure that plots the energy in function of ilmenite head grade,
     #but also distinguishes between different processes
 
     stacked_bar_chart = plt.figure(3)
-    plt.bar(ilmenite_grade_list, X_energy_list, color='grey', label='X_energy')
-    plt.bar(ilmenite_grade_list, T_energy_list, bottom=X_energy_list, color='black', label='T_energy')
-    plt.bar(ilmenite_grade_list, R_energy_list, bottom=T_energy_list+X_energy_list, color='red', label='R_energy')
-    plt.bar(ilmenite_grade_list, E_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list, color='green', label='E_energy')
-    plt.bar(ilmenite_grade_list, L_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list+E_energy_list, color='blue', label='L_energy')
-    plt.bar(ilmenite_grade_list, S_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list+E_energy_list+L_energy_list, color='orange', label='S_energy')
-    plt.title('Energy consumption of the different processes depending on ilmenite concentration')
-    plt.xlabel('ilmenite %')
-    plt.ylabel('kWh/kg LOX')
+    plt.bar(ilmenite_grade_list, X_energy_list, color='grey', label='Excavation')
+    plt.bar(ilmenite_grade_list, T_energy_list, bottom=X_energy_list, color='black', label='Transportation')
+    plt.bar(ilmenite_grade_list, R_energy_list, bottom=T_energy_list+X_energy_list, color='red', label='Hydrogen Reduction Reactor')
+    plt.bar(ilmenite_grade_list, E_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list, color='green', label='Electrolysis')
+    plt.bar(ilmenite_grade_list, L_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list+E_energy_list, color='blue', label='Liquefaction')
+    plt.bar(ilmenite_grade_list, S_energy_list, bottom=T_energy_list+X_energy_list+R_energy_list+E_energy_list+L_energy_list, color='orange', label='Storage')
+    #plt.title('Energy consumption of the different processes depending on ilmenite concentration')
+    plt.xlabel('ilmenite weight %')
+    plt.ylabel('Energy consumption [kWh/kg LOX]')
     plt.legend()
     plt.show()
     
