@@ -301,7 +301,7 @@ def energy_to_heat_regolith_batch_calculation(mass_regolith_batch):
 
     
     #plot the data
-    """heat_capacity_regolith_and_ilmenite = plt.figure(1,dpi=120)
+    '''heat_capacity_regolith_and_ilmenite = plt.figure(1,dpi=120)
     plt.title("Cp(T) of lunar regolith and ilmenite")
     plt.xlabel("Temperature [K]")
     plt.ylabel("Specific heat capacity Cp [J/(kg*K)]")
@@ -311,7 +311,7 @@ def energy_to_heat_regolith_batch_calculation(mass_regolith_batch):
     plt.plot(xdata,ydata,label="Lunar regolith")
     plt.plot(xdata_ilmenite,ydata_ilmenite,label="Ilmenite")
     plt.legend()
-    plt.show()"""
+    plt.show()'''
    
 
 
@@ -334,9 +334,9 @@ def energy_to_heat_regolith_batch_calculation(mass_regolith_batch):
     popt, pcov = curve_fit(func_ilmenite, xdata_ilmenite, ydata_ilmenite)
     #Evaluate and plot function with the optimal parameters
     funcdata_ilmenite = func_ilmenite(xdata_ilmenite,popt[0]+140*1,popt[1],popt[2],popt[3],popt[4],popt[5])
-    #plt.plot(xdata_ilmenite,funcdata_ilmenite,label="Average")
-    #plt.legend()
-    #plt.show()
+    '''plt.plot(xdata_ilmenite,funcdata_ilmenite,label="Average")
+    plt.legend()
+    plt.show()'''
 
 
     #integrate from starting to end temperature to get total heat needed to heat up 1 kg of regolith
