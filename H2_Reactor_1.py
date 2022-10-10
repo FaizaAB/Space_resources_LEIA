@@ -115,9 +115,9 @@ def ilmenite_to_water_conversion():
     popt, pcov = curve_fit(func_ilmenite_conversion, reaction_time, ilmenite_conversion_percentage)
     #Evaluate and plot function with the optimal parameters
     funcdata_ilmenite_conversion = func_ilmenite_conversion(reaction_time,popt[0],popt[1],popt[2],popt[3],popt[4],popt[5])
-
+    
     ilmenite_conversion_percentage = func_ilmenite_conversion(batch_reaction_time_in_hours,popt[0],popt[1],popt[2],popt[3],popt[4],popt[5])
-
+    #print(ilmenite_conversion_percentage)
     #print('ilmenite_conversion_ratio',ilmenite_conversion_percentage)
     #plt.plot(reaction_time,funcdata_ilmenite_conversion,label="ilmenite conversion")
     #plt.legend()
@@ -464,7 +464,7 @@ df.to_csv("rego_heat_list.csv", sep=';',index=False)
 #print("Q_total_lost = ",Q_total_lost)
 #print("reactor_efficiency =", reactor_efficiency)
 #print("mass_regolith_batch=",mass_regolith_batch)
-print("reactor_chamber_radius = ", reactor_chamber_radius)
+#print("reactor_chamber_radius = ", reactor_chamber_radius)
 #print("reactor_insulation_mass =", reactor_insulation_mass)
 #print("energy_to_heat_hydrogen = ",energy_to_heat_hydrogen)
 #print("T_outer_surface_HTMLI =", T_outer_surface_HTMLI)
@@ -478,12 +478,12 @@ print("reactor_chamber_radius = ", reactor_chamber_radius)
 #print("total_energy_used_by_reactor_per_kg_O2 =", total_energy_used_by_reactor_per_kg_O2)
 #print("energy_to_heat_hydrogen=",energy_to_heat_hydrogen)
 
-energy_comparison = plt.figure()
+'''energy_comparison = plt.figure()
 energy_sinks = ["energy to heat H2", "energy to heat insulation", "energy endothermic reaction", "heat lost over insulation", "energy to heat up regolith"]
 energies = [energy_to_heat_hydrogen, total_energy_to_heat_insulation, energy_endothermic_ilmenite_H2_reaction, Q_total_lost, energy_to_heat_regolith_batch]
 plt.bar(energy_sinks, energies)
 plt.ylabel('kWh')
-plt.show()
+plt.show()'''
 
 #What is missing:
 #- reactor efficiency for in the shadow
