@@ -219,14 +219,14 @@ print("ilmenite_conversion:",round(ilmenite_conversion))
 
 
 #This way to plot things shows in visual studio code
-total_energy_comparison = plt.figure(1)
+'''total_energy_comparison = plt.figure(1)
 energy_consumers = ["Excavation","Transportation","Hydrogen Reduction Reactor","Electrolysis","Liquefaction","Storage"]
 energy = [X_energy_per_kg_LOX,T_energy_per_kg_LOX,R_energy_per_kg_LOX,E_energy_per_kg_LOX,L_energy_per_kg_LOX,S_energy_per_kg_LOX]
 plt.bar(energy_consumers, energy)
 #plt.title('Energy comparison between different process steps')
 plt.xlabel('Process steps')
 plt.ylabel('Energy consumption [kWh/kg LOX]')
-plt.show()
+plt.show()'''
 
 #Show or hide individual steps energy use
 
@@ -264,7 +264,7 @@ def energy_as_func_of_ilmenite():
     #lists to include in energy as func of ilmenite graph
     ilmenite_grade_list = []
     energy_as_func_of_ilmenite_list = []
-    max_pre_benef_ilmenite_grade = 32 #[%]
+    max_pre_benef_ilmenite_grade = 16 #[%] 
 
     #lists to include in stacked bar chart graph 
     X_energy_list = []
@@ -274,14 +274,14 @@ def energy_as_func_of_ilmenite():
     L_energy_list = []
     S_energy_list = []
 
-    for i in range (2,max_pre_benef_ilmenite_grade):
+    for i in range (2,max_pre_benef_ilmenite_grade*4):
         
         'Calculations'
         '=================================================='
         
         #increasing variable
         
-        pre_benef_ilmenite_grade_loop = i/200 #convert from percent to ratio
+        pre_benef_ilmenite_grade_loop = i/400 #convert from percent to ratio
         
         
         # (3) Mass flow
@@ -296,7 +296,7 @@ def energy_as_func_of_ilmenite():
         B_out_regolith = B_out_ilmenite + B_out_gangue
         R_in_regolith = B_out_regolith
         
-        post_benef_ilmenite_grade = int(i/2)*benef1.enrichment_factor
+        post_benef_ilmenite_grade = int(i/4)*benef1.enrichment_factor
         
 
 
@@ -334,7 +334,7 @@ def energy_as_func_of_ilmenite():
         #report result
         #print("ilmen: ",round(pre_benef_ilmenite_grade_loop*100) , "%." ,"  Energy-req kWh/kg-LOX: " , round(Total_energy/S_in_dioxy_kg,4))
         
-
+        
         #append results to lists
         ilmenite_grade_list.append(pre_benef_ilmenite_grade_loop*100)
         energy_as_func_of_ilmenite_list.append(Total_energy/S_out_dioxy_kg)
@@ -347,6 +347,8 @@ def energy_as_func_of_ilmenite():
         
 
     #Convert to numpy array to use in stacked bar figure
+    ilmenite_grade_list = np.array(ilmenite_grade_list)
+    energy_as_func_of_ilmenite_list = np.array(energy_as_func_of_ilmenite_list)
     X_energy_list = np.array(X_energy_list) 
     T_energy_list = np.array(T_energy_list) 
     R_energy_list = np.array(R_energy_list) 
@@ -383,7 +385,7 @@ def energy_as_func_of_ilmenite():
     plt.legend()
     plt.show()
     '''
-    return ilmenite_grade_list, energy_list
+    return ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list
     
     
 
@@ -398,16 +400,16 @@ energy = [X_energy_per_kg_LOX,T_energy_per_kg_LOX,R_energy_per_kg_LOX,E_energy_p
 sum_energy = np.sum(energy)
 labels = np.around(energy/sum_energy*100, 1)
 energy_consumers_full = ["Excavation", "Transportation", "Reactor", "Electrolysis", "Liquefaction", "Storage"]
-colors_bars = ["tab:grey", "black", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
+#colors_bars = ["tab:grey", "black", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
 colors_bars = ["black", "grey", viridis(0.2), viridis(0.45),  viridis(0.6), viridis(0.95)] 
 #colors_bars = [pastel[5], pastel[7], pastel[3], pastel[2],  pastel[0], pastel[8]]
 #colors_bars = ['#FEB144', pastel[7], '#FF6663', '#FDFD97',  '#9EC1CF', '#9EE09E']
 #colors_bars = ['black', '#8197a6', '#f1666a', '#00ae9d',  '#009bdb', '#1e3378']
 
 #used lists and variables for the stackplot
-ilmenite_grade_list, energy_list = energy_as_func_of_ilmenite()
+ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list = energy_as_func_of_ilmenite()
 legend_stackplot = [ "Storage",  "Liquefaction", "Electrolysis","Transportation","Excavation","Reactor"]
-colors_stackplot = [  "tab:orange",  "tab:blue", "tab:green", "tab:red","black","tab:grey" ]
+#colors_stackplot = [  "tab:orange",  "tab:blue", "tab:green", "tab:red","black","tab:grey" ]
 colors_stackplot = [  viridis(0.95),  viridis(0.6), viridis(0.45),"grey","black",viridis(0.2)]
 #colors_stackplot = [pastel[8], pastel[0], pastel[2], pastel[3],  pastel[7], pastel[5]]
 #colors_stackplot = ['#9EE09E', '#9EC1CF', '#FDFD97', '#FF6663', pastel[7], '#FEB144']
@@ -461,6 +463,20 @@ plt.savefig('Result_figure.png', dpi=200, bbox_inches='tight')
 plt.show()
 plt.close()
 
+
+
+
+#Define fitting function for energy as function of ilmenite %
+def func(i,a,c):
+    return a/i + c
+#use curve_fit from scipy.optimize to fit the fitting function to the data
+#outcomes are popt (optimal parameters)
+popt, pcov = curve_fit(func, ilmenite_grade_list, energy_as_func_of_ilmenite_list)
+#Evaluate and plot function with the optimal parameters
+#print(popt[0],popt[1])
+funcdata_energy_as_function_of_ilmenite = func(ilmenite_grade_list,popt[0],popt[1])
+#plt.plot(ilmenite_grade_list,funcdata_energy_as_function_of_ilmenite,label="energy as function of ilmenite %")
+#plt.show()
 
 
 print("\n end")
