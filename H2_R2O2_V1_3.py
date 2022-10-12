@@ -42,18 +42,8 @@ rego_heat = total_energy_used_by_reactor_per_kg_regolith # kWh/kg-regolith      
 water_elec = electrolysis_energy_per_mol_H2O  # kWh/mol-water        (theta)
 dioxy_liq = work_per_mol_O2    # kWh/mol-dioxygen     (psi)
 storage_cooling = zero_boil_off_system["Energy_per_kg_LOX"] # kWh/mol-dioxygen
-pv_efficiency = 0.20
 
-#lattitude variable
-User_lattitude = 0
 
-#solar input radiation to PV
-solar_input = 1361 #Watts/m2
-Avg_W_per_month = solar_input * 0.40
-Avg_KW_per_month= Avg_W_per_month/1000
-hours_per_month = 24*30
-
-##add FFC module
 
 # (2) Mass flow conversion parameters
 benef_rego_preserved = 0.5           
@@ -146,36 +136,13 @@ Energy_chain = [X_energy,T_energy,R_energy,E_energy,L_energy,S_energy]
 Total_energy = (X_energy + T_energy +R_energy +E_energy +L_energy + S_energy)
 
 
-
-
-
-#(4.4) Energy Per Month
-
-batches_per_month = production_rate *24*30
-Energy_required_per_month = batches_per_month * Total_energy #change total energy to total_energy_pre_batch
-
-
-
-
-
-Sol_in_kwh_per_month = Avg_KW_per_month* hours_per_month 
-PV_out_kwh_per_m2_month = Sol_in_kwh_per_month*pv_efficiency
-PV_area_m2_required_for_production= Energy_required_per_month /PV_out_kwh_per_m2_month
-
-
-#(4.5) LOX production per month
-total_monthly_LOX_Stored_final_kg = batches_per_month * S_out_dioxy_kg 
-
-
 #(4.6) Energy per kg LOX
-
 X_energy_per_kg_LOX = X_energy/S_out_dioxy_kg
 T_energy_per_kg_LOX = T_energy/S_out_dioxy_kg
 R_energy_per_kg_LOX = R_energy/S_out_dioxy_kg
 E_energy_per_kg_LOX = E_energy/S_out_dioxy_kg
 L_energy_per_kg_LOX = L_energy/S_out_dioxy_kg
 S_energy_per_kg_LOX = S_energy/S_out_dioxy_kg
-
 Total_energy_per_kg_LOX = Total_energy/S_out_dioxy_kg
 
 
@@ -188,20 +155,20 @@ Total_energy_per_kg_LOX = Total_energy/S_out_dioxy_kg
 'READOUTS and GRAPHS'
 '=================='
 
-print("Batch size in Regolith excavated kg: " ,X_in_regolith)
-print("ilmenite %: " ,pre_benef_ilmenite_grade *100)
+#print("Batch size in Regolith excavated kg: " ,X_in_regolith)
+#print("ilmenite %: " ,pre_benef_ilmenite_grade *100)
 #print("electrol input water mols", round(E_in_water_mols ,2))
 #print("electrol input water g", round(E_in_water_mols/0.018 ,2))
 #print("beneficiaiton out ilmenite in kg ", round(B_out_ilmenite,2))
-print("total energy req per batch (kWh): " , round(Total_energy,2))
+#print("total energy req per batch (kWh): " , round(Total_energy,2))
 #print("dioxy yield before storage kg: " , round(S_in_dioxy_kg,2))
-print("mols o2 produced by Electro: " ,round(S_in_dioxy_mols,2)) 
-print("mass o2 after electro g: " ,round(S_in_dioxy_kg*1000,2))
+#print("mols o2 produced by Electro: " ,round(S_in_dioxy_mols,2)) 
+#print("mass o2 after electro g: " ,round(S_in_dioxy_kg*1000,2))
 #print("Energy per mol dioxy (kWh/mol): " , round(Total_energy/S_out_dioxy_mols,2))
 
 
-print("Stored LOX final g: ",round(S_out_dioxy_kg*1000,2))
-print("Energy per kg dioxy (kWh/kg): " , round(Total_energy/S_out_dioxy_kg,0))
+#print("Stored LOX final g: ",round(S_out_dioxy_kg*1000,2))
+'''print("Energy per kg dioxy (kWh/kg): " , round(Total_energy/S_out_dioxy_kg,0))
 
 print("  ")
 print("Energy per kg rego input (kWh/kg): " , round(Total_energy/X_out_regolith,2))
@@ -214,7 +181,7 @@ print("Total Monthly Prod LOX kg: ",round(total_monthly_LOX_Stored_final_kg,0))
 print("total_energy_used_by_reactor_per_kg_O2:", round(total_energy_used_by_reactor_per_kg_O2,1))
 print("R_energy:", round(R_energy,3))
 print("ilmenite_conversion:",round(ilmenite_conversion))
-
+'''
 "GRAPHS"
 
 
