@@ -274,14 +274,14 @@ def energy_as_func_of_ilmenite():
     L_energy_list = []
     S_energy_list = []
 
-    for i in range (2,max_pre_benef_ilmenite_grade*4):
+    for i in range (2,max_pre_benef_ilmenite_grade*2):
         
         'Calculations'
         '=================================================='
         
         #increasing variable
         
-        pre_benef_ilmenite_grade_loop = i/400 #convert from percent to ratio
+        pre_benef_ilmenite_grade_loop = i/200 #convert from percent to ratio
         
         
         # (3) Mass flow
@@ -296,7 +296,7 @@ def energy_as_func_of_ilmenite():
         B_out_regolith = B_out_ilmenite + B_out_gangue
         R_in_regolith = B_out_regolith
         
-        post_benef_ilmenite_grade = int(i/4)*benef1.enrichment_factor
+        post_benef_ilmenite_grade = int(i/2)*benef1.enrichment_factor
         
 
 
@@ -401,7 +401,7 @@ sum_energy = np.sum(energy)
 labels = np.around(energy/sum_energy*100, 1)
 energy_consumers_full = ["Excavation", "Transportation", "Reactor", "Electrolysis", "Liquefaction", "Storage"]
 #colors_bars = ["tab:grey", "black", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
-colors_bars = ["black", "grey", viridis(0.2), viridis(0.45),  viridis(0.6), viridis(0.95)] 
+colors_bars = ["orange", "red", viridis(0.2), viridis(0.45),  viridis(0.6), viridis(0.95)] 
 #colors_bars = [pastel[5], pastel[7], pastel[3], pastel[2],  pastel[0], pastel[8]]
 #colors_bars = ['#FEB144', pastel[7], '#FF6663', '#FDFD97',  '#9EC1CF', '#9EE09E']
 #colors_bars = ['black', '#8197a6', '#f1666a', '#00ae9d',  '#009bdb', '#1e3378']
@@ -410,7 +410,7 @@ colors_bars = ["black", "grey", viridis(0.2), viridis(0.45),  viridis(0.6), viri
 ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list = energy_as_func_of_ilmenite()
 legend_stackplot = [ "Storage",  "Liquefaction", "Electrolysis","Transportation","Excavation","Reactor"]
 #colors_stackplot = [  "tab:orange",  "tab:blue", "tab:green", "tab:red","black","tab:grey" ]
-colors_stackplot = [  viridis(0.95),  viridis(0.6), viridis(0.45),"grey","black",viridis(0.2)]
+colors_stackplot = [  viridis(0.95),  viridis(0.6), viridis(0.45),"red","orange",viridis(0.2)]
 #colors_stackplot = [pastel[8], pastel[0], pastel[2], pastel[3],  pastel[7], pastel[5]]
 #colors_stackplot = ['#9EE09E', '#9EC1CF', '#FDFD97', '#FF6663', pastel[7], '#FEB144']
 #colors_stackplot = ['#1e3378', '#009bdb', '#00ae9d', '#f1666a', '#8197a6', 'black']
@@ -423,12 +423,12 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9,5),)
 #p2 = ax2.stackplot(ilmenite_grade_list, energy_list, colors = colors_stackplot, labels = legend_stackplot)
 
 barwidth = 12/len(ilmenite_grade_list)
-p2=ax2.bar(ilmenite_grade_list, energy_list[0], color=colors_stackplot[0], label='Storage', width = barwidth)
-p3=ax2.bar(ilmenite_grade_list, energy_list[1], bottom=energy_list[0], color=colors_stackplot[1], label='Liquefaction', width = barwidth)
-p4=ax2.bar(ilmenite_grade_list, energy_list[2], bottom=energy_list[0]+energy_list[1], color=colors_stackplot[2], label='Electrolysis', width = barwidth)
-p5=ax2.bar(ilmenite_grade_list, energy_list[3], bottom=energy_list[0]+energy_list[1]+energy_list[2], color=colors_stackplot[3], label='Reactor', width = barwidth)
-p6=ax2.bar(ilmenite_grade_list, energy_list[4], bottom=energy_list[0]+energy_list[1]+energy_list[2]+energy_list[3], color=colors_stackplot[4], label='Transportation', width = barwidth)
-p7=ax2.bar(ilmenite_grade_list, energy_list[5], bottom=energy_list[0]+energy_list[1]+energy_list[2]+energy_list[3]+energy_list[4], color=colors_stackplot[5], label='Excavation', width = barwidth)
+p2=ax2.bar(ilmenite_grade_list, energy_list[0], color=colors_stackplot[0], label=legend_stackplot[0], width = barwidth)
+p3=ax2.bar(ilmenite_grade_list, energy_list[1], bottom=energy_list[0], color=colors_stackplot[1], label=legend_stackplot[1], width = barwidth)
+p4=ax2.bar(ilmenite_grade_list, energy_list[2], bottom=energy_list[0]+energy_list[1], color=colors_stackplot[2], label=legend_stackplot[2], width = barwidth)
+p5=ax2.bar(ilmenite_grade_list, energy_list[3], bottom=energy_list[0]+energy_list[1]+energy_list[2], color=colors_stackplot[3], label=legend_stackplot[3], width = barwidth)
+p6=ax2.bar(ilmenite_grade_list, energy_list[4], bottom=energy_list[0]+energy_list[1]+energy_list[2]+energy_list[3], color=colors_stackplot[4], label=legend_stackplot[4], width = barwidth)
+p7=ax2.bar(ilmenite_grade_list, energy_list[5], bottom=energy_list[0]+energy_list[1]+energy_list[2]+energy_list[3]+energy_list[4], color=colors_stackplot[5], label=legend_stackplot[5], width = barwidth)
 
 ax2.grid(axis = "y") 
 ax2.set_title("B", loc="left", fontsize = 20)
