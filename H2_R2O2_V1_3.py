@@ -21,6 +21,7 @@ import Storage_losses
 from Storage_losses import *
 from beneficiation_placeholder import *
 from transportation import *
+from excavation import *
 
 
 print("start")
@@ -34,9 +35,8 @@ production_rate = 0.5  #kg regolith/24-hours
 'production rate kg-regolith-excavated /24-hours'
 oxygen_production_rate = 11.42  #[kg/h] (11.42 kg/h = 100 t/year)
 
-
 # (1) Energy cost parameters      # DUMMY NUMBERS currently 18/6/2022
-rego_exca = 0.0002    # kWh/kg-regolith      (alpha)
+rego_exca = Alpha    # kWh/kg-regolith      (alpha)
 rego_tran = Beta    # kWh/kg-regolith/km   (beta)
 rego_heat = total_energy_used_by_reactor_per_kg_regolith # kWh/kg-regolith      (zeta)
 water_elec = electrolysis_energy_per_mol_H2O  # kWh/mol-water        (theta)
@@ -105,10 +105,6 @@ S_out_dioxy_kg = S_in_dioxy_kg
 #print("S_in_mols", S_in_dioxy_mols)
 #print("S_in_kg", S_in_dioxy_kg)
 #print("S_in_g", round(S_in_dioxy_kg*1000,1))
-
-
-
-
 
 
 # (4) Energy Accounting
