@@ -119,5 +119,5 @@ def A_prime(x,f,d):
     return ans
 
 digOutputs = excavationMechanics(depthM, trenchDepthM, radiusM, extAngle, intAngle, cohCoeff)
-Alpha = digOutputs[1]
+Alpha = 2.77778e-7*digOutputs[1]  #kWh/kg
 
