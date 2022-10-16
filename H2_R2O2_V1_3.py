@@ -17,8 +17,8 @@ import H2_Reactor_1
 from H2_Reactor_1 import *
 from electrolysis import *
 from liquefaction import *
-import Storage_losses
-from Storage_losses import *
+import Storage
+from Storage import *
 from beneficiation_placeholder import *
 from transportation import *
 
