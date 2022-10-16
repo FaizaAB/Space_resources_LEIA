@@ -50,7 +50,7 @@ HEAT_CAPACITY_HYDROGEN                  = 15300             #[J/(kg*K)] Assumed 
 MOLAR_MASS_H2                           = 2                 #[g/mol]
 MOLAR_MASS_ILMENITE                     = 151.71            #[g/mol]
 MOLAR_MASS_O2                           = 32                #[g/mol]
-DELTA_H_REACTION_ILMENITE_HYDROGEN      = 0.003             #[kWh/mol]
+DELTA_H_REACTION_ILMENITE_HYDROGEN      = 40.6              #[kJ/mol]
 HEAT_CAPACITY_CFI                       = 1130              #[J/(kg*K)] Assumed to be constant (conservative assumption)
 HEAT_CAPACITY_HTMLI                     = 910               #[J/(kg*K)] Heat capacity of aluminum (All of the weight of HTMLI comes from the foil)
 
@@ -84,12 +84,12 @@ T_reduction_regolith_batch = 1173 #[K] Temperature of regolith during reduction
 #times:
 reactor_loading_time = 0.5 #[h] 
 reactor_heat_up_time_in_hours = 5 #[h] 
-reactor_heat_up_time_in = reactor_heat_up_time_in_hours*3600 #[s] 
+reactor_heat_up_time_in_seconds = reactor_heat_up_time_in_hours*3600 #[s] 
 batch_reaction_time_in_hours = 2.5 #[h]
 batch_reaction_time = batch_reaction_time_in_hours*3600 #[s]
 reactor_unloading_time = 0.5 #[h] 
 total_batch_reaction_time = reactor_loading_time+reactor_heat_up_time_in_hours+batch_reaction_time_in_hours+reactor_unloading_time  #[h]
-
+print(total_batch_reaction_time)
 
 def ilmenite_to_water_conversion():
 
@@ -157,7 +157,7 @@ def batch_mass_calculation(reactor_chamber_radius):
     
     #Number of ilmenite moles in regolith batch
     ilmenite_moles_batch = 1000*ilmenite_mass_batch/MOLAR_MASS_ILMENITE #multiplied by 1000 because of kg to g conversion
-
+    
     return mass_regolith_batch, ilmenite_mass_batch, ilmenite_moles_batch
 
 
@@ -186,8 +186,9 @@ def energy_to_heat_hydrogen_func(ilmenite_mass_batch):
 
 def energy_endothermic_ilmenite_H2_reaction_func(ilmenite_moles_batch,ilmenite_conversion_percentage):
     #Energy lost to endothermic reaction of hydrogen and ilmenite
-    energy_endothermic_ilmenite_H2_reaction = ilmenite_moles_batch * DELTA_H_REACTION_ILMENITE_HYDROGEN*ilmenite_conversion_percentage/100
+    energy_endothermic_ilmenite_H2_reaction = ilmenite_moles_batch * DELTA_H_REACTION_ILMENITE_HYDROGEN*ilmenite_conversion_percentage/(3600*100)
     
+
     return energy_endothermic_ilmenite_H2_reaction
 
 
@@ -413,10 +414,10 @@ for i in range (1,99):
     reactor_chamber_radius, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI, reactor_CFI_insulation_mass, reactor_HTMLI_insulation_mass, reactor_insulation_mass = reactor_geometry_calculation(ilmenite_conversion_percentage)
 
     mass_regolith_batch, ilmenite_mass_batch, ilmenite_moles_batch = batch_mass_calculation(reactor_chamber_radius)
-
+    
     energy_to_heat_hydrogen = energy_to_heat_hydrogen_func(ilmenite_mass_batch)
 
-    energy_endothermic_ilmenite_H2_reaction = energy_endothermic_ilmenite_H2_reaction_func(ilmenite_mass_batch,ilmenite_conversion_percentage)
+    energy_endothermic_ilmenite_H2_reaction = energy_endothermic_ilmenite_H2_reaction_func(ilmenite_moles_batch,ilmenite_conversion_percentage)
 
     energy_to_heat_CFI_insulation, energy_to_heat_HTMLI, total_energy_to_heat_insulation = energy_to_heat_insulation_func(reactor_CFI_insulation_mass, reactor_HTMLI_insulation_mass)
 
@@ -464,7 +465,7 @@ df.to_csv("rego_heat_list.csv", sep=';',index=False)
 #print("Q_total_lost = ",Q_total_lost)
 #print("reactor_efficiency =", reactor_efficiency)
 #print("mass_regolith_batch=",mass_regolith_batch)
-print("surface_area_outer_HTMLI=",surface_area_outer_HTMLI)
+#print("surface_area_outer_HTMLI=",surface_area_outer_HTMLI)
 #print("reactor_chamber_radius = ", reactor_chamber_radius)
 #print("reactor_insulation_mass =", reactor_insulation_mass)
 #print("energy_to_heat_hydrogen = ",energy_to_heat_hydrogen)
@@ -478,16 +479,16 @@ print("surface_area_outer_HTMLI=",surface_area_outer_HTMLI)
 #print("oxygen_out_kg_batch =", oxygen_out_kg_batch)
 #print("total_energy_used_by_reactor_per_kg_O2 =", total_energy_used_by_reactor_per_kg_O2)
 #print("energy_to_heat_hydrogen=",energy_to_heat_hydrogen)
-
-'''energy_comparison = plt.figure()
+print("energy_endothermic_ilmenite_H2_reaction=",energy_endothermic_ilmenite_H2_reaction)
+print(ilmenite_conversion_percentage)
+energy_comparison = plt.figure()
 energy_sinks = ["energy to heat H2", "energy to heat insulation", "energy endothermic reaction", "heat lost over insulation", "energy to heat up regolith"]
 energies = [energy_to_heat_hydrogen, total_energy_to_heat_insulation, energy_endothermic_ilmenite_H2_reaction, Q_total_lost, energy_to_heat_regolith_batch]
 plt.bar(energy_sinks, energies)
 plt.ylabel('kWh')
-plt.show()'''
+plt.show()
 
 #What is missing:
-#- reactor efficiency for in the shadow
 #- think about temperature of inner insulation and whether to lower it, 3 energiebilanzen aufstellen, erstmal mit Qrad usw. und gucken ob über gleichungssystem lösbar
 #- plot reactor efficiency depending on insulation thickness
     

@@ -17,8 +17,8 @@ import electrolysis
 from electrolysis import *
 import liquefaction
 from liquefaction import *
-import Storage_losses
-from Storage_losses import *
+import Storage
+from Storage import *
 
 print("start")
 
