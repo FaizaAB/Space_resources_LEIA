@@ -23,7 +23,6 @@ from beneficiation_placeholder import *
 from transportation import *
 from excavation import *
 
-
 print("start")
 
 'user parameters'
@@ -360,8 +359,9 @@ energy_as_func_of_ilmenite()
 viridis = cm.get_cmap('viridis', 12)
 pastel = sns.color_palette(palette = "muted", as_cmap=True)
 energy = [X_energy_per_kg_LOX,T_energy_per_kg_LOX,R_energy_per_kg_LOX,E_energy_per_kg_LOX,L_energy_per_kg_LOX,S_energy_per_kg_LOX]
+print(energy)
 sum_energy = np.sum(energy)
-labels = np.around(energy/sum_energy*100, 1)
+labels = np.round(energy/sum_energy*100, 3)
 energy_consumers_full = ["Excavation", "Transportation", "Reactor", "Electrolysis", "Liquefaction", "Storage"]
 #colors_bars = ["tab:grey", "black", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
 colors_bars = ["orange", "red", viridis(0.2), viridis(0.45),  viridis(0.6), viridis(0.95)] 

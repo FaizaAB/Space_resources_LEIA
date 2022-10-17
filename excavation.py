@@ -6,7 +6,6 @@ Testing mod
 
 import numpy as np
 import math as ma
-from mpmath import cot
 
 #Excavation parameters
 depthM = 0.025 # m
@@ -100,11 +99,11 @@ def Balovnev(reg_vars, reg_vars2, exc_vars, exc_vars2):
     ls = r_scoop    # Length of scoop sides
 
     # Balovnev equation
-    dig_force = (w*D*A1*(1 + cot(b)*ma.tan(d))*(D*4*g*gam/2 + c*cot(f) + 
+    dig_force = (w*D*A1*(1 + 1/ma.tan(b)*ma.tan(d))*(D*4*g*gam/2 + c*1/ma.tan(f) + 
         (D - l*ma.sin(b))*g*gam*(1-ma.sin(f))/(1+ma.sin(f))) +
-        w*eb*A2*(1 +ma.tan(d)*cot(ab))*(eb*g*gam/2 + c*cot(f) + D*g*gam*
+        w*eb*A2*(1 +ma.tan(d)*1/ma.tan(ab))*(eb*g*gam/2 + c*1/ma.tan(f) + D*g*gam*
         (1-ma.sin(f))/(1+ma.sin(f))) +
-        D*A3*(2*s + 4*ls*ma.tan(d))*(D*g*gam/2 + c*cot(f) + 
+        D*A3*(2*s + 4*ls*ma.tan(d))*(D*g*gam/2 + c*1/ma.tan(f) + 
         (D - ls*ma.sin(b))*g*gam*(1-ma.sin(f))/(1+ma.sin(f))))
     return dig_force   
 
@@ -120,4 +119,3 @@ def A_prime(x,f,d):
 
 digOutputs = excavationMechanics(depthM, trenchDepthM, radiusM, extAngle, intAngle, cohCoeff)
 Alpha = 2.77778e-7*digOutputs[1]  #kWh/kg
-
