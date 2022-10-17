@@ -22,8 +22,6 @@ SOLAR_INPUT                             = 1361              #[W/m^2]
 σ                                       = 5.6703744e-8      #[W/(m^2*K^4)] Stefan-Boltzmann-Constant
 VIEW_FACTOR_SUN_TANK                    = 0.5               #[-]        
 LUNAR_GRAVITY                           = 1.625             #[m/s^2]
-
-
 HEAT_CAPACITY_HYDROGEN                  = 14500             #[J/(kg*K)] Assumed to be constant (conservative assumption)
 MOLAR_MASS_H2                           = 2                 #[g/mole]
 MOLAR_MASS_O2                           = 32                #[g/mole]
@@ -32,7 +30,7 @@ MOLAR_MASS_O2                           = 32                #[g/mole]
 "=================Variables=================="
 
 LOX_tank = {"steel_wall" : { #steel tank wall
-                "inner_radius" : 1.18,#[m]
+                "inner_radius" : 0.481,#[m] Calculated depending on how much LOX is produced during the 2 weeks storage time
                 "thickness" :  0.004,#[m]
                 "outer_radius" : 0,#[m]
                 "mass" : 0,#[kg]
@@ -40,9 +38,9 @@ LOX_tank = {"steel_wall" : { #steel tank wall
                 "DENSITY" : 8000, #[kg/m^3]
                 "inner_temperature" : 91}, #[K]
             
-            "mli" : { #multilayer insulation
+            "vip" : { #Vacuum insulated panel insulation
                 "inner_radius" : 0,#[m]
-                "thickness" : 0.1,#[m]
+                "thickness" : 0.025,#[m]
                 "outer_radius" : 0,#[m]
                 "mass" : 0,#[kg]
                 "outer_surface_area" : 0,#[m^2]
@@ -91,8 +89,8 @@ LOX_tank = {"steel_wall" : { #steel tank wall
 zero_boil_off_system = {"cryocooler_efficiency": 0.1,#[-]
                         "T_cold_reservoir_carnot_cycle": 80,#[-]
                         "T_hot_reservoir_carnot_cycle": 233,#[-] Based on ISS radiators
-                        "LOX_storage_time": 720,#[hours] We assume 1 month of storage time
-                        "mLOX_produced_in_storage_time": 8220,#[kg] We assume a production rate of 100 t/year = 274 kg/day
+                        "LOX_storage_time": 336,#[hours] We assume 1 month of storage time
+                        "mLOX_produced_in_storage_time": 3846,#[kg] We assume a production rate of 100 t/year = 274 kg/day
                         "COP_Carnot": 0,#[-]
                         "COP": 0,#[-]
                         "Power_consumption" : 0,#[W]
@@ -139,13 +137,13 @@ def lox_tank_geometry_calculation():
     steel_wall_DENSITY = LOX_tank["steel_wall"]["DENSITY"]
     steel_wall_mass = LOX_tank["steel_wall"]["mass"]
     
-    #multi-layer-insulation (mli) geometry parameters
-    mli_inner_radius = LOX_tank["mli"]["inner_radius"] 
-    mli_thickness = LOX_tank["mli"]["thickness"]   
-    mli_outer_radius = LOX_tank["mli"]["outer_radius"]   
-    mli_outer_surface_area = LOX_tank["mli"]["outer_surface_area"]  
-    mli_DENSITY = LOX_tank["mli"]["DENSITY"]
-    mli_mass = LOX_tank["mli"]["mass"]
+    #Vacuum insulated panels (vip) geometry parameters
+    vip_inner_radius = LOX_tank["vip"]["inner_radius"] 
+    vip_thickness = LOX_tank["vip"]["thickness"]   
+    vip_outer_radius = LOX_tank["vip"]["outer_radius"]   
+    vip_outer_surface_area = LOX_tank["vip"]["outer_surface_area"]  
+    vip_DENSITY = LOX_tank["vip"]["DENSITY"]
+    vip_mass = LOX_tank["vip"]["mass"]
     
     #volume and mass 
     volume = LOX_tank["volume"]
@@ -164,11 +162,11 @@ def lox_tank_geometry_calculation():
     steel_wall_outer_radius = steel_wall_inner_radius + steel_wall_thickness 
     steel_wall_mass = 4/3 * math.pi * (steel_wall_outer_radius**3 - steel_wall_inner_radius**3) * steel_wall_DENSITY
     
-    #mli calculation
-    mli_inner_radius = steel_wall_outer_radius
-    mli_outer_radius = mli_inner_radius + mli_thickness
-    mli_outer_surface_area = 4 * math.pi * mli_outer_radius**2
-    mli_mass = 4/3 * math.pi * (mli_outer_radius**3 - mli_inner_radius**3) * mli_DENSITY
+    #vip calculation
+    vip_inner_radius = steel_wall_outer_radius
+    vip_outer_radius = vip_inner_radius + vip_thickness
+    vip_outer_surface_area = 4 * math.pi * vip_outer_radius**2
+    vip_mass = 4/3 * math.pi * (vip_outer_radius**3 - vip_inner_radius**3) * vip_DENSITY
     
     #volume and LOX mass calculation
     volume = 4/3 * math.pi * steel_wall_inner_radius**3
@@ -184,10 +182,10 @@ def lox_tank_geometry_calculation():
     #RETURNING VALUES TO DICTIONARY
     LOX_tank["steel_wall"]["outer_radius"] = steel_wall_outer_radius 
     LOX_tank["steel_wall"]["mass"] = steel_wall_mass 
-    LOX_tank["mli"]["inner_radius"] = mli_inner_radius
-    LOX_tank["mli"]["outer_radius"] = mli_outer_radius
-    LOX_tank["mli"]["outer_surface_area"] = mli_outer_surface_area
-    LOX_tank["mli"]["mass"] = mli_mass
+    LOX_tank["vip"]["inner_radius"] = vip_inner_radius
+    LOX_tank["vip"]["outer_radius"] = vip_outer_radius
+    LOX_tank["vip"]["outer_surface_area"] = vip_outer_surface_area
+    LOX_tank["vip"]["mass"] = vip_mass
     LOX_tank["volume"] = volume 
     LOX_tank["support_beam"]["radius"] = support_beam_radius 
     LOX_tank["support_beam"]["cross_section_area"] = support_beam_cross_section_area 
@@ -195,7 +193,6 @@ def lox_tank_geometry_calculation():
     LOX_tank["support_beam"]["mass"] = support_beam_mass
     LOX_tank["liquid_oxygen"]["mass"] = LOX_mass
     
-
 def heat_transfer_coefficient_calculation():
     
     #Calculates the heat heat transfer coefficient between inner tank wall and LOX
@@ -232,7 +229,7 @@ def view_factor_calculation():
     
     lunar_surface_relevant_radius = lunar_surface["relevant_radius"]
     lunar_surface_relevant_area = lunar_surface["relevant_area"]
-    mli_outer_surface_area = LOX_tank["mli"]["outer_surface_area"]
+    vip_outer_surface_area = LOX_tank["vip"]["outer_surface_area"]
     tank_height_above_surface = LOX_tank["height_above_lunar_surface"]
     view_factor_tank_to_lunar_surface = lunar_surface["view_factor"]["tank_to_lunar_surface"]
     view_factor_lunar_surface_to_tank = lunar_surface["view_factor"]["lunar_surface_to_tank"]
@@ -247,7 +244,7 @@ def view_factor_calculation():
     #View factor tank --> lunar surface
     view_factor_tank_to_lunar_surface = 1/2 * (1-1/(1+ lunar_surface_relevant_radius**2/tank_height_above_surface**2)**(1/2)) #[-] 
     #View factor lunar surface --> reactor
-    view_factor_lunar_surface_to_tank = view_factor_tank_to_lunar_surface * mli_outer_surface_area /lunar_surface_relevant_area #[-] 
+    view_factor_lunar_surface_to_tank = view_factor_tank_to_lunar_surface * vip_outer_surface_area /lunar_surface_relevant_area #[-] 
     #RETURNING VALUES TO DICTIONARY
     lunar_surface["relevant_area"] = lunar_surface_relevant_area 
     lunar_surface["view_factor"]["tank_to_lunar_surface"] = view_factor_tank_to_lunar_surface
@@ -258,7 +255,7 @@ def solar_and_lunar_heat_flux_calculation():
     #VARIABLE INITIALIZATION
     lunar_surface_relevant_area = lunar_surface["relevant_area"]
     view_factor_lunar_surface_to_tank = lunar_surface["view_factor"]["lunar_surface_to_tank"]
-    mli_outer_surface_area = LOX_tank["mli"]["outer_surface_area"]
+    vip_outer_surface_area = LOX_tank["vip"]["outer_surface_area"]
     lunar_surface_temperature_in_sunlight = lunar_surface["temperature_in_sunlight"]
     lunar_surface_temperature_in_shadow = lunar_surface["temperature_in_shadow"]
     lunar_surface_emissivity = lunar_surface["EMISSIVITY"]
@@ -269,7 +266,7 @@ def solar_and_lunar_heat_flux_calculation():
     #CALCULATION
     
     #Heat flux coming from the sun to tank
-    Q_flux_solar = SOLAR_INPUT * VIEW_FACTOR_SUN_TANK * mli_outer_surface_area #[W]
+    Q_flux_solar = SOLAR_INPUT * VIEW_FACTOR_SUN_TANK * vip_outer_surface_area #[W]
     #Heat flux coming from lunar surface to tank
     Q_flux_lunar_surface_sunlight = (σ *lunar_surface_temperature_in_sunlight**4 * lunar_surface_emissivity + SOLAR_INPUT * lunar_surface_reflectivity) * lunar_surface_relevant_area * view_factor_lunar_surface_to_tank #[W]  
     #Heat flux coming from lunar surface to tank
@@ -282,28 +279,28 @@ def solar_and_lunar_heat_flux_calculation():
     heat_fluxes["Q_flux_lunar_surface_shadow"] = Q_flux_lunar_surface_shadow
     
 def outer_surface_heat_balance():
-    #Calculation of T_outer_surface_ by doing heat balance around outer surface of mli
+    #Calculation of T_outer_surface_ by doing heat balance around outer surface of vip
     
     #VARIABLE INITIALIZATION
     Q_flux_solar = heat_fluxes["Q_flux_solar"]
     Q_flux_lunar_surface_sunlight = heat_fluxes["Q_flux_lunar_surface_sunlight"]
     Q_flux_lunar_surface_shadow = heat_fluxes["Q_flux_lunar_surface_shadow"]
     Q_conductive_support_beam = heat_fluxes["Q_conductive_support_beam"]
-    temperature_outer_surface_in_sunlight = LOX_tank["mli"]["temperature_outer_surface_in_sunlight"]
-    temperature_outer_surface_in_shadow = LOX_tank["mli"]["temperature_outer_surface_in_shadow"]
+    temperature_outer_surface_in_sunlight = LOX_tank["vip"]["temperature_outer_surface_in_sunlight"]
+    temperature_outer_surface_in_shadow = LOX_tank["vip"]["temperature_outer_surface_in_shadow"]
     lunar_surface_temperature_in_sunlight = lunar_surface["temperature_in_sunlight"]
     lunar_surface_temperature_in_shadow = lunar_surface["temperature_in_shadow"]
-    steel_wall_inner_temperature = LOX_tank["steel_wall"]["inner_temperature"]
+    LOX_temperature = LOX_tank["liquid_oxygen"]["temperature"]
     heat_transfer_coefficient = LOX_tank["liquid_oxygen"]["heat_transfer_coefficient"]
     steel_wall_inner_radius = LOX_tank["steel_wall"]["inner_radius"]
     steel_wall_outer_radius = LOX_tank["steel_wall"]["outer_radius"]
     steel_wall_thermal_conductivity = LOX_tank["steel_wall"]["THERMAL_CONDUCTIVITY"] 
-    mli_inner_radius = LOX_tank["mli"]["inner_radius"] 
-    mli_outer_radius = LOX_tank["mli"]["outer_radius"] 
-    mli_thermal_conductivity = LOX_tank["mli"]["THERMAL_CONDUCTIVITY"] 
-    mli_outer_surface_area = LOX_tank["mli"]["outer_surface_area"]  
-    mli_emissivity = LOX_tank["mli"]["EMISSIVITY"]
-    mli_reflectivity = LOX_tank["mli"]["REFLECTIVITY"]
+    vip_inner_radius = LOX_tank["vip"]["inner_radius"] 
+    vip_outer_radius = LOX_tank["vip"]["outer_radius"] 
+    vip_thermal_conductivity = LOX_tank["vip"]["THERMAL_CONDUCTIVITY"] 
+    vip_outer_surface_area = LOX_tank["vip"]["outer_surface_area"]  
+    vip_emissivity = LOX_tank["vip"]["EMISSIVITY"]
+    vip_reflectivity = LOX_tank["vip"]["REFLECTIVITY"]
     support_beam_cross_section_area = LOX_tank["support_beam"]["cross_section_area"]
     support_beam_length = LOX_tank["support_beam"]["length"]
     tank_height_above_lunar_surface = LOX_tank["height_above_lunar_surface"]
@@ -313,8 +310,8 @@ def outer_surface_heat_balance():
     #CALCULATION
     def heat_balance_in_sunlight(temperature_outer_surface_in_sunlight):
         x = (Q_flux_solar + Q_flux_lunar_surface_sunlight + steel_wall_thermal_conductivity * support_beam_cross_section_area * (lunar_surface_temperature_in_sunlight - temperature_outer_surface_in_sunlight)/support_beam_length
-        - (σ * temperature_outer_surface_in_sunlight**4 * mli_outer_surface_area* mli_emissivity + (Q_flux_solar + Q_flux_lunar_surface_sunlight) * mli_reflectivity) 
-        - (temperature_outer_surface_in_sunlight - steel_wall_inner_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/mli_inner_radius - 1/mli_outer_radius)/mli_thermal_conductivity
+        - (σ * temperature_outer_surface_in_sunlight**4 * vip_outer_surface_area* vip_emissivity + (Q_flux_solar + Q_flux_lunar_surface_sunlight) * vip_reflectivity) 
+        - (temperature_outer_surface_in_sunlight - LOX_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/vip_inner_radius - 1/vip_outer_radius)/vip_thermal_conductivity
         + (1/steel_wall_inner_radius - 1/steel_wall_outer_radius)/steel_wall_thermal_conductivity))
         return x
     
@@ -326,8 +323,8 @@ def outer_surface_heat_balance():
     
     def heat_balance_in_shadow(temperature_outer_surface_in_shadow):
         x = (Q_flux_lunar_surface_shadow + steel_wall_thermal_conductivity * support_beam_cross_section_area * (lunar_surface_temperature_in_shadow - temperature_outer_surface_in_shadow)/support_beam_length
-        - (σ * temperature_outer_surface_in_shadow**4 * mli_outer_surface_area* mli_emissivity + (Q_flux_lunar_surface_shadow) * mli_reflectivity) 
-        - (temperature_outer_surface_in_shadow - steel_wall_inner_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/mli_inner_radius - 1/mli_outer_radius)/mli_thermal_conductivity
+        - (σ * temperature_outer_surface_in_shadow**4 * vip_outer_surface_area* vip_emissivity + (Q_flux_lunar_surface_shadow) * vip_reflectivity) 
+        - (temperature_outer_surface_in_shadow - LOX_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/vip_inner_radius - 1/vip_outer_radius)/vip_thermal_conductivity
         + (1/steel_wall_inner_radius - 1/steel_wall_outer_radius)/steel_wall_thermal_conductivity))
         return x
     
@@ -339,21 +336,21 @@ def outer_surface_heat_balance():
     heat_fluxes["Q_flux_lunar_surface_sunlight"] = Q_flux_lunar_surface_sunlight 
     heat_fluxes["Q_flux_lunar_surface_shadow"] = Q_flux_lunar_surface_shadow  
     heat_fluxes["Q_conductive_support_beam"] = Q_conductive_support_beam 
-    LOX_tank["mli"]["temperature_outer_surface_in_sunlight"] = temperature_outer_surface_in_sunlight  
-    LOX_tank["mli"]["temperature_outer_surface_in_shadow"] = temperature_outer_surface_in_shadow  
+    LOX_tank["vip"]["temperature_outer_surface_in_sunlight"] = temperature_outer_surface_in_sunlight  
+    LOX_tank["vip"]["temperature_outer_surface_in_shadow"] = temperature_outer_surface_in_shadow  
     lunar_surface["temperature_in_sunlight"] = lunar_surface_temperature_in_sunlight  
     lunar_surface["temperature_in_shadow"] = lunar_surface_temperature_in_shadow  
-    LOX_tank["steel_wall"]["inner_temperature"] = steel_wall_inner_temperature 
+    LOX_tank["steel_wall"]["inner_temperature"] = LOX_temperature
     LOX_tank["liquid_oxygen"]["heat_transfer_coefficient"] = heat_transfer_coefficient 
     LOX_tank["steel_wall"]["inner_radius"] = steel_wall_inner_radius  
     LOX_tank["steel_wall"]["outer_radius"] = steel_wall_outer_radius 
     LOX_tank["steel_wall"]["THERMAL_CONDUCTIVITY"] = steel_wall_thermal_conductivity 
-    LOX_tank["mli"]["inner_radius"]  = mli_inner_radius  
-    LOX_tank["mli"]["outer_radius"]  = mli_outer_radius 
-    LOX_tank["mli"]["THERMAL_CONDUCTIVITY"] = mli_thermal_conductivity  
-    LOX_tank["mli"]["outer_surface_area"] = mli_outer_surface_area  
-    LOX_tank["mli"]["EMISSIVITY"] = mli_emissivity 
-    LOX_tank["mli"]["REFLECTIVITY"] = mli_reflectivity 
+    LOX_tank["vip"]["inner_radius"]  = vip_inner_radius  
+    LOX_tank["vip"]["outer_radius"]  = vip_outer_radius 
+    LOX_tank["vip"]["THERMAL_CONDUCTIVITY"] = vip_thermal_conductivity  
+    LOX_tank["vip"]["outer_surface_area"] = vip_outer_surface_area  
+    LOX_tank["vip"]["EMISSIVITY"] = vip_emissivity 
+    LOX_tank["vip"]["REFLECTIVITY"] = vip_reflectivity 
     LOX_tank["support_beam"]["cross_section_area"] = support_beam_cross_section_area 
     LOX_tank["support_beam"]["length"] = support_beam_length 
     LOX_tank["height_above_lunar_surface"] = tank_height_above_lunar_surface 
@@ -364,13 +361,13 @@ def heat_flux_into_tank_calculation():
   
     Q_flux_into_tank_sunlight = heat_fluxes["Q_flux_into_tank_sunlight"]
     Q_flux_into_tank_shadow = heat_fluxes["Q_flux_into_tank_shadow"]
-    steel_wall_inner_temperature = LOX_tank["steel_wall"]["inner_temperature"]
-    temperature_outer_surface_in_sunlight = LOX_tank["mli"]["temperature_outer_surface_in_sunlight"]
-    temperature_outer_surface_in_shadow = LOX_tank["mli"]["temperature_outer_surface_in_shadow"]
+    LOX_temperature = LOX_tank["liquid_oxygen"]["temperature"]
+    temperature_outer_surface_in_sunlight = LOX_tank["vip"]["temperature_outer_surface_in_sunlight"]
+    temperature_outer_surface_in_shadow = LOX_tank["vip"]["temperature_outer_surface_in_shadow"]
     heat_transfer_coefficient = LOX_tank["liquid_oxygen"]["heat_transfer_coefficient"]
-    mli_inner_radius = LOX_tank["mli"]["inner_radius"] 
-    mli_outer_radius = LOX_tank["mli"]["outer_radius"] 
-    mli_thermal_conductivity = LOX_tank["mli"]["THERMAL_CONDUCTIVITY"] 
+    vip_inner_radius = LOX_tank["vip"]["inner_radius"] 
+    vip_outer_radius = LOX_tank["vip"]["outer_radius"] 
+    vip_thermal_conductivity = LOX_tank["vip"]["THERMAL_CONDUCTIVITY"] 
     steel_wall_inner_radius = LOX_tank["steel_wall"]["inner_radius"]
     steel_wall_outer_radius = LOX_tank["steel_wall"]["outer_radius"]
     steel_wall_thermal_conductivity = LOX_tank["steel_wall"]["THERMAL_CONDUCTIVITY"] 
@@ -378,19 +375,17 @@ def heat_flux_into_tank_calculation():
     
     #CALCULATION
     
-    Q_flux_into_tank_sunlight = (temperature_outer_surface_in_sunlight - steel_wall_inner_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/mli_inner_radius - 1/mli_outer_radius)/mli_thermal_conductivity
+    Q_flux_into_tank_sunlight = (temperature_outer_surface_in_sunlight - LOX_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/vip_inner_radius - 1/vip_outer_radius)/vip_thermal_conductivity
     + (1/steel_wall_inner_radius - 1/steel_wall_outer_radius)/steel_wall_thermal_conductivity)
     
     
-    Q_flux_into_tank_shadow = (temperature_outer_surface_in_shadow - steel_wall_inner_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/mli_inner_radius - 1/mli_outer_radius)/mli_thermal_conductivity
+    Q_flux_into_tank_shadow = (temperature_outer_surface_in_shadow - LOX_temperature)*4*math.pi/(1/(heat_transfer_coefficient * steel_wall_inner_radius**2) + (1/vip_inner_radius - 1/vip_outer_radius)/vip_thermal_conductivity
     + (1/steel_wall_inner_radius - 1/steel_wall_outer_radius)/steel_wall_thermal_conductivity)
     
     #RETURNING VALUES TO DICTIONARY
     heat_fluxes["Q_flux_into_tank_sunlight"] = Q_flux_into_tank_sunlight
     heat_fluxes["Q_flux_into_tank_shadow"] = Q_flux_into_tank_shadow
     
-
-
 def boil_off_rate_calculation():
     
     #VARIABLE INITIALIZATION
@@ -418,7 +413,6 @@ def boil_off_rate_calculation():
     LOX_tank["boil_off_rate_%_per_month_sunlight"] = boil_off_rate_percent_per_month_sunlight
     LOX_tank["boil_off_rate_%_per_month_shadow"] = boil_off_rate_percent_per_month_shadow
 
-    
 def zero_boil_off_system_power_consumption():
 
 
@@ -452,7 +446,6 @@ def zero_boil_off_system_power_consumption():
     zero_boil_off_system["Power_consumption"] = Power_consumption
     zero_boil_off_system["Energy"] = Energy
     zero_boil_off_system["Energy_per_kg_LOX"] = Energy_per_kg_LOX
-
 
 def __main__():
 
