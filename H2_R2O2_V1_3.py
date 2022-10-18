@@ -18,7 +18,7 @@ from beneficiation_placeholder import *
 from electrolysis import *
 from excavation import *
 from H2_Reactor_1 import *
-from liquefaction import *
+from liquefaction import liquefaction
 from Storage import *
 from transportation import *
 
@@ -42,7 +42,7 @@ rego_tran = Beta    # kWh/kg-regolith/km   (beta)
 # kWh/kg-regolith      (zeta)
 rego_heat = total_energy_used_by_reactor_per_kg_regolith
 water_elec = electrolysis_energy_per_mol_H2O  # kWh/mol-water        (theta)
-dioxy_liq = work_per_mol_O2    # kWh/mol-dioxygen     (psi)
+dioxy_liq = liquefaction()    # kWh/mol-dioxygen     (psi)
 storage_cooling = zero_boil_off_system["Energy_per_kg_LOX"]  # kWh/mol-dioxygen
 
 
