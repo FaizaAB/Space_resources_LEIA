@@ -97,7 +97,7 @@ def ilmenite_to_water_conversion():
     #The conversion % depends strongly on the reaction time
 
     #Import the ilmenite conversion csv file
-    with open("ilmenite_conversion.csv", "r") as i:
+    with open("Ilmenite_conversion.csv", "r") as i:
         #save data into list
         ilmenite_conversion_rawdata = list(csv.reader(i,delimiter = ";"))
     
