@@ -13,7 +13,7 @@ energy_slice = []
 for n in range(0, N): 
     cryocooler_efficiency = random.uniform(0.05, 0.4)
     system_efficiency = random.uniform(0.5, 0.7)
-    
+
     ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(cryocooler_efficiency=cryocooler_efficiency, system_efficiency=system_efficiency)
 
     energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
@@ -35,7 +35,7 @@ plt.gca().set_title('Total energy w. errors')
 plt.show()
 
 # Plot energy w. errors
-plt.errorbar(processes, y=energy_slice_mu, yerr=energy_slice_std)
+plt.bar(processes, height=energy_slice_mu, yerr=energy_slice_std)
 plt.gca().set_title('Energy w. errors')
 plt.show()
 
@@ -47,9 +47,6 @@ for process, _ax, name in zip(energy_slice.T, axs.ravel(), processes):
     _ax.set_title(name)
 plt.show()
 
-# Check liquefaction
-plt.plot(energy_slice[:,4])
-plt.gca().set_title(processes[4])
-plt.show()
+
 
 
