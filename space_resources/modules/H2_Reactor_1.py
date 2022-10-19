@@ -27,8 +27,8 @@ import scipy
 from scipy import integrate
 from scipy.optimize import curve_fit, fsolve
 
-import beneficiation_placeholder
-from beneficiation_placeholder import *
+import modules.beneficiation_placeholder as beneficiation_placeholder
+from modules.beneficiation_placeholder import *
 
 SOLAR_INPUT                             = 1361  # [W/m^2]
 σ = 5.6703744e-8  # [W/(m^2*K^4)] Stefan-Boltzmann-Constant

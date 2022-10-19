@@ -23,7 +23,7 @@ from matplotlib.backends.backend_wx import FigureCanvasWx as FigureCanvas
 from matplotlib.figure import Figure
 from numpy import arange, pi, sin
 
-from Parcel import *
+from modules.Parcel import *
 
 
 def clear(): return os.system('cls')
