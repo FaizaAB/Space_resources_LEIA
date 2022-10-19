@@ -10,7 +10,6 @@ Created on Thu Aug 11 11:34:24 2022
 # VARIABLES
 
 # liquefaction unit data
-cryocooler_efficiency = 0.1  # [-]
 T_cold_reservoir_carnot_cycle = 80  # [K]
 T_hot_reservoir_carnot_cycle = 233  # [K] based on ISS radiators
 
