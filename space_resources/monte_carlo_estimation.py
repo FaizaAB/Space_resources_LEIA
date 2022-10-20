@@ -25,8 +25,8 @@ energy_slice = np.array(energy_slice)
 energy_w_ilmenite_mu = np.mean(energy_w_ilmenite, axis=0)
 energy_slice_mu = np.mean(energy_slice, axis=0)
 
-energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)/np.sqrt(N)
-energy_slice_std = np.std(energy_slice, axis=0)/np.sqrt(N)
+energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)
+energy_slice_std = np.std(energy_slice, axis=0)
 
 
 # Plot total energy w. errors
