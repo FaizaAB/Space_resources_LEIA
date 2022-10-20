@@ -61,8 +61,8 @@ HEAT_CAPACITY_HTMLI = 910
 # Variables
 
 
-CFI_thickness = 0.05  # [m] Ceramic insulation thickness
-HTMLI_thickness = 0.05  # [m] HTMLI insulation thickness
+CFI_thickness = 0.06  # [m] Ceramic insulation thickness
+HTMLI_thickness = 0.06  # [m] HTMLI insulation thickness
 reactor_height_above_surface = 1  # [m]
 relevant_lunar_surface_radius = 10  # [m]
 relevant_lunar_surface_area = math.pi * \
@@ -242,8 +242,7 @@ def solar_and_lunar_heat_flux_calculation(surface_area_outer_HTMLI, view_factor_
     Q_flux_lunar_surface_sunlight = (σ * T_LUNAR_SURFACE_IN_SUNLIGHT**4 * EMISSIVITY_LUNAR_SURFACE + SOLAR_INPUT *
                                      REFLECTIVITY_LUNAR_SURFACE) * relevant_lunar_surface_area * view_factor_lunar_surface_reactor * ABSORBTIVITY_HTMLI  # [W]
     # Heat flux coming from lunar surface to outer HTMLI surface
-    Q_flux_lunar_surface_shadow = (σ * T_LUNAR_SURFACE_IN_SHADOW**4 * EMISSIVITY_LUNAR_SURFACE + SOLAR_INPUT *
-                                   REFLECTIVITY_LUNAR_SURFACE) * relevant_lunar_surface_area * view_factor_lunar_surface_reactor * ABSORBTIVITY_HTMLI  # [W]
+    Q_flux_lunar_surface_shadow = (σ * T_LUNAR_SURFACE_IN_SHADOW**4 * EMISSIVITY_LUNAR_SURFACE) * relevant_lunar_surface_area * view_factor_lunar_surface_reactor * ABSORBTIVITY_HTMLI  # [W]
 
     return Q_flux_lunar_surface_sunlight, Q_flux_lunar_surface_shadow
 
