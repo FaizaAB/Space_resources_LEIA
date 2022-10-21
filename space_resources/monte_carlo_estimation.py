@@ -15,6 +15,7 @@ for n in range(0, N):
     system_efficiency = random.uniform(0.5, 0.7)
 
     ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(cryocooler_efficiency=cryocooler_efficiency, system_efficiency=system_efficiency)
+    
 
     energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
     energy_slice.append(energy)
@@ -25,19 +26,23 @@ energy_slice = np.array(energy_slice)
 energy_w_ilmenite_mu = np.mean(energy_w_ilmenite, axis=0)
 energy_slice_mu = np.mean(energy_slice, axis=0)
 
-energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)/np.sqrt(N)
-energy_slice_std = np.std(energy_slice, axis=0)/np.sqrt(N)
+energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)
+energy_slice_std = np.std(energy_slice, axis=0)
 
+ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(cryocooler_efficiency=0.1, system_efficiency=0.6)
 
 # Plot total energy w. errors
-plt.errorbar(ilmenite_grade_list, y=energy_w_ilmenite_mu, yerr=energy_w_ilmenite_std)
+plt.errorbar(ilmenite_grade_list, y=energy_as_func_of_ilmenite_list, yerr=energy_w_ilmenite_std)
 plt.gca().set_title('Total energy w. errors')
 plt.show()
 
+
 # Plot energy w. errors
-plt.bar(processes, height=energy_slice_mu, yerr=energy_slice_std)
+plt.bar(processes, height=energy, yerr=energy_slice_std)
 plt.gca().set_title('Energy w. errors')
 plt.show()
+
+
 
 # Plot distributions
 fig, axs = plt.subplots(ncols=3, nrows=2, figsize=(15,8))
