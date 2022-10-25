@@ -57,7 +57,7 @@ colors_stackplot = [viridis(0.95),  viridis(
 # colors_stackplot = ['#1e3378', '#009bdb', '#00ae9d', '#f1666a', '#8197a6', 'black']
 
 # create figure
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 5),)
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(9, 5),)
 
 
 # create stackplot
@@ -102,6 +102,15 @@ for bar in p1:
              ha='center',
              weight='bold')
 
+#Plot reactor energy sinks comparison
+reactor_energy_sinks = ["Energy to heat H2", "Energy to heat insulation", "Energy endothermic reaction", "Heat lost over insulation", "Energy to heat up regolith"]
+reactor_energies = [energy_to_heat_hydrogen_at_10_perc_ilm, total_energy_to_heat_insulation_at_10_perc_ilm, energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm, Q_total_lost_at_10_perc_ilm, energy_to_heat_regolith_batch_at_10_perc_ilm]
+p3 = ax3.bar(reactor_energy_sinks, reactor_energies)
+ax3.grid(axis="y")
+ax3.set_title("C", loc="left",  fontsize=20)
+ax3.set_ylabel('kWh/kg LOX')
+
+
 fig.autofmt_xdate()
 plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,
          ha="center", rotation_mode="anchor")
@@ -110,6 +119,10 @@ plt.subplots_adjust(wspace=0.3)
 plt.savefig('Result_figure.png', dpi=200, bbox_inches='tight')
 plt.show()
 plt.close()
+
+
+
+
 
 
 # Define fitting function for energy as function of ilmenite %

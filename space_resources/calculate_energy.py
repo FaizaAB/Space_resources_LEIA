@@ -85,10 +85,12 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     B_out_regolith = benef1.B_out_regolith # B_in_ilmenite * benef_ilmenite_recovery
 
     R_in_regolith = B_out_regolith  # all figures here are kg
-
+    
     B_out_ilmenite_mols = B_out_ilmenite/ilmenite_molar_kg_mass
+    post_benef_ilmenite_grade = int(pre_benef_ilmenite_grade*benef1.enrichment_factor*100)
     # ilmenite_conversion Calculated in reactor module, depends on reaction time
     R_out_water_mols = B_out_ilmenite_mols*ilmenite_conversion
+   
 
     E_in_water_mols = R_out_water_mols
     E_out_dioxy_mols = E_in_water_mols*1/2
@@ -116,7 +118,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     # (4.2) calculate Energy per step
     X_energy = X_in_regolith * rego_exca
     T_energy = X_in_regolith * rego_tran
-    R_energy = R_in_regolith * rego_heat
+    R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade+1]
     E_energy = E_in_water_mols * water_elec
     L_energy = L_in_dioxy_mols * dioxy_liq
     S_energy = S_out_dioxy_kg * storage_cooling
@@ -261,7 +263,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         # (4.2) calculate Energy per step
         X_energy = X_in_regolith * rego_exca
         T_energy = X_in_regolith * rego_tran
-        R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade-1]
+        R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade+1]
         E_energy = E_in_water_mols * water_elec
         L_energy = L_in_dioxy_mols * dioxy_liq
         S_energy = S_out_dioxy_kg * storage_cooling
@@ -323,6 +325,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     '''
 
     energy = [X_energy_per_kg_LOX, T_energy_per_kg_LOX, R_energy_per_kg_LOX,
-          E_energy_per_kg_LOX, L_energy_per_kg_LOX, S_energy_per_kg_LOX]    
+          E_energy_per_kg_LOX, L_energy_per_kg_LOX, S_energy_per_kg_LOX]
+
     return ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy
 
