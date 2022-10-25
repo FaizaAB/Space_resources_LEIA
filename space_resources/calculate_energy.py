@@ -263,12 +263,16 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         # (4.2) calculate Energy per step
         X_energy = X_in_regolith * rego_exca
         T_energy = X_in_regolith * rego_tran
-        R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade+1]
+        R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade-1]
         E_energy = E_in_water_mols * water_elec
         L_energy = L_in_dioxy_mols * dioxy_liq
         S_energy = S_out_dioxy_kg * storage_cooling
         Total_energy = (X_energy + T_energy + R_energy +
                         E_energy + L_energy + S_energy)
+
+        # (4.4) Reactor energies 
+
+
 
         # report result
         #print("ilmen: ",round(pre_benef_ilmenite_grade_loop*100) , "%." ,"  Energy-req kWh/kg-LOX: " , round(Total_energy/S_in_dioxy_kg,4))
@@ -323,9 +327,9 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     plt.legend()
     plt.show()
     '''
+    
 
     energy = [X_energy_per_kg_LOX, T_energy_per_kg_LOX, R_energy_per_kg_LOX,
           E_energy_per_kg_LOX, L_energy_per_kg_LOX, S_energy_per_kg_LOX]
 
     return ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy
-
