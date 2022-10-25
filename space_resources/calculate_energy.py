@@ -79,8 +79,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
 
     "add benef module "
 
-    benef1 = beneficiation_placeholder.Benef_class(
-        B_in_regolith, pre_benef_ilmenite_grade)
+    benef1 = Benef_class(B_in_regolith, pre_benef_ilmenite_grade)
 
     B_out_ilmenite = benef1.B_out_ilmenite # B_in_regolith * pre_benef_ilmenite_grade
     B_out_regolith = benef1.B_out_regolith # B_in_ilmenite * benef_ilmenite_recovery
