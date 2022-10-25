@@ -499,6 +499,18 @@ for i in range(1, 99):
     rego_heat_list.append(total_energy_used_by_reactor_per_kg_regolith)
     ilmenite_grade_list.append(i)
 
+
+    #We want to compare the energy sinks in the reactor to each other at 10% ilmenite. With enrichment factor of 6, 
+    #we need to get the values from ilmenite percentage = 60%
+    if i == 60:
+        energy_to_heat_hydrogen_at_10_perc_ilm = energy_to_heat_hydrogen/oxygen_out_kg_batch
+        total_energy_to_heat_insulation_at_10_perc_ilm = total_energy_to_heat_insulation/oxygen_out_kg_batch
+        energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm = energy_endothermic_ilmenite_H2_reaction/oxygen_out_kg_batch
+        Q_total_lost_at_10_perc_ilm = Q_total_lost/oxygen_out_kg_batch
+        energy_to_heat_regolith_batch_at_10_perc_ilm = energy_to_heat_regolith_batch/oxygen_out_kg_batch
+
+
+
 #cwd = os.getcwd()
 df = pandas.DataFrame(
     data={"ilmenite_head_grade": ilmenite_grade_list, "rego_heat": rego_heat_list})
@@ -509,7 +521,7 @@ df.to_csv(os.path.join("data", "rego_heat_list.csv"), sep=';', index=False)
 'READOUTS and GRAPHS'
 '=================='
 
-
+#print('energy_to_heat_hydrogen_at_10_perc_ilm =',energy_to_heat_hydrogen_at_10_perc_ilm)
 #print("Q_out_added_heat_up = ",Q_out_added_heat_up)
 #print("Q_lost_during_reaction = ",Q_lost_during_reaction)
 #print("Q_total_lost = ",Q_total_lost)
@@ -529,14 +541,16 @@ df.to_csv(os.path.join("data", "rego_heat_list.csv"), sep=';', index=False)
 #print("oxygen_out_kg_batch =", oxygen_out_kg_batch)
 #print("total_energy_used_by_reactor_per_kg_O2 =", total_energy_used_by_reactor_per_kg_O2)
 # print("energy_to_heat_hydrogen=",energy_to_heat_hydrogen)
-print("energy_endothermic_ilmenite_H2_reaction=",energy_endothermic_ilmenite_H2_reaction)
-print(ilmenite_conversion_percentage)
-energy_comparison = plt.figure()
+#print("energy_endothermic_ilmenite_H2_reaction=",energy_endothermic_ilmenite_H2_reaction)
+#print(ilmenite_conversion_percentage)
+
+'''p3 = ax3.bar()
 energy_sinks = ["energy to heat H2", "energy to heat insulation", "energy endothermic reaction", "heat lost over insulation", "energy to heat up regolith"]
-energies = [energy_to_heat_hydrogen, total_energy_to_heat_insulation, energy_endothermic_ilmenite_H2_reaction, Q_total_lost, energy_to_heat_regolith_batch]
+energies = [energy_to_heat_hydrogen_at_10_perc_ilm, total_energy_to_heat_insulation_at_10_perc_ilm, energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm, Q_total_lost_at_10_perc_ilm, energy_to_heat_regolith_batch_at_10_perc_ilm]
+energy_comparison.grid(axis="y")
 plt.bar(energy_sinks, energies)
-plt.ylabel('kWh')
-plt.show()
+plt.ylabel('kWh/kg LOX')
+plt.show()'''
 
 # What is missing:
 # - think about temperature of inner insulation and whether to lower it, 3 energiebilanzen aufstellen, erstmal mit Qrad usw. und gucken ob über gleichungssystem lösbar
