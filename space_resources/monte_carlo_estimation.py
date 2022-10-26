@@ -28,14 +28,16 @@ for n in range(0, N):
 
     # Storage Parameters
     vip_thickness = random.uniform(0.015, 0.035)
-
+    vip_thermal_conductivity = random.uniform(0.004, 0.008)
+    vip_emissivity = random.uniform(0.03, 0.2)
+    cryocooler_efficiency_storage = random.uniform(0.05, 0.4)
     # Reactor parameters
 
     # Electrolisys Parameters
     system_efficiency = random.uniform(0.5, 0.7)
 
     ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
-        cryocooler_efficiency=cryocooler_efficiency, system_efficiency=system_efficiency, enrichment_factor=enrichment_factor, benef_ilmenite_recovery=benef_ilmenite_recovery, motor_efficiency=motor_efficiency, mRover=mRover, T_hot_reservoir_carnot_cycle=T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen=T_of_incoming_oxygen, vip_thickness=vip_thickness)
+        cryocooler_efficiency=cryocooler_efficiency, system_efficiency=system_efficiency, enrichment_factor=enrichment_factor, benef_ilmenite_recovery=benef_ilmenite_recovery, motor_efficiency=motor_efficiency, mRover=mRover, T_hot_reservoir_carnot_cycle=T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen=T_of_incoming_oxygen, vip_thickness=vip_thickness, vip_thermal_conductivity=vip_thermal_conductivity, vip_emissivity=vip_emissivity,cryocooler_efficiency_storage=cryocooler_efficiency_storage)
 
     energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
     energy_slice.append(energy)
@@ -49,8 +51,7 @@ energy_slice_mu = np.mean(energy_slice, axis=0)
 energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)
 energy_slice_std = np.std(energy_slice, axis=0)
 
-ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
-    cryocooler_efficiency=0.1, system_efficiency=0.6, enrichment_factor=6, benef_ilmenite_recovery=0.51, motor_efficiency=0.6, mRover=67, vip_thickness=0.025)
+ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
 
 # Plot total energy w. errors
 print(energy_slice_mu)

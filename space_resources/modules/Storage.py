@@ -127,16 +127,16 @@ heat_fluxes = {"Q_flux_solar": 0,  # [W]
 
                }
 
-def get_Energy_per_kg_LOX(vip_thickness):
+def get_Energy_per_kg_LOX(vip_thickness,vip_thermal_conductivity, vip_emissivity,cryocooler_efficiency):
 
     lox_tank_geometry_calculation(vip_thickness)
     heat_transfer_coefficient_calculation()
     view_factor_calculation()
     solar_and_lunar_heat_flux_calculation()
-    outer_surface_heat_balance()
-    heat_flux_into_tank_calculation()
+    outer_surface_heat_balance(vip_thermal_conductivity, vip_emissivity)
+    heat_flux_into_tank_calculation(vip_thermal_conductivity)
     boil_off_rate_calculation()
-    zero_boil_off_system_power_consumption()
+    zero_boil_off_system_power_consumption(cryocooler_efficiency)
 
     return zero_boil_off_system["Energy_per_kg_LOX"]
 
@@ -299,7 +299,7 @@ def solar_and_lunar_heat_flux_calculation():
     heat_fluxes["Q_flux_lunar_surface_shadow"] = Q_flux_lunar_surface_shadow
 
 
-def outer_surface_heat_balance():
+def outer_surface_heat_balance(vip_thermal_conductivity=0.006, vip_emissivity=0.05):
     # Calculation of T_outer_surface_ by doing heat balance around outer surface of vip
 
     # VARIABLE INITIALIZATION
@@ -318,9 +318,9 @@ def outer_surface_heat_balance():
     steel_wall_thermal_conductivity = LOX_tank["steel_wall"]["THERMAL_CONDUCTIVITY"]
     vip_inner_radius = LOX_tank["vip"]["inner_radius"]
     vip_outer_radius = LOX_tank["vip"]["outer_radius"]
-    vip_thermal_conductivity = LOX_tank["vip"]["THERMAL_CONDUCTIVITY"]
+    vip_thermal_conductivity = vip_thermal_conductivity
     vip_outer_surface_area = LOX_tank["vip"]["outer_surface_area"]
-    vip_emissivity = LOX_tank["vip"]["EMISSIVITY"]
+    vip_emissivity = vip_emissivity
     vip_reflectivity = LOX_tank["vip"]["REFLECTIVITY"]
     support_beam_cross_section_area = LOX_tank["support_beam"]["cross_section_area"]
     support_beam_length = LOX_tank["support_beam"]["length"]
@@ -374,7 +374,7 @@ def outer_surface_heat_balance():
     LOX_tank["height_above_lunar_surface"] = tank_height_above_lunar_surface
 
 
-def heat_flux_into_tank_calculation():
+def heat_flux_into_tank_calculation(vip_thermal_conductivity=0.006):
 
     # VARIABLE INITIALIZATION
 
@@ -386,7 +386,7 @@ def heat_flux_into_tank_calculation():
     heat_transfer_coefficient = LOX_tank["liquid_oxygen"]["heat_transfer_coefficient"]
     vip_inner_radius = LOX_tank["vip"]["inner_radius"]
     vip_outer_radius = LOX_tank["vip"]["outer_radius"]
-    vip_thermal_conductivity = LOX_tank["vip"]["THERMAL_CONDUCTIVITY"]
+    vip_thermal_conductivity = vip_thermal_conductivity
     steel_wall_inner_radius = LOX_tank["steel_wall"]["inner_radius"]
     steel_wall_outer_radius = LOX_tank["steel_wall"]["outer_radius"]
     steel_wall_thermal_conductivity = LOX_tank["steel_wall"]["THERMAL_CONDUCTIVITY"]
@@ -433,10 +433,10 @@ def boil_off_rate_calculation():
     LOX_tank["boil_off_rate_%_per_month_shadow"] = boil_off_rate_percent_per_month_shadow
 
 
-def zero_boil_off_system_power_consumption():
+def zero_boil_off_system_power_consumption(cryocooler_efficiency=0.1):
 
     # VARIABLE INITIALIZATION
-    cryocooler_efficiency = zero_boil_off_system["cryocooler_efficiency"]
+    cryocooler_efficiency = cryocooler_efficiency
     T_cold_reservoir_carnot_cycle = zero_boil_off_system["T_cold_reservoir_carnot_cycle"]
     T_hot_reservoir_carnot_cycle = zero_boil_off_system["T_hot_reservoir_carnot_cycle"]
     LOX_storage_time = zero_boil_off_system["LOX_storage_time"]

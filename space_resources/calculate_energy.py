@@ -25,7 +25,7 @@ from modules.transportation import *
 forloops = False
 
 
-def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.6, enrichment_factor = 6, benef_ilmenite_recovery= 0.51, motor_efficiency=0.6, mRover=67, T_hot_reservoir_carnot_cycle=233, T_of_incoming_oxygen=340, vip_thickness=0.025):
+def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.6, enrichment_factor = 6, benef_ilmenite_recovery= 0.51, motor_efficiency=0.6, mRover=67, T_hot_reservoir_carnot_cycle=233, T_of_incoming_oxygen=340, vip_thickness=0.025, vip_thermal_conductivity=0.006, vip_emissivity=0.05,cryocooler_efficiency_storage=0.1):
     'user parameters'
     '====================================='
 
@@ -42,7 +42,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     rego_heat = total_energy_used_by_reactor_per_kg_regolith
     water_elec = electrolysis_energy_per_mol_H2O(system_efficiency)  # kWh/mol-water        (theta)
     dioxy_liq = liquefaction(cryocooler_efficiency, T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen)    # kWh/mol-dioxygen     (psi)
-    storage_cooling = get_Energy_per_kg_LOX(vip_thickness)  # kWh/mol-dioxygen
+    storage_cooling = get_Energy_per_kg_LOX(vip_thickness,vip_thermal_conductivity, vip_emissivity,cryocooler_efficiency_storage)  # kWh/mol-dioxygen
 
 
     # (2) Mass flow conversion parameters
