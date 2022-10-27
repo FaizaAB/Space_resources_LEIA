@@ -25,7 +25,7 @@ from modules.transportation import *
 forloops = False
 
 
-def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.6, enrichment_factor = 6, benef_ilmenite_recovery= 0.51, motor_efficiency=0.6, mRover=67, T_hot_reservoir_carnot_cycle=233, T_of_incoming_oxygen=340, vip_thickness=0.025, vip_thermal_conductivity=0.006, vip_emissivity=0.05,cryocooler_efficiency_storage=0.1):
+def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.6, enrichment_factor = 6, benef_ilmenite_recovery= 0.51, motor_efficiency=0.6, mRover=67, T_hot_reservoir_carnot_cycle=233, T_of_incoming_oxygen=340, vip_thickness=0.025, vip_thermal_conductivity=0.006, vip_emissivity=0.05,cryocooler_efficiency_storage=0.1,batch_reaction_time_in_hours=2.5, CFI_thickness=0.06, HTMLI_thickness=0.06, delta_T_insulation=200, reactor_heat_up_time_in_hours=5, T_regolith_in=273, T_pre_heater=450):
     'user parameters'
     '====================================='
 
@@ -39,7 +39,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     rego_exca = Alpha    # kWh/kg-regolith      (alpha)
     rego_tran = get_Beta(motor_efficiency=motor_efficiency,mRover=mRover)    # kWh/kg-regolith/km   (beta)
     # kWh/kg-regolith      (zeta)
-    rego_heat = total_energy_used_by_reactor_per_kg_regolith
+    rego_heat_list = create_rego_heat_list(batch_reaction_time_in_hours, CFI_thickness, HTMLI_thickness, delta_T_insulation, reactor_heat_up_time_in_hours, T_regolith_in, T_pre_heater)
     water_elec = electrolysis_energy_per_mol_H2O(system_efficiency)  # kWh/mol-water        (theta)
     dioxy_liq = liquefaction(cryocooler_efficiency, T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen)    # kWh/mol-dioxygen     (psi)
     storage_cooling = get_Energy_per_kg_LOX(vip_thickness,vip_thermal_conductivity, vip_emissivity,cryocooler_efficiency_storage)  # kWh/mol-dioxygen
