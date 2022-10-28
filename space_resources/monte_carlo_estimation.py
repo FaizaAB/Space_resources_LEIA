@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 def monte_carlo_estimation_all_params():
     processes = ["Excavation", "Transportation", "Reactor",
                 "Electrolysis", "Liquefaction", "Storage"]
-    N = 10
+    N = 100
 
     energy_w_ilmenite = []
     energy_slice = []
@@ -21,7 +21,7 @@ def monte_carlo_estimation_all_params():
         T_of_incoming_oxygen = random.uniform(330, 350)
 
         # Beneficiation parameters
-        enrichment_factor = 6#random.uniform(1.25, 11.39)
+        enrichment_factor = random.uniform(1.25, 11.39)
         benef_ilmenite_recovery = random.uniform(0.24, 0.77)
 
         # Transportation parameters
@@ -96,25 +96,48 @@ def monte_carlo_estimation_individual_params():
 
     processes = ["Excavation", "Transportation", "Reactor",
                 "Electrolysis", "Liquefaction", "Storage"]
-    N = 10
-    energy_w_ilmenite = []
-    energy_slice = []
-    param_dict = {"batch_reaction_time_in_hours":   (0.5, 4.5),
-        "CFI_thickness":   (0.02, 0.1),    
-        "HTMLI_thickness":(0.02, 0.1),    
-        "delta_T_insulation":(100, 300),    
-        "reactor_heat_up_time_in_hours":(3, 7),    
-        "T_regolith_in":(173, 373),    
-        "T_pre_heater":(250, 650),    
-        "enrichment_factor":(1.25, 11.39),    
-        "benef_ilmenite_recovery":(0.24, 0.77),    
+    N = 50
+    #dictionary for the parameters to be varied of structure:  "Name":(lower bound, assumed value, upper bound)
+    param_dict = {"batch_reaction_time_in_hours":   [0.5,2.5, 4.5],
+        "CFI_thickness":   [0.02, 0.06, 0.1],    
+        "HTMLI_thickness":[0.02, 0.06, 0.1],    
+        "delta_T_insulation":[100, 200, 300],    
+        "reactor_heat_up_time_in_hours":[3, 5, 7],    
+        "T_regolith_in":[173, 273, 373],    
+        "T_pre_heater":[250, 450, 650],    
+        "enrichment_factor":[1.25, 6, 11.39],    
+        "benef_ilmenite_recovery":[0.24, 0.51, 0.77]    
     }
 
-    for param in param_dict:
+    #dictionary to write the results
+    result_dict = {"ilmenite_grades"
+        "batch_reaction_time_in_hours":   [],
+        "CFI_thickness":   [],    
+        "HTMLI_thickness":[],    
+        "delta_T_insulation":[],    
+        "reactor_heat_up_time_in_hours":[],    
+        "T_regolith_in":[],    
+        "T_pre_heater":[],    
+        "enrichment_factor":[],    
+        "benef_ilmenite_recovery":[]    
+        }
+    ilmenite_grade_list = []
+
+    #iterating through the parameter dictionary
+    for key in param_dict:
+        print(key)
+        energy_w_ilmenite = []
+        energy_slice = []
+        assumed_value = param_dict[key][1]
         for i in range(0,N):
-            ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(param = param_dict[param])
+            
+            param_dict[key][1] = random.uniform(param_dict[key][0], param_dict[key][2])
+            ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
+                batch_reaction_time_in_hours = param_dict["batch_reaction_time_in_hours"][1], CFI_thickness=param_dict["CFI_thickness"][1], HTMLI_thickness=param_dict["HTMLI_thickness"][1], delta_T_insulation=param_dict["delta_T_insulation"][1], reactor_heat_up_time_in_hours=param_dict["reactor_heat_up_time_in_hours"][1], T_regolith_in=param_dict["T_regolith_in"][1], T_pre_heater=param_dict["T_pre_heater"][1], benef_ilmenite_recovery=param_dict["benef_ilmenite_recovery"][1], enrichment_factor=param_dict["enrichment_factor"][1])
             energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
             energy_slice.append(energy)
+
+        param_dict[key][1] = assumed_value
         energy_w_ilmenite = np.array(energy_w_ilmenite)
         energy_slice = np.array(energy_slice)
 
@@ -124,10 +147,10 @@ def monte_carlo_estimation_individual_params():
         energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)
         energy_slice_std = np.std(energy_slice, axis=0)
 
-        print(energy_slice_std)
+        result_dict[key] = [energy_slice_std, energy_w_ilmenite_std]
+        #ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
 
-        ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
-
+        '''
         # Plot total energy w. errors
         print(energy_slice_mu)
         plt.errorbar(ilmenite_grade_list, y=energy_as_func_of_ilmenite_list,
@@ -150,5 +173,22 @@ def monte_carlo_estimation_individual_params():
             sns.histplot(process, ax=_ax)
             _ax.set_title(name)
         plt.show()
-
+        '''
+    #plot list of total errors for differrent varied variables
+    plt.scatter(ilmenite_grade_list[4::], result_dict["batch_reaction_time_in_hours"][1][4::], marker = 'x', label = "batch_reaction_time_in_hours")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["CFI_thickness"][1][4::], marker = 'x', label = "CFI_thickness")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["HTMLI_thickness"][1][4::], marker = 'x', label = "HTMLI_thickness")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["delta_T_insulation"][1][4::], marker = 'x', label = "delta_T_insulation")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["reactor_heat_up_time_in_hours"][1][4::], marker = 'x', label = "reactor_heat_up_time_in_hours")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["T_regolith_in"][1][4::], marker = 'x', label = "T_regolith_in")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["T_pre_heater"][1][4::], marker = 'x', label = "T_pre_heater")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["enrichment_factor"][1][4::], marker = 'x', label = "enrichment_factor")
+    plt.scatter(ilmenite_grade_list[4::], result_dict["benef_ilmenite_recovery"][1][4::], marker = 'x', label = "benef_ilmenite_recovery")
+    
+    plt.gca().set_title('Errors for different variables')
+    plt.xlabel("ilmenite %")
+    plt.ylabel("error in kWh/kg LOX")
+    plt.legend()
+    plt.show()
+#monte_carlo_estimation_all_params()
 monte_carlo_estimation_individual_params()
