@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 def monte_carlo_estimation_all_params():
-    processes = ["Excavation", "Transportation", "Reactor",
+    processes = ["Excavation", "Transportation", "Beneficiation", "Reactor",
                 "Electrolysis", "Liquefaction", "Storage"]
     N = 100
 
@@ -173,7 +173,7 @@ def monte_carlo_estimation_individual_params():
             sns.histplot(process, ax=_ax)
             _ax.set_title(name)
         plt.show()
-        '''
+    '''    
     #plot list of total errors for differrent varied variables
     plt.scatter(ilmenite_grade_list[4::], result_dict["batch_reaction_time_in_hours"][1][4::], marker = 'x', label = "batch_reaction_time_in_hours")
     plt.scatter(ilmenite_grade_list[4::], result_dict["CFI_thickness"][1][4::], marker = 'x', label = "CFI_thickness")
@@ -190,5 +190,5 @@ def monte_carlo_estimation_individual_params():
     plt.ylabel("error in kWh/kg LOX")
     plt.legend()
     plt.show()
-#monte_carlo_estimation_all_params()
-monte_carlo_estimation_individual_params()
+monte_carlo_estimation_all_params()
+#monte_carlo_estimation_individual_params()

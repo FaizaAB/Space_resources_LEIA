@@ -37,10 +37,10 @@ pastel = sns.color_palette(palette="muted", as_cmap=True)
 print(energy)
 sum_energy = np.sum(energy)
 labels = np.round(energy/sum_energy*100, 3)
-energy_consumers_full = ["Excavation", "Transportation",
+energy_consumers_full = ["Excavation", "Transportation", "Beneficiation",
                          "Reactor", "Electrolysis", "Liquefaction", "Storage"]
 #colors_bars = ["tab:grey", "black", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
-colors_bars = ["orange", "red", viridis(
+colors_bars = ["orange", "red", "black", viridis(
     0.2), viridis(0.45),  viridis(0.6), viridis(0.95)]
 #colors_bars = [pastel[5], pastel[7], pastel[3], pastel[2],  pastel[0], pastel[8]]
 # colors_bars = ['#FEB144', pastel[7], '#FF6663', '#FDFD97',  '#9EC1CF', '#9EE09E']
@@ -48,10 +48,10 @@ colors_bars = ["orange", "red", viridis(
 
 # used lists and variables for the stackplot
 legend_stackplot = ["Storage",  "Liquefaction",
-                    "Electrolysis", "Transportation", "Excavation", "Reactor"]
+                    "Electrolysis", "Transportation", "Excavation", "Beneficiation", "Reactor"]
 #colors_stackplot = [  "tab:orange",  "tab:blue", "tab:green", "tab:red","black","tab:grey" ]
 colors_stackplot = [viridis(0.95),  viridis(
-    0.6), viridis(0.45), "red", "orange", viridis(0.2)]
+    0.6), viridis(0.45), "red", "orange", "black", viridis(0.2)]
 #colors_stackplot = [pastel[8], pastel[0], pastel[2], pastel[3],  pastel[7], pastel[5]]
 # colors_stackplot = ['#9EE09E', '#9EC1CF', '#FDFD97', '#FF6663', pastel[7], '#FEB144']
 # colors_stackplot = ['#1e3378', '#009bdb', '#00ae9d', '#f1666a', '#8197a6', 'black']
@@ -62,7 +62,7 @@ fig2, (ax3, ax4) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
 
 # create stackplot
 #p2 = ax2.stackplot(ilmenite_grade_list, energy_list, colors = colors_stackplot, labels = legend_stackplot)
-
+'''
 barwidth = 12/len(ilmenite_grade_list)
 p2 = ax2.bar(ilmenite_grade_list,
              energy_list[0], color=colors_stackplot[0], label=legend_stackplot[0], width=barwidth)
@@ -84,7 +84,7 @@ ax2.set_title('B', loc='left', fontsize =20)
 ax2.set_xlabel("Ilmenite %")
 ax2.set_ylabel('kWh/kg LOX')
 ax2.set_xlim((0.75, 15.25))
-ax2.legend()
+ax2.legend()'''
 
 # create bar plot
 p1 = ax1.bar(energy_consumers_full, energy, color=colors_bars)

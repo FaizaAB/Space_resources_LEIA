@@ -31,6 +31,8 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
 
     'production rate kg-regolith-excavated /24-hours'
     production_rate = 0.5  # kg regolith/24-hours
+    
+
 
     'production rate kg-regolith-excavated /24-hours'
     oxygen_production_rate = 11.42  # [kg/h] (11.42 kg/h = 100 t/year)
@@ -112,6 +114,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     # (4.1) init variables
     X_energy = 0
     T_energy = 0
+    B_energy = 0
     R_energy = 0
     E_energy = 0
     L_energy = 0
@@ -120,23 +123,25 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     # (4.2) calculate Energy per step
     X_energy = X_in_regolith * rego_exca
     T_energy = X_in_regolith * rego_tran
+    B_energy = B_in_regolith *(LUNAR_GRAVITY * 1/(3.6e6) + rego_tran) #Lift regolith 1m + transport it 1 km away from site
     R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade-1]
     E_energy = E_in_water_mols * water_elec
     L_energy = L_in_dioxy_mols * dioxy_liq
     S_energy = S_out_dioxy_kg * storage_cooling
 
-    Energy_chain_name = ["X_energy", "T_energy",
+    Energy_chain_name = ["X_energy", "T_energy", "B_energy",
                         "R_energy", "E_energy", "L_energy", "S_energy"]
-    Energy_chain = [X_energy, T_energy, R_energy, E_energy, L_energy, S_energy]
+    Energy_chain = [X_energy, T_energy, B_energy, R_energy, E_energy, L_energy, S_energy]
 
     # (4.3) Total Energy per Batch
-    Total_energy = (X_energy + T_energy + R_energy +
+    Total_energy = (X_energy + T_energy + R_energy + B_energy +
                     E_energy + L_energy + S_energy)
 
 
     # (4.6) Energy per kg LOX
     X_energy_per_kg_LOX = X_energy/S_out_dioxy_kg
     T_energy_per_kg_LOX = T_energy/S_out_dioxy_kg
+    B_energy_per_kg_LOX = B_energy/S_out_dioxy_kg
     R_energy_per_kg_LOX = R_energy/S_out_dioxy_kg
     E_energy_per_kg_LOX = E_energy/S_out_dioxy_kg
     L_energy_per_kg_LOX = L_energy/S_out_dioxy_kg
@@ -212,6 +217,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     # lists to include in stacked bar chart graph
     X_energy_list = []
     T_energy_list = []
+    B_energy_list = []
     R_energy_list = []
     E_energy_list = []
     L_energy_list = []
@@ -258,6 +264,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         # (4.1) init variables
         X_energy = 0
         T_energy = 0
+        B_energy = 0 
         R_energy = 0
         E_energy = 0
         L_energy = 0
@@ -266,6 +273,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         # (4.2) calculate Energy per step
         X_energy = X_in_regolith * rego_exca
         T_energy = X_in_regolith * rego_tran
+        B_energy = B_in_regolith * LUNAR_GRAVITY * 1 + rego_tran
         R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade-1]
         E_energy = E_in_water_mols * water_elec
         L_energy = L_in_dioxy_mols * dioxy_liq
@@ -285,6 +293,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         energy_as_func_of_ilmenite_list.append(Total_energy/S_out_dioxy_kg)
         X_energy_list.append(X_energy/S_out_dioxy_kg)
         T_energy_list.append(T_energy/S_out_dioxy_kg)
+        B_energy_list.append(B_energy/S_out_dioxy_kg)
         R_energy_list.append(R_energy/S_out_dioxy_kg)
         E_energy_list.append(E_energy/S_out_dioxy_kg)
         L_energy_list.append(L_energy/S_out_dioxy_kg)
@@ -295,13 +304,14 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     energy_as_func_of_ilmenite_list = np.array(energy_as_func_of_ilmenite_list)
     X_energy_list = np.array(X_energy_list)
     T_energy_list = np.array(T_energy_list)
+    B_energy_list = np.array(T_energy_list)
     R_energy_list = np.array(R_energy_list)
     E_energy_list = np.array(E_energy_list)
     L_energy_list = np.array(L_energy_list)
     S_energy_list = np.array(S_energy_list)
 
     energy_list = [S_energy_list, L_energy_list, E_energy_list,
-                   T_energy_list, X_energy_list, R_energy_list]
+                   T_energy_list, X_energy_list, B_energy_list, R_energy_list]
 
     # Figure that plots the energy in function of ilmenite head grade
     '''
@@ -332,7 +342,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     '''
     
 
-    energy = [X_energy_per_kg_LOX, T_energy_per_kg_LOX, R_energy_per_kg_LOX,
+    energy = [X_energy_per_kg_LOX, T_energy_per_kg_LOX, B_energy_per_kg_LOX, R_energy_per_kg_LOX,
           E_energy_per_kg_LOX, L_energy_per_kg_LOX, S_energy_per_kg_LOX]
 
     return ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy

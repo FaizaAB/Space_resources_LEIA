@@ -23,6 +23,12 @@ class Benef_class():
                              self.pre_benef_ilmenite_grade)/(self.enrichment_factor * self.pre_benef_ilmenite_grade)
         self.B_out_regolith = self.B_out_ilmenite + self.B_out_gangue
 
+      
+        
+
+
+    
+
 # output ilmenite
 # output gangue
 # output regolith
