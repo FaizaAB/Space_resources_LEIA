@@ -12,9 +12,10 @@ import numpy as np
 depthM = 0.025  # m
 trenchDepthM = 0.1  # m
 radiusM = 0.15  # m
-extAngle = 10  # deg
-intAngle = 45  # deg
-cohCoeff = 2000  # Pa
+#extAngle = 10  # deg
+#intAngle = 45  # deg
+#cohCoeff = 2100  # Pa
+
 
 
 def excavationMechanics(depth_m, trench_depth_m, radius_m, ext_angle, int_angle, coh_coeff):
@@ -126,6 +127,13 @@ def A_prime(x, f, d):
     return ans
 
 
-digOutputs = excavationMechanics(
+
+def get_Alpha(cohCoeff=2.1, intAngle=45, extAngle=10):
+    digOutputs = excavationMechanics(
     depthM, trenchDepthM, radiusM, extAngle, intAngle, cohCoeff)
-Alpha = 2.77778e-7*digOutputs[1]  # kWh/kg
+
+    Alpha = 2.77778e-7*digOutputs[1]  # kWh/kg
+
+    return Alpha
+
+Alpha = get_Alpha()
