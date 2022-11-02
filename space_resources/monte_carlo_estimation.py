@@ -3,7 +3,7 @@ import numpy as np
 import random
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+plt.rcParams.update({'lines.markeredgewidth': 1})
 
 def monte_carlo_estimation_all_params():
     processes = ["Excavation", "Transportation", "Beneficiation", "Reactor",
@@ -71,14 +71,14 @@ def monte_carlo_estimation_all_params():
     # Plot total energy w. errors
     print(energy_slice_mu)
     plt.errorbar(ilmenite_grade_list, y=energy_as_func_of_ilmenite_list,
-                yerr=energy_w_ilmenite_std)
+                yerr=energy_w_ilmenite_std, capsize=5)
     plt.gca().set_title('Total energy w. errors')
     plt.show()
 
 
     # Plot energy w. errors
     plt.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
-            energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))))
+            energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))), capsize=5)
     plt.gca().set_title('Energy w. errors')
     plt.show()
 
@@ -96,7 +96,7 @@ def monte_carlo_estimation_individual_params():
 
     processes = ["Excavation", "Transportation", "Reactor",
                 "Electrolysis", "Liquefaction", "Storage"]
-    N = 50
+    N = 5
     #dictionary for the parameters to be varied of structure:  "Name":(lower bound, assumed value, upper bound)
     param_dict = {"batch_reaction_time_in_hours":   [0.5,2.5, 4.5],
         "CFI_thickness":   [0.02, 0.06, 0.1],    
@@ -195,8 +195,7 @@ def monte_carlo_estimation_individual_params():
     plt.scatter(10, 100*result_dict["T_pre_heater"][0][3]/energy[3], marker = 'x', label = "T_pre_heater")
     plt.scatter(10, 100*result_dict["enrichment_factor"][0][3]/energy[3], marker = 'x', label = "enrichment_factor")
     plt.scatter(10, 100*result_dict["benef_ilmenite_recovery"][0][3]/energy[3], marker = 'x', label = "benef_ilmenite_recovery")
-
-    print(result_dict["batch_reaction_time_in_hours"][0])  
+ 
 
     plt.gca().set_title('Errors for different variables')
     plt.xlabel("ilmenite %")
@@ -207,5 +206,5 @@ def monte_carlo_estimation_individual_params():
 
 
 
-#monte_carlo_estimation_all_params()
-monte_carlo_estimation_individual_params()
+monte_carlo_estimation_all_params()
+#monte_carlo_estimation_individual_params()
