@@ -8,7 +8,7 @@ plt.rcParams.update({'lines.markeredgewidth': 1})
 def monte_carlo_estimation_all_params():
     processes = ["Excavation", "Transportation", "Beneficiation", "Reactor",
                 "Electrolysis", "Liquefaction", "Storage"]
-    N = 10
+    N = 50
 
     energy_w_ilmenite = []
     energy_slice = []
@@ -28,6 +28,11 @@ def monte_carlo_estimation_all_params():
         motor_efficiency = random.uniform(0.4, 0.8)
         mRover = random.uniform(50, 90)
         
+        # Excavation parameters
+        cohCoeff = random.uniform(100, 2100)
+        intAngle = random.uniform(40, 50)
+        extAngle = random.uniform(10, 15)
+
 
         # Storage Parameters
         vip_thickness = random.uniform(0.015, 0.035)
@@ -50,7 +55,7 @@ def monte_carlo_estimation_all_params():
 
         
         ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
-            cryocooler_efficiency=cryocooler_efficiency, enrichment_factor=enrichment_factor, system_efficiency=system_efficiency, benef_ilmenite_recovery=benef_ilmenite_recovery, motor_efficiency=motor_efficiency, mRover=mRover, T_hot_reservoir_carnot_cycle=T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen=T_of_incoming_oxygen, vip_thickness=vip_thickness, vip_thermal_conductivity=vip_thermal_conductivity, vip_emissivity=vip_emissivity,cryocooler_efficiency_storage=cryocooler_efficiency_storage,batch_reaction_time_in_hours=batch_reaction_time_in_hours,CFI_thickness=CFI_thickness,HTMLI_thickness=HTMLI_thickness, delta_T_insulation=delta_T_insulation, reactor_heat_up_time_in_hours=reactor_heat_up_time_in_hours, T_regolith_in=T_regolith_in, T_pre_heater=T_pre_heater)
+            cryocooler_efficiency=cryocooler_efficiency, enrichment_factor=enrichment_factor, system_efficiency=system_efficiency, benef_ilmenite_recovery=benef_ilmenite_recovery, motor_efficiency=motor_efficiency, mRover=mRover, T_hot_reservoir_carnot_cycle=T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen=T_of_incoming_oxygen, vip_thickness=vip_thickness, vip_thermal_conductivity=vip_thermal_conductivity, vip_emissivity=vip_emissivity,cryocooler_efficiency_storage=cryocooler_efficiency_storage,batch_reaction_time_in_hours=batch_reaction_time_in_hours,CFI_thickness=CFI_thickness,HTMLI_thickness=HTMLI_thickness, delta_T_insulation=delta_T_insulation, reactor_heat_up_time_in_hours=reactor_heat_up_time_in_hours, T_regolith_in=T_regolith_in, T_pre_heater=T_pre_heater, cohCoeff=cohCoeff, intAngle=intAngle, extAngle=extAngle)
 
         energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
         energy_slice.append(energy)
@@ -96,7 +101,7 @@ def monte_carlo_estimation_individual_params():
 
     processes = ["Excavation", "Transportation", "Reactor",
                 "Electrolysis", "Liquefaction", "Storage"]
-    N = 5
+    N = 150
     #dictionary for the parameters to be varied of structure:  "Name":(lower bound, assumed value, upper bound)
     param_dict = {"batch_reaction_time_in_hours":   [0.5,2.5, 4.5],
         "CFI_thickness":   [0.02, 0.06, 0.1],    
