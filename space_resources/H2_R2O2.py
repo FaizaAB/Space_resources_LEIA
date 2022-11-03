@@ -39,22 +39,22 @@ sum_energy = np.sum(energy)
 labels = np.round(energy/sum_energy*100, 1)
 energy_consumers_full = ["Excavation", "Transportation", "Beneficiation",
                          "Reactor", "Electrolysis", "Liquefaction", "Storage"]
-#colors_bars = ["tab:grey", "black", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
-colors_bars = ["orange", "red", "black", viridis(
+#colors_bars = ["tab:grey", "grey", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
+colors_bars = ["orange", "red", "grey", viridis(
     0.2), viridis(0.45),  viridis(0.6), viridis(0.95)]
 #colors_bars = [pastel[5], pastel[7], pastel[3], pastel[2],  pastel[0], pastel[8]]
 # colors_bars = ['#FEB144', pastel[7], '#FF6663', '#FDFD97',  '#9EC1CF', '#9EE09E']
-# colors_bars = ['black', '#8197a6', '#f1666a', '#00ae9d',  '#009bdb', '#1e3378']
+# colors_bars = ['grey', '#8197a6', '#f1666a', '#00ae9d',  '#009bdb', '#1e3378']
 
 # used lists and variables for the stackplot
 legend_stackplot = ["Storage",  "Liquefaction",
                     "Electrolysis", "Transportation", "Excavation", "Beneficiation", "Reactor"]
-#colors_stackplot = [  "tab:orange",  "tab:blue", "tab:green", "tab:red","black","tab:grey" ]
+#colors_stackplot = [  "tab:orange",  "tab:blue", "tab:green", "tab:red","grey","tab:grey" ]
 colors_stackplot = [viridis(0.95),  viridis(
-    0.6), viridis(0.45), "red", "orange", "black", viridis(0.2)]
+    0.6), viridis(0.45), "red", "orange", "grey", viridis(0.2)]
 #colors_stackplot = [pastel[8], pastel[0], pastel[2], pastel[3],  pastel[7], pastel[5]]
 # colors_stackplot = ['#9EE09E', '#9EC1CF', '#FDFD97', '#FF6663', pastel[7], '#FEB144']
-# colors_stackplot = ['#1e3378', '#009bdb', '#00ae9d', '#f1666a', '#8197a6', 'black']
+# colors_stackplot = ['#1e3378', '#009bdb', '#00ae9d', '#f1666a', '#8197a6', 'grey']
 
 # create figure
 fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
@@ -97,7 +97,7 @@ ax1.grid(axis="y")
 #              loc="left",  fontsize=11)
 ax1.set_title('A', loc='left', fontsize =20)
 ax1.set_ylabel('kWh/kg LOX')
-
+fig.subplots_adjust(wspace=0.3, hspace=0.5)
 index = -1
 for bar in p1:
     index = index+1
@@ -111,19 +111,35 @@ for bar in p1:
              weight='bold')
 
 # Plot reactor energy sinks comparison
+pastel = sns.color_palette(palette="muted", as_cmap=True)
 reactor_energy_sinks = ["Hydrogen heating", "Insulation heating",
                         "Endothermic reaction", "Insulation heat loss", "Regolith heat up"]
 reactor_energies = [energy_to_heat_hydrogen_at_10_perc_ilm, total_energy_to_heat_insulation_at_10_perc_ilm,
                     energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm, Q_total_lost_at_10_perc_ilm, energy_to_heat_regolith_batch_at_10_perc_ilm]
-reactor_colors = ['red','black','green','blue','grey']
+#reactor_colors = ['red','black','green','blue','grey']
+reactor_colors = [pastel[3],pastel[0],pastel[1],pastel[2],pastel[7]]
+
 
 p3 = ax3.bar(reactor_energy_sinks, reactor_energies, color = reactor_colors)
 ax3.grid(axis="y")
 #ax3.set_title("Reactor energy requirements comparison (10 %Ilmenite)",
 #              loc="left",  fontsize=11)
-ax3.set_title('C',loc='left', fontsize =20)
+ax3.set_title('A',loc='left', fontsize =20)
 ax3.set_ylabel('kWh/kg LOX')
 
+sum_energy_reactor = np.sum(reactor_energies)
+labels_reactor = np.round(reactor_energies/sum_energy_reactor*100, 1)
+index = -1
+for bar in p3:
+    index = index+1
+    width = bar.get_width()
+    height = bar.get_height()
+    x, y = bar.get_xy()
+    ax3.text(x+width/2,
+             y+height*1.01,
+             str(labels_reactor[index])+'%',
+             ha='center',
+             weight='bold')
 
 # Plot reactor energy sinks comparison over ilmenite %
 
@@ -148,22 +164,22 @@ energy_to_heat_regolith_batch_list= np.divide(energy_to_heat_regolith_batch_list
 
 barwidth_2 = 12/len(ilmenite_grade_list)
 b1 = ax4.bar(ilmenite_grade_list,
-             energy_to_heat_hydrogen_list, color='red', label=reactor_energy_sinks[0], width=barwidth)
+             energy_to_heat_hydrogen_list, color=reactor_colors[0], label=reactor_energy_sinks[0], width=barwidth)
 b2 = ax4.bar(ilmenite_grade_list, total_energy_to_heat_insulation_list,
-             bottom=energy_to_heat_hydrogen_list, color='black', label=reactor_energy_sinks[1], width=barwidth)
+             bottom=energy_to_heat_hydrogen_list, color=reactor_colors[1], label=reactor_energy_sinks[1], width=barwidth)
 b3 = ax4.bar(ilmenite_grade_list, energy_endothermic_ilmenite_H2_reaction_list, bottom=energy_to_heat_hydrogen_list
-             + total_energy_to_heat_insulation_list, color='green', label=reactor_energy_sinks[2], width=barwidth)
+             + total_energy_to_heat_insulation_list, color=reactor_colors[2], label=reactor_energy_sinks[2], width=barwidth)
 b4 = ax4.bar(ilmenite_grade_list, Q_total_lost_list, bottom=energy_to_heat_hydrogen_list + total_energy_to_heat_insulation_list +
-             energy_endothermic_ilmenite_H2_reaction_list, color='blue', label=reactor_energy_sinks[3], width=barwidth)
+             energy_endothermic_ilmenite_H2_reaction_list, color=reactor_colors[3], label=reactor_energy_sinks[3], width=barwidth)
 b4 = ax4.bar(ilmenite_grade_list, energy_to_heat_regolith_batch_list, bottom=energy_to_heat_hydrogen_list + total_energy_to_heat_insulation_list +
-             energy_endothermic_ilmenite_H2_reaction_list+Q_total_lost_list, color='grey', label=reactor_energy_sinks[4], width=barwidth)
+             energy_endothermic_ilmenite_H2_reaction_list+Q_total_lost_list, color=reactor_colors[4], label=reactor_energy_sinks[4], width=barwidth)
 ax4.legend()
 ax4.grid(axis="y")
 ax4.set_xlabel("Ilmenite wt%")
 ax4.set_ylabel('kWh/kg LOX')
 ax4.set_xlim((0.75, 15.25))
 #ax4.set_title("Reactor energy requirements comparison as a function of ilmenite %",loc="left",  fontsize=11)
-ax4.set_title('D',loc='left', fontsize =20)
+ax4.set_title('B',loc='left', fontsize =20)
 
 fig.autofmt_xdate()
 fig2.autofmt_xdate()
@@ -172,7 +188,7 @@ plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,
 plt.setp(ax4.xaxis.get_majorticklabels(), rotation=0,
          ha="center", rotation_mode="anchor")
 #plt.suptitle('Energy comparison between different process steps')
-plt.subplots_adjust(wspace=0.3, hspace=0.5)
+fig2.subplots_adjust(wspace=0.3, hspace=0.5)
 plt.savefig('Result_figure.png', dpi=200, bbox_inches='tight')
 plt.show()
 plt.close()

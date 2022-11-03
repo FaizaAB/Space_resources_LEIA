@@ -5,12 +5,15 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
+
+#global plot parameters
 plt.rcParams.update({'lines.markeredgewidth': 1})
+plt.rc('axes', axisbelow=True)
 
 def monte_carlo_estimation_all_params():
     processes = ["Excavation", "Transportation", "Beneficiation", "Reactor",
                 "Electrolysis", "Liquefaction", "Storage"]
-    N = 50
+    N = 200
 
     energy_w_ilmenite = []
     energy_slice = []
@@ -77,26 +80,36 @@ def monte_carlo_estimation_all_params():
 
     #define parameters for plots
     viridis = cm.get_cmap('viridis', 12)
-    colors_bars = ["orange", "red", "black", viridis(
+    colors_bars = ["orange", "red", "grey", viridis(
     0.2), viridis(0.45),  viridis(0.6), viridis(0.95)]
     barwidth = 12/len(ilmenite_grade_list)
     
+    fig, (ax1, ax2) =plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
     # Plot total energy w. errors
-    plt.bar(ilmenite_grade_list, height=energy_as_func_of_ilmenite_list,
-                yerr=energy_w_ilmenite_std, capsize=5, width = barwidth)
-    plt.gca().set_title('Total energy w. errors')
-    plt.show()
+    ax2.bar(ilmenite_grade_list, height=energy_as_func_of_ilmenite_list,
+                yerr=(abs(energy_w_ilmenite_std+(energy_as_func_of_ilmenite_list -
+            energy_w_ilmenite_mu)), abs(energy_w_ilmenite_std-(energy_as_func_of_ilmenite_list-energy_w_ilmenite_mu))), capsize=3, width = barwidth)
+    ax2.set_ylabel('kWh/kg LOX')
+    ax2.grid(axis="y")
+    ax2.set_xlabel("Ilmenite wt%")
+    ax2.set_title('B',loc='left', fontsize =20)
 
 
     # Plot energy w. errors
-    plt.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
-            energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))), capsize=5, color = colors_bars)
-    plt.gca().set_title('Energy w. errors')
+    ax1.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
+            energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))), capsize=5, color = colors_bars, label = processes)
+    ax1.set_yscale('linear')
+    ax1.set_ylabel('kWh/kg LOX')
+    ax1.set_title('A',loc='left', fontsize =20)
+    ax1.grid(axis="y")
+    fig.subplots_adjust(wspace=0.3, hspace=0.5)
+    fig.autofmt_xdate()
+    plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,
+         ha="center", rotation_mode="anchor")
     plt.show()
-
-
     # Plot distributions
-    fig, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
+
+    fig2, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
 
     for process, _ax, name in zip(energy_slice.T, axs.ravel(), processes):
         sns.histplot(process, ax=_ax)
@@ -212,6 +225,8 @@ def monte_carlo_estimation_individual_params():
     plt.gca().set_title('Errors for different variables')
     plt.xlabel("ilmenite %")
     plt.ylabel("Relative error of energy consumption in %")
+    plt.set_ylabel('kWh/kg LOX')
+    plt.grid(axis="y")
     plt.legend()
     plt.show()
 
