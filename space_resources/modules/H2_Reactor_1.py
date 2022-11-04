@@ -59,7 +59,7 @@ HEAT_CAPACITY_HTMLI = 910
 
 # Variables
 
-T_pre_heater = 450
+T_pre_heater = 723
 CFI_thickness = 0.06  # [m] Ceramic insulation thickness
 HTMLI_thickness = 0.06  # [m] HTMLI insulation thickness
 reactor_height_above_surface = 1  # [m]
@@ -171,13 +171,13 @@ def energy_to_heat_hydrogen_func(ilmenite_mass_batch, batch_reaction_time_in_hou
 
     # Hydrogen heat-up calculation:
 
-    # Needed hydrogen mass flow calculation with 10% partial pressure condition
+    # Needed hydrogen mass flow calculation with 5% partial pressure condition
     water_out_moles_batch = ilmenite_moles_batch * \
         ilmenite_conversion_percentage/100  # [mol]
     molar_mass_flow_water = water_out_moles_batch / \
         (batch_reaction_time_in_hours*3600)  # [mol/s]
-    # [mol/s] 10 because of 10% partial pressure condition
-    molar_mass_flow_hydrogen = 10*molar_mass_flow_water
+    # [mol/s] 20 because of 5% partial pressure condition
+    molar_mass_flow_hydrogen = 20*molar_mass_flow_water
     mass_flow_hydrogen = molar_mass_flow_hydrogen * \
         MOLAR_MASS_H2/1000  # [kg/s] converted from g/s to kg/s
 
