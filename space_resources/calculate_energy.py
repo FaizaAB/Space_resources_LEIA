@@ -94,7 +94,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         post_benef_ilmenite_grade = 98
     # ilmenite_conversion Calculated in reactor module, depends on reaction time
     R_out_water_mols = B_out_ilmenite_mols*ilmenite_conversion
-   
+    
 
     E_in_water_mols = R_out_water_mols
     E_out_dioxy_mols = E_in_water_mols*1/2
@@ -123,7 +123,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     # (4.2) calculate Energy per step
     X_energy = X_in_regolith * rego_exca
     T_energy = X_in_regolith * rego_tran
-    B_energy = B_in_regolith *(LUNAR_GRAVITY * 1/(3.6e6) + rego_tran) #Lift regolith 1m + transport it 1 km away from site
+    B_energy = B_in_regolith * LUNAR_GRAVITY * 1/(3.6e6) + (B_in_regolith - B_out_regolith) * rego_tran #Lift regolith 1m + transport it 1 km away from site
     R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade-1]
     E_energy = E_in_water_mols * water_elec
     L_energy = L_in_dioxy_mols * dioxy_liq
@@ -258,7 +258,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         S_in_dioxy_mols = L_out_dioxy_mols
         S_in_dioxy_kg = S_in_dioxy_mols*dioxygen_molar_kg_mass
         S_out_dioxy_kg = S_in_dioxy_kg
-
+        
         # (4) Energy Accounting
 
         # (4.1) init variables
@@ -273,7 +273,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
         # (4.2) calculate Energy per step
         X_energy = X_in_regolith * rego_exca
         T_energy = X_in_regolith * rego_tran
-        B_energy = B_in_regolith * LUNAR_GRAVITY * 1 + rego_tran
+        B_energy = B_in_regolith * LUNAR_GRAVITY * 1/(3.6e6) + (B_in_regolith - B_out_regolith) * rego_tran #Lift regolith 1m + transport it 1 km away from site
         R_energy = R_in_regolith * rego_heat_list[post_benef_ilmenite_grade-1]
         E_energy = E_in_water_mols * water_elec
         L_energy = L_in_dioxy_mols * dioxy_liq
@@ -347,3 +347,4 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
 
 
     return ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy
+
