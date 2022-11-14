@@ -16,11 +16,12 @@ import modules.H2_Reactor_1 as H2_Reactor_1
 import modules.Storage as Storage
 from modules.beneficiation_placeholder import *
 from modules.electrolysis import electrolysis_energy_per_mol_H2O
-from modules.excavation import *
+from modules.excavation_new import *
 from modules.H2_Reactor_1 import *
 from modules.liquefaction import liquefaction
 from modules.Storage import *
-from modules.transportation import *
+#from modules.transportation import *
+from modules.transportation_onlyBeta import *
 
 forloops = False
 
@@ -38,8 +39,8 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.1, system_efficiency=0.
     oxygen_production_rate = 11.42  # [kg/h] (11.42 kg/h = 100 t/year)
 
     # (1) Energy cost parameters      # DUMMY NUMBERS currently 18/6/2022
-    rego_exca = get_Alpha(cohCoeff=cohCoeff, intAngle=intAngle, extAngle=extAngle)    # kWh/kg-regolith      (alpha)
-    rego_tran = get_Beta(motor_efficiency=motor_efficiency,mRover=mRover)    # kWh/kg-regolith/km   (beta)
+    rego_exca = get_Alpha(cohCoeff, intAngle, extAngle, motor_efficiency, mRover)    # kWh/kg-regolith      (alpha)
+    rego_tran = get_Beta(motor_efficiency,mRover)    # kWh/kg-regolith/km   (beta)
     # kWh/kg-regolith      (zeta)
     rego_heat_list = create_rego_heat_list(batch_reaction_time_in_hours, CFI_thickness, HTMLI_thickness, delta_T_insulation, reactor_heat_up_time_in_hours, T_regolith_in, T_pre_heater)
     water_elec = electrolysis_energy_per_mol_H2O(system_efficiency)  # kWh/mol-water        (theta)

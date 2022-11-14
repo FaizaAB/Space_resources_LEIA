@@ -53,12 +53,59 @@ def monte_carlo_estimation_all_params():
         reactor_heat_up_time_in_hours = random.uniform(3, 7)
         T_regolith_in = random.uniform(173, 373)
         T_pre_heater = random.uniform(623, 823)
-
-
-        # Electrolisys Parameters
-        system_efficiency = random.uniform(0.5, 0.7)
+        
 
         
+        # Electrolisys Parameters
+        system_efficiency = random.uniform(0.5, 0.7)
+        '''
+        
+        Default values to be used for testing
+        
+        
+        '''
+
+
+        '''
+        # Liquefaction parameters
+        cryocooler_efficiency = 0.1
+        T_hot_reservoir_carnot_cycle = 233
+        T_of_incoming_oxygen = 340
+
+        # Beneficiation parameters
+        enrichment_factor = 6
+        benef_ilmenite_recovery = 0.51
+
+        # Transportation parameters
+        #motor_efficiency = 0.6
+        #mRover = 67
+        
+        # Excavation parameters
+        cohCoeff = 2100
+        intAngle = 45
+        extAngle = 10
+
+
+        # Storage Parameters
+        vip_thickness = 0.025
+        vip_thermal_conductivity = 0.006
+        vip_emissivity = 0.05
+        cryocooler_efficiency_storage = 0.1
+
+        # Reactor parameters
+        batch_reaction_time_in_hours = 2.5
+        CFI_thickness = 0.06
+        HTMLI_thickness = 0.06
+        delta_T_insulation = 200
+        reactor_heat_up_time_in_hours = 5
+        T_regolith_in = 273
+        T_pre_heater = 723
+
+        # Electrolisys Parameters
+        system_efficiency = 0.6
+
+        '''
+
         ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
             cryocooler_efficiency=cryocooler_efficiency, enrichment_factor=enrichment_factor, system_efficiency=system_efficiency, benef_ilmenite_recovery=benef_ilmenite_recovery, motor_efficiency=motor_efficiency, mRover=mRover, T_hot_reservoir_carnot_cycle=T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen=T_of_incoming_oxygen, vip_thickness=vip_thickness, vip_thermal_conductivity=vip_thermal_conductivity, vip_emissivity=vip_emissivity,cryocooler_efficiency_storage=cryocooler_efficiency_storage,batch_reaction_time_in_hours=batch_reaction_time_in_hours,CFI_thickness=CFI_thickness,HTMLI_thickness=HTMLI_thickness, delta_T_insulation=delta_T_insulation, reactor_heat_up_time_in_hours=reactor_heat_up_time_in_hours, T_regolith_in=T_regolith_in, T_pre_heater=T_pre_heater, cohCoeff=cohCoeff, intAngle=intAngle, extAngle=extAngle)
 
@@ -102,7 +149,7 @@ def monte_carlo_estimation_all_params():
     ax1.set_ylabel('kWh/kg LOX')
     ax1.set_title('A',loc='left', fontsize =20)
     ax1.grid(axis="y")
-    ax1.set_ylim(bottom=10**(-4))
+    ax1.set_ylim(bottom=10**(-3))
     fig.subplots_adjust(wspace=0.3, hspace=0.5)
     fig.autofmt_xdate()
     plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,

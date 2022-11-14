@@ -424,78 +424,78 @@ def compute_beta(mRoverVar, mRegolithVar, gVar, bVar, rVar, slopeVar, lVar, hVar
 
 
 
+################################### ASSUMPTIONS: regolith properties #############################################
 
+# Regolith properties (from book "Introduction to the Mechanics of Space Robots").
+
+gVal = 1.62  # 1.62  # Gravity (m/s2)
+
+rhoVal = 1600  # Density (kg/m3), 1600 is taken as reference.
+
+nVal = 1  # Exponent
+
+kcVal = 2100  # Coheslion modulus (N/m^n+1) '#1400
+
+kphiVal = 820000  # Friction modulus (N/m^n+2)
+
+cVal = 170  # Cohesion (Pa)
+
+phiVal = math.radians(45)  # Friction angle (rad) 37 before
+
+kVal = 18e-3  # Shear modulus (m)
+
+
+
+############################################ Other ASSUMPTIONS ###################################################
+
+# ASSUMPTIONS: velocity, motor efficiency, total mass, wheel dimensions, wheelbase, height of CoG.
+
+# Parameters (90 kg of regolith per trip)
+
+velocityVal = 0.49  # [m/s], maximum speed from "RASSOR, the reduced gravity excavator."
+
+motor_efficiencyVal = 0.6  # 0.6
+
+mRover = 67  # [kg] Total mass of RASSOR2
+
+mRegolith = 90  # [kg] The rover is assumed to transport the maximum amount of regolith each time (from "RASSOR, the reduced gravity excavator.").
+
+WheelRadiusVal = 0.4318 / 2  # [m] Wheel radius (17 inches for the full wheel)
+
+WheelWidthVal = 0.1  # [m] Wheel width (from the picture?)
+
+wheelbaseVal = 0.5  # [m]
+
+heightCOGVal = 0.1  # [m]
+
+# The CoG is assumed to be centered
+
+SlopeVal = 0  # [rad] The soil is assumed to be flat
+
+DistanceToTravel = 1000  # [m] Distance between the excavation and the beneficiation site
+
+NcVal = fNy(phiVal*180/math.pi)  # Coefficient based on phi
+
+NyVal = fNc(phiVal*180/math.pi)  # Coefficient based on phi
 
 
 
 ################################################ Compute Beta ##################################################
 
-def get_Beta(motor_efficiency=0.6, mRover=67):
-
-    ################################### ASSUMPTIONS: regolith properties #############################################
-
-    # Regolith properties (from book "Introduction to the Mechanics of Space Robots").
-
-    gVal = 1.62  # 1.62  # Gravity (m/s2)
-
-    rhoVal = 1600  # Density (kg/m3), 1600 is taken as reference.
-
-    nVal = 1  # Exponent
-
-    kcVal = 2100  # Coheslion modulus (N/m^n+1) '#1400
-
-    kphiVal = 820000  # Friction modulus (N/m^n+2)
-
-    cVal = 170  # Cohesion (Pa)
-
-    phiVal = math.radians(45)  # Friction angle (rad) 37 before
-
-    kVal = 18e-3  # Shear modulus (m)
 
 
-
-    ############################################ Other ASSUMPTIONS ###################################################
-
-    # ASSUMPTIONS: velocity, motor efficiency, total mass, wheel dimensions, wheelbase, height of CoG.
-
-    # Parameters (90 kg of regolith per trip)
-
-    velocityVal = 0.49  # [m/s], maximum speed from "RASSOR, the reduced gravity excavator."
-
-    motor_efficiencyVal = motor_efficiency # 0.6
-
-    mRover = mRover  # [kg] Total mass of RASSOR2
-
-    mRegolith = 90  # [kg] The rover is assumed to transport the maximum amount of regolith each time (from "RASSOR, the reduced gravity excavator.").
-
-    WheelRadiusVal = 0.4318 / 2  # [m] Wheel radius (17 inches for the full wheel)
-
-    WheelWidthVal = 0.1  # [m] Wheel width (from the picture?)
-
-    wheelbaseVal = 0.5  # [m]
-
-    heightCOGVal = 0.1  # [m]
-
-    # The CoG is assumed to be centered
-
-    SlopeVal = 0  # [rad] The soil is assumed to be flat
-
-    DistanceToTravel = 1000  # [m] Distance between the excavation and the beneficiation site
-
-    NcVal = fNy(phiVal*180/math.pi)  # Coefficient based on phi
-
-    NyVal = fNc(phiVal*180/math.pi)  # Coefficient based on phi
-
-    Beta = compute_beta(mRover, mRegolith, gVal, WheelWidthVal, WheelRadiusVal, SlopeVal, wheelbaseVal, heightCOGVal,
-
-                        velocityVal, motor_efficiencyVal, DistanceToTravel, nVal, kcVal, kphiVal, cVal, kVal, phiVal)  # [kJ/kg/km]
+Beta = compute_beta(mRover, mRegolith, gVal, WheelWidthVal, WheelRadiusVal, SlopeVal, wheelbaseVal, heightCOGVal,
+                    velocityVal, motor_efficiencyVal, DistanceToTravel, nVal, kcVal, kphiVal, cVal, kVal, phiVal)  # [kJ/kg/km]
 
 
+def get_Beta(motor_efficiency, mRover_input):
+    beta_return = compute_beta(mRover_input, mRegolith, gVal, WheelWidthVal, WheelRadiusVal, SlopeVal, wheelbaseVal, heightCOGVal,
+                    velocityVal, motor_efficiency, DistanceToTravel, nVal, kcVal, kphiVal, cVal, kVal, phiVal)
+    return beta_return/3600
 
-    Beta = Beta/3600  # [kWh/kg/km]
+Beta = Beta/3600  # [kWh/kg/km]
 
-    print(Beta)
-    return Beta
+
 
 
 #print("Beta:", Beta, "[kWh/kg/km]")
