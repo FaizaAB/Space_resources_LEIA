@@ -14,7 +14,7 @@ plt.rc('axes', axisbelow=True)
 def monte_carlo_estimation_all_params():
     processes = ["Excavation", "Transportation", "Beneficiation", "Reactor",
                  "Electrolysis", "Liquefaction", "Storage"]
-    N = 2000
+    N = 20
 
     energy_w_ilmenite = []
     energy_slice = []
@@ -152,24 +152,28 @@ def monte_carlo_estimation_all_params():
         0.2), viridis(0.45),  viridis(0.6), viridis(0.95)]
     barwidth = 12/len(ilmenite_grade_list)
 
-    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
+    fig, (ax2) = plt.subplots(nrows=1, ncols=1, figsize=(9, 5))
     # Plot total energy w. errors
     ax2.bar(ilmenite_grade_list, height=energy_as_func_of_ilmenite_list,
             yerr=(abs(energy_w_ilmenite_std+(energy_as_func_of_ilmenite_list -
                                              energy_w_ilmenite_mu)), abs(energy_w_ilmenite_std-(energy_as_func_of_ilmenite_list-energy_w_ilmenite_mu))), capsize=3, width=barwidth)
     ax2.set_ylabel('kWh/kg LOX')
     ax2.grid(axis="y")
+    ax2.set_xticks([1,3,5,7,9,11,13,15])
+    ax2.set_xlim((0.75, 15.25))
     ax2.set_xlabel("Ilmenite wt%")
-    ax2.set_title('B', loc='left', fontsize=20)
+    #ax2.set_title('B', loc='left', fontsize=20)
 
-    # Plot energy w. errors
+
+
+    '''# Plot energy w. errors
     ax1.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
             energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))), capsize=5, color=colors_bars, label=processes)
     ax1.set_yscale('log')
     ax1.set_ylabel('kWh/kg LOX')
     ax1.set_title('A', loc='left', fontsize=20)
     ax1.grid(axis="y")
-    ax1.set_ylim(bottom=10**(-3))
+    ax1.set_ylim(bottom=10**(-3))'''
     fig.subplots_adjust(wspace=0.3, hspace=0.5)
     fig.autofmt_xdate()
     plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,
@@ -177,12 +181,12 @@ def monte_carlo_estimation_all_params():
     plt.show()
     # Plot distributions
 
-    fig2, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
+    #fig2, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
 
-    for process, _ax, name in zip(energy_slice.T, axs.ravel(), processes):
+    '''for process, _ax, name in zip(energy_slice.T, axs.ravel(), processes):
         sns.histplot(process, ax=_ax)
         _ax.set_title(name)
-    plt.show()
+    plt.show()'''
 
 
 def monte_carlo_estimation_individual_params():

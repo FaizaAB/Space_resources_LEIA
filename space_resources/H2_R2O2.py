@@ -36,7 +36,7 @@ pastel = sns.color_palette(palette="muted", as_cmap=True)
 
 
 sum_energy = np.sum(energy)
-labels = np.round(energy/sum_energy*100, 1)
+labels = np.round(energy/sum_energy*100, 2)
 energy_consumers_full = ["Excavation", "Transportation", "Beneficiation",
                          "Reactor", "Electrolysis", "Liquefaction", "Storage"]
 #colors_bars = ["tab:grey", "grey", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
@@ -87,6 +87,7 @@ ax2.grid(axis="y")
 ax2.set_title('B', loc='left', fontsize =20)
 ax2.set_xlabel("Ilmenite wt%")
 ax2.set_ylabel('kWh/kg LOX')
+ax2.set_xticks([1,3,5,7,9,11,13,15])
 ax2.set_xlim((0.75, 15.25))
 ax2.legend()
 
@@ -108,7 +109,7 @@ for bar in p1:
              y+height*1.01,
              str(labels[index])+'%',
              ha='center',
-             weight='bold')
+             weight='bold', fontsize=8)
 
 # Plot reactor energy sinks comparison
 pastel = sns.color_palette(palette="muted", as_cmap=True)
@@ -178,6 +179,7 @@ ax4.legend()
 ax4.grid(axis="y")
 ax4.set_xlabel("Ilmenite wt%")
 ax4.set_ylabel('kWh/kg LOX')
+ax4.set_xticks([1,3,5,7,9,11,13,15])
 ax4.set_xlim((0.75, 15.25))
 #ax4.set_title("Reactor energy requirements comparison as a function of ilmenite %",loc="left",  fontsize=11)
 ax4.set_title('B',loc='left', fontsize =20)
