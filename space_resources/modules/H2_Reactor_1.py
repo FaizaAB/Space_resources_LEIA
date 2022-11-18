@@ -384,8 +384,7 @@ def total_heat_lost(Q_out_added_heat_up, Q_flux_out, batch_reaction_time_in_hour
         (3.6e6)  # [kWh] Heat lost during heat-up time
     Q_lost_during_reaction = Q_flux_out * batch_reaction_time_in_hours*3600 / \
         (3.6e6)  # [kWh] Heat lost during the batch reaction time
-    # Total heat lost during heat-up and reaction time, multiply Q_total_lost with 3 to account for losses in mechanical supports / piping and for losses during loading and unloading regolith
-    Q_total_lost = 3*(Q_out_added_heat_up + Q_lost_during_reaction)  # [kWh]
+    Q_total_lost = (Q_out_added_heat_up + Q_lost_during_reaction)  # [kWh]
 
     return Q_out_added_heat_up, Q_lost_during_reaction, Q_total_lost
 
