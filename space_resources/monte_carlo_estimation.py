@@ -124,7 +124,7 @@ def monte_carlo_estimation_all_params():
 
 # prints
 
-    # absolute uncertainties
+    # uncertainties at 10 wt% ilmenite
     print("\n\n")
     print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------")
     print("-------------------------------------------------------      Absolute uncertainty by module in kWh/kg LOX      ----------------------------------------------------")
