@@ -36,7 +36,10 @@ pastel = sns.color_palette(palette="muted", as_cmap=True)
 
 
 sum_energy = np.sum(energy)
-labels = np.round(energy/sum_energy*100, 2)
+labels = np.zeros(len(energy))
+labels[1:] = np.round(energy[1:]/sum_energy*100, 1)
+labels[0] = np.round(energy[0]/sum_energy*100, 2)
+
 energy_consumers_full = ["Excavation", "Transportation", "Beneficiation",
                          "Hydrogen Reduction", "Electrolysis", "Liquefaction", "Storage"]
 #colors_bars = ["tab:grey", "grey", "tab:red", "tab:green",  "tab:blue", "tab:orange"]
@@ -85,7 +88,7 @@ ax2.grid(axis="y")
 #ax2.set_title("Energy requirements as a function of ilmenite %",
 #              loc="left", fontsize=11)
 ax2.set_title('B', loc='left', fontsize =20)
-ax2.set_xlabel("Ilmenite wt%")
+ax2.set_xlabel("Ilmenite head grade [wt%]")
 ax2.set_ylabel('kWh/kg LOX')
 ax2.set_xticks([1,3,5,7,9,11,13,15])
 ax2.set_xlim((0.75, 15.25))
@@ -177,7 +180,7 @@ b4 = ax4.bar(ilmenite_grade_list, energy_to_heat_regolith_batch_list, bottom=ene
              energy_endothermic_ilmenite_H2_reaction_list+Q_total_lost_list, color=reactor_colors[4], label=reactor_energy_sinks[4], width=barwidth)
 ax4.legend()
 ax4.grid(axis="y")
-ax4.set_xlabel("Ilmenite wt%")
+ax4.set_xlabel("Ilmenite head grade [wt%]")
 ax4.set_ylabel('kWh/kg LOX')
 ax4.set_xticks([1,3,5,7,9,11,13,15])
 ax4.set_xlim((0.75, 15.25))
