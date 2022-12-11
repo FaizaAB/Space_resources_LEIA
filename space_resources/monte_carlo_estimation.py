@@ -11,7 +11,7 @@ plt.rcParams.update({'lines.markeredgewidth': 1})
 plt.rc('axes', axisbelow=True)
 
 ''' Function: monte_carlo_estimation_all_params()
-    runs a monte carlo estimation to find the uncertainty in the energy requird when changin certain input parameters
+    runs a monte carlo estimation to find the uncertainty in the energy requirement when changing certain model parameters
 '''
 def monte_carlo_estimation_all_params():
     processes = ["Excavation", "Transportation", "Beneficiation", "Reactor",
@@ -24,7 +24,7 @@ def monte_carlo_estimation_all_params():
     for n in range(0, N):
 
         # Liquefaction parameters
-        cryocooler_efficiency = random.uniform(0.05, 0.4)  # Think about upper limit
+        cryocooler_efficiency = random.uniform(0.05, 0.4)
         T_hot_reservoir_carnot_cycle = random.uniform(183, 283)
         T_of_incoming_oxygen = random.uniform(330, 350)
 
@@ -121,37 +121,40 @@ def monte_carlo_estimation_all_params():
     ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
 
 
-# prints
+# numeric values printed for the computed uncertainties at 10%wt ilmenite
+    print = False
+    if(print):
+        print("\n\n")
+        print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+        print("-------------------------------------------------------      Absolute uncertainty by module in kWh/kg LOX      ----------------------------------------------------")
+        print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------" "\t")
 
-    # uncertainties at 10 wt% ilmenite
-    print("\n\n")
-    print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-    print("-------------------------------------------------------      Absolute uncertainty by module in kWh/kg LOX      ----------------------------------------------------")
-    print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------" "\t")
+        print(processes[0], "\t\t", processes[1], "\t", processes[2],
+            "\t\t", processes[3], "\t\t", processes[4], "\t\t", processes[5], "\t\t", processes[6])
+        print(energy_slice_std[0], "\t", energy_slice_std[1], "\t", energy_slice_std[2], "\t",
+            energy_slice_std[3], "\t", energy_slice_std[4], "\t", energy_slice_std[5], "\t", energy_slice_std[6])
+        print("\n\n")
 
-    print(processes[0], "\t\t", processes[1], "\t", processes[2],
-          "\t\t", processes[3], "\t\t", processes[4], "\t\t", processes[5], "\t\t", processes[6])
-    print(energy_slice_std[0], "\t", energy_slice_std[1], "\t", energy_slice_std[2], "\t",
-          energy_slice_std[3], "\t", energy_slice_std[4], "\t", energy_slice_std[5], "\t", energy_slice_std[6])
-    print("\n\n")
+        print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------")
+        print("-------------------------------------------------------        Relative uncertainty by module in %            -----------------------------------------------------")
+        print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------" "\t")
 
-    print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-    print("-------------------------------------------------------        Relative uncertainty by module in %            -----------------------------------------------------")
-    print("-------------------------------------------------------------------------------------------------------------------------------------------------------------------" "\t")
+        print(processes[0], "\t\t", processes[1], "\t", processes[2],
+            "\t\t", processes[3], "\t\t", processes[4], "\t\t", processes[5], "\t\t", processes[6])
+        print(energy_slice_std[0]/energy[0]*100, "\t", energy_slice_std[1]/energy[1]*100, "\t", energy_slice_std[2]/energy[2]*100,
+            "\t", energy_slice_std[3]/energy[3]*100, "\t", energy_slice_std[4]/energy[4]*100, "\t", energy_slice_std[5]/energy[5]*100, "\t", energy_slice_std[6]/energy[6]*100)
+        print("\n\n")
+    
 
-    print(processes[0], "\t\t", processes[1], "\t", processes[2],
-          "\t\t", processes[3], "\t\t", processes[4], "\t\t", processes[5], "\t\t", processes[6])
-    print(energy_slice_std[0]/energy[0]*100, "\t", energy_slice_std[1]/energy[1]*100, "\t", energy_slice_std[2]/energy[2]*100,
-          "\t", energy_slice_std[3]/energy[3]*100, "\t", energy_slice_std[4]/energy[4]*100, "\t", energy_slice_std[5]/energy[5]*100, "\t", energy_slice_std[6]/energy[6]*100)
-    print("\n\n")
 
-    # define parameters for plots
+    #color palettes and formatting for the output plots
     viridis = cm.get_cmap('viridis', 12)
     colors_bars = ["orange", "red", "grey", viridis(
         0.2), viridis(0.45),  viridis(0.6), viridis(0.95)]
     barwidth = 12/len(ilmenite_grade_list)
 
-    fig, (ax2) = plt.subplots(nrows=1, ncols=1, figsize=(9, 5))
+    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
+    
     # Plot total energy w. errors
     ax2.bar(ilmenite_grade_list, height=energy_as_func_of_ilmenite_list,
             yerr=(abs(energy_w_ilmenite_std+(energy_as_func_of_ilmenite_list -
@@ -161,25 +164,25 @@ def monte_carlo_estimation_all_params():
     ax2.set_xticks([1,3,5,7,9,11,13,15])
     ax2.set_xlim((0.75, 15.25))
     ax2.set_xlabel("Ilmenite wt%")
-    #ax2.set_title('B', loc='left', fontsize=20)
+    ax2.set_title('B', loc='left', fontsize=20)
 
 
 
-    '''# Plot energy w. errors
+    # Plot energy w. errors
     ax1.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
             energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))), capsize=5, color=colors_bars, label=processes)
     ax1.set_yscale('log')
     ax1.set_ylabel('kWh/kg LOX')
     ax1.set_title('A', loc='left', fontsize=20)
     ax1.grid(axis="y")
-    ax1.set_ylim(bottom=10**(-3))'''
+    ax1.set_ylim(bottom=10**(-3))
     fig.subplots_adjust(wspace=0.3, hspace=0.5)
     fig.autofmt_xdate()
     plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,
              ha="center", rotation_mode="anchor")
     plt.show()
-    # Plot distributions
 
+    # Plot distributions
     #fig2, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
 
     '''for process, _ax, name in zip(energy_slice.T, axs.ravel(), processes):
@@ -188,11 +191,17 @@ def monte_carlo_estimation_all_params():
     plt.show()'''
 
 
+
+''' Function: monte_carlo_estimation_individual_params()
+    runs a monte carlo estimation for parameters in the reactor module specifically, 
+    as the reactor module exhibits the highest uncertainty out of all the considered modules.
+    individual parameters are varied one by one to evaluate the impact of different parameters on the model
+'''
 def monte_carlo_estimation_individual_params():
 
     processes = ["Excavation", "Transportation", "Reactor",
                  "Electrolysis", "Liquefaction", "Storage"]
-    N = 150
+    N = 3
     # dictionary for the parameters to be varied of structure:  "Name":(lower bound, assumed value, upper bound)
     param_dict = {"batch_reaction_time_in_hours":   [0.5, 2.5, 4.5],
                   "CFI_thickness":   [0.02, 0.06, 0.1],
@@ -219,16 +228,15 @@ def monte_carlo_estimation_individual_params():
                    }
     ilmenite_grade_list = []
 
-    # iterating through the parameter dictionary
+    # iterating through the parameter dictionary, varying one parameter at a time
     for key in param_dict:
-        print(key)
+
         energy_w_ilmenite = []
         energy_slice = []
         assumed_value = param_dict[key][1]
-        for i in range(0, N):
 
-            param_dict[key][1] = random.uniform(
-                param_dict[key][0], param_dict[key][2])
+        for i in range(0, N):
+            param_dict[key][1] = random.uniform(param_dict[key][0], param_dict[key][2])
             ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
                 batch_reaction_time_in_hours=param_dict["batch_reaction_time_in_hours"][1], CFI_thickness=param_dict["CFI_thickness"][1], HTMLI_thickness=param_dict["HTMLI_thickness"][1], delta_T_insulation=param_dict["delta_T_insulation"][1], reactor_heat_up_time_in_hours=param_dict["reactor_heat_up_time_in_hours"][1], T_regolith_in=param_dict["T_regolith_in"][1], T_pre_heater=param_dict["T_pre_heater"][1], benef_ilmenite_recovery=param_dict["benef_ilmenite_recovery"][1], enrichment_factor=param_dict["enrichment_factor"][1])
             energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
@@ -245,23 +253,21 @@ def monte_carlo_estimation_individual_params():
         energy_slice_std = np.std(energy_slice, axis=0)
 
         result_dict[key] = [energy_slice_std, energy_w_ilmenite_std]
-        #ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
 
         '''
         # Plot total energy w. errors
-        print(energy_slice_mu)
         plt.errorbar(ilmenite_grade_list, y=energy_as_func_of_ilmenite_list,
                     yerr=energy_w_ilmenite_std)
         plt.gca().set_title('Total energy w. errors')
         plt.show()
 
-
+        
         # Plot energy w. errors
         plt.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
                 energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))))
         plt.gca().set_title('Energy w. errors')
         plt.show()
-
+        
 
         # Plot distributions
         fig, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
@@ -270,8 +276,8 @@ def monte_carlo_estimation_individual_params():
             sns.histplot(process, ax=_ax)
             _ax.set_title(name)
         plt.show()
-    '''
-    # plot list of total errors for differrent varied variables
+        '''
+    # plot list of total errors for different varied variables
     '''plt.scatter(ilmenite_grade_list, result_dict["batch_reaction_time_in_hours"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "batch_reaction_time_in_hours")
     plt.scatter(ilmenite_grade_list, result_dict["CFI_thickness"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "CFI_thickness")
     plt.scatter(ilmenite_grade_list, result_dict["HTMLI_thickness"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "HTMLI_thickness")
@@ -305,11 +311,10 @@ def monte_carlo_estimation_individual_params():
     plt.gca().set_title('Errors for different variables')
     plt.xlabel("ilmenite %")
     plt.ylabel("Relative error of energy consumption in %")
-    plt.set_ylabel('kWh/kg LOX')
     plt.grid(axis="y")
     plt.legend()
     plt.show()
 
 
-monte_carlo_estimation_all_params()
-# monte_carlo_estimation_individual_params()
+#monte_carlo_estimation_all_params()
+monte_carlo_estimation_individual_params()
