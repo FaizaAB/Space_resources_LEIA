@@ -1,18 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jul 27 13:41:56 2022
-
-@author: Fardin Ghaffari
-"""
 
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jun 27 12:03:26 2022
 
-@author: Fardin Ghaffari
+@author: Fardin Ghaffari, Anton Morlock
 """
-# H2_Reactor
-
 
 import csv
 import math
@@ -436,7 +428,7 @@ Q_total_lost_list = []
 energy_to_heat_regolith_batch_list = []
 
 
-for i in range(1, 99):
+for i in range(1, 100):
 
     ilmenite_percentage = i/100  # convert from percent to ratio
 
@@ -528,7 +520,7 @@ def create_rego_heat_list(batch_reaction_time_in_hours, CFI_thickness, HTMLI_thi
         computes energy requirements as a function of post beneficiation ilmenite percentage"""
 
     rego_heat_list = []
-    for i in range(1, 99):
+    for i in range(1, 100):
 
         ilmenite_percentage = i/100  # convert from percent to ratio
 

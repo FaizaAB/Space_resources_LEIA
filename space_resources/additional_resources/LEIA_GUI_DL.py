@@ -4,6 +4,7 @@
 Description:
     This script is a first order model of the energy chain required to 
     produce oxygen from lunar regolith via carbothermal reduction. 
+Author: Dorian Leger
 """
 
 # if theres a problem with WX change your local region on windows to US /English

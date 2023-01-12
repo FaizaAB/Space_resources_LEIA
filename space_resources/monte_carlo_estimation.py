@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jun 18 10:07:53 2022
+#monte carlo estimation:    
+author: Anton Morlock, Fardin Ghaffari, Freya Thoresen
+
+Version 1.0
+"""
+
+
 from calculate_energy import energy_as_func_of_ilmenite
 import numpy as np
 import random
@@ -10,19 +20,20 @@ from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 plt.rcParams.update({'lines.markeredgewidth': 1})
 plt.rc('axes', axisbelow=True)
 
-''' Function: monte_carlo_estimation_all_params()
-    runs a monte carlo estimation to find the uncertainty in the energy requirement when changing certain model parameters
-'''
+
 def monte_carlo_estimation_all_params():
+    """conducts a monte carlo estimation for specified parameters to determine the uncertainty of the modeled process"""
+
     processes = ["Excavation", "Transportation", "Beneficiation", "Reactor",
                  "Electrolysis", "Liquefaction", "Storage"]
+                  
     N = 2000
 
     energy_w_ilmenite = []
     energy_slice = []
 
     for n in range(0, N):
-
+        
         # Liquefaction parameters
         cryocooler_efficiency = random.uniform(0.05, 0.4)
         T_hot_reservoir_carnot_cycle = random.uniform(183, 283)
@@ -61,8 +72,6 @@ def monte_carlo_estimation_all_params():
         
         
         '========================Default values to be used for testing========================'
-        
-
         '''
         # Liquefaction parameters
         cryocooler_efficiency = 0.1
@@ -103,21 +112,25 @@ def monte_carlo_estimation_all_params():
 
         '''
 
+        #calculating the energy required for the current set of parameters and appending it into a list
         ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
             cryocooler_efficiency=cryocooler_efficiency, enrichment_factor=enrichment_factor, system_efficiency=system_efficiency, benef_ilmenite_recovery=benef_ilmenite_recovery, motor_efficiency=motor_efficiency, mRover=mRover, T_hot_reservoir_carnot_cycle=T_hot_reservoir_carnot_cycle, T_of_incoming_oxygen=T_of_incoming_oxygen, vip_thickness=vip_thickness, vip_thermal_conductivity=vip_thermal_conductivity, vip_emissivity=vip_emissivity, cryocooler_efficiency_storage=cryocooler_efficiency_storage, batch_reaction_time_in_hours=batch_reaction_time_in_hours, CFI_thickness=CFI_thickness, HTMLI_thickness=HTMLI_thickness, delta_T_insulation=delta_T_insulation, reactor_heat_up_time_in_hours=reactor_heat_up_time_in_hours, T_regolith_in=T_regolith_in, T_pre_heater=T_pre_heater, cohCoeff=cohCoeff, intAngle=intAngle, extAngle=extAngle)
 
         energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
         energy_slice.append(energy)
 
+    
     energy_w_ilmenite = np.array(energy_w_ilmenite)
     energy_slice = np.array(energy_slice)
 
+    #computing mean values and standard deviation for the data sets
     energy_w_ilmenite_mu = np.mean(energy_w_ilmenite, axis=0)
     energy_slice_mu = np.mean(energy_slice, axis=0)
 
     energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)
     energy_slice_std = np.std(energy_slice, axis=0)
 
+    #reference energy with unchanged parameters
     ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
 
 
@@ -168,7 +181,7 @@ def monte_carlo_estimation_all_params():
 
 
 
-    # Plot energy w. errors
+    # Plot energy split at 10% ilmenite w. errors
     ax1.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
             energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))), capsize=5, color=colors_bars, label=processes)
     ax1.set_yscale('log')
@@ -183,25 +196,24 @@ def monte_carlo_estimation_all_params():
     plt.show()
 
     # Plot distributions
-    #fig2, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
-
-    '''for process, _ax, name in zip(energy_slice.T, axs.ravel(), processes):
+    '''fig2, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
+    for process, _ax, name in zip(energy_slice.T, axs.ravel(), processes):
         sns.histplot(process, ax=_ax)
         _ax.set_title(name)
     plt.show()'''
 
 
 
-''' Function: monte_carlo_estimation_individual_params()
-    runs a monte carlo estimation for parameters in the reactor module specifically, 
-    as the reactor module exhibits the highest uncertainty out of all the considered modules.
-    individual parameters are varied one by one to evaluate the impact of different parameters on the model
-'''
+
 def monte_carlo_estimation_individual_params():
+    ''' runs a monte carlo estimation for parameters in the reactor module specifically, 
+    as the reactor module exhibits the highest uncertainty out of all the considered modules.
+    individual parameters are varied one by one to evaluate the impact of different parameters on the model'''
 
     processes = ["Excavation", "Transportation", "Reactor",
                  "Electrolysis", "Liquefaction", "Storage"]
-    N = 3
+    N = 40
+    
     # dictionary for the parameters to be varied of structure:  "Name":(lower bound, assumed value, upper bound)
     param_dict = {"batch_reaction_time_in_hours":   [0.5, 2.5, 4.5],
                   "CFI_thickness":   [0.02, 0.06, 0.1],
@@ -215,8 +227,7 @@ def monte_carlo_estimation_individual_params():
                   }
 
     # dictionary to write the results
-    result_dict = {"ilmenite_grades"
-                   "batch_reaction_time_in_hours":   [],
+    result_dict = {"batch_reaction_time_in_hours":   [],
                    "CFI_thickness":   [],
                    "HTMLI_thickness": [],
                    "delta_T_insulation": [],
@@ -230,24 +241,25 @@ def monte_carlo_estimation_individual_params():
 
     # iterating through the parameter dictionary, varying one parameter at a time
     for key in param_dict:
-
+        print(key)
         energy_w_ilmenite = []
         energy_slice = []
         assumed_value = param_dict[key][1]
 
         for i in range(0, N):
+            #randomising the current varied parameter in the range specified in param_dict
             param_dict[key][1] = random.uniform(param_dict[key][0], param_dict[key][2])
+
+            #calculating the energy for the current parameter variation
             ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
                 batch_reaction_time_in_hours=param_dict["batch_reaction_time_in_hours"][1], CFI_thickness=param_dict["CFI_thickness"][1], HTMLI_thickness=param_dict["HTMLI_thickness"][1], delta_T_insulation=param_dict["delta_T_insulation"][1], reactor_heat_up_time_in_hours=param_dict["reactor_heat_up_time_in_hours"][1], T_regolith_in=param_dict["T_regolith_in"][1], T_pre_heater=param_dict["T_pre_heater"][1], benef_ilmenite_recovery=param_dict["benef_ilmenite_recovery"][1], enrichment_factor=param_dict["enrichment_factor"][1])
             energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
             energy_slice.append(energy)
 
+        #resetting the assumed parameter of the current varied parameter
         param_dict[key][1] = assumed_value
         energy_w_ilmenite = np.array(energy_w_ilmenite)
         energy_slice = np.array(energy_slice)
-
-        energy_w_ilmenite_mu = np.mean(energy_w_ilmenite, axis=0)
-        energy_slice_mu = np.mean(energy_slice, axis=0)
 
         energy_w_ilmenite_std = np.std(energy_w_ilmenite, axis=0)
         energy_slice_std = np.std(energy_slice, axis=0)
@@ -255,20 +267,6 @@ def monte_carlo_estimation_individual_params():
         result_dict[key] = [energy_slice_std, energy_w_ilmenite_std]
 
         '''
-        # Plot total energy w. errors
-        plt.errorbar(ilmenite_grade_list, y=energy_as_func_of_ilmenite_list,
-                    yerr=energy_w_ilmenite_std)
-        plt.gca().set_title('Total energy w. errors')
-        plt.show()
-
-        
-        # Plot energy w. errors
-        plt.bar(processes, height=energy, yerr=(abs(energy_slice_std+(energy -
-                energy_slice_mu)), abs(energy_slice_std-(energy-energy_slice_mu))))
-        plt.gca().set_title('Energy w. errors')
-        plt.show()
-        
-
         # Plot distributions
         fig, axs = plt.subplots(ncols=3, nrows=2, figsize=(15, 8))
 
@@ -277,8 +275,9 @@ def monte_carlo_estimation_individual_params():
             _ax.set_title(name)
         plt.show()
         '''
+    
     # plot list of total errors for different varied variables
-    '''plt.scatter(ilmenite_grade_list, result_dict["batch_reaction_time_in_hours"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "batch_reaction_time_in_hours")
+    plt.scatter(ilmenite_grade_list, result_dict["batch_reaction_time_in_hours"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "batch_reaction_time_in_hours")
     plt.scatter(ilmenite_grade_list, result_dict["CFI_thickness"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "CFI_thickness")
     plt.scatter(ilmenite_grade_list, result_dict["HTMLI_thickness"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "HTMLI_thickness")
     plt.scatter(ilmenite_grade_list, result_dict["delta_T_insulation"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "delta_T_insulation")
@@ -286,8 +285,8 @@ def monte_carlo_estimation_individual_params():
     plt.scatter(ilmenite_grade_list, result_dict["T_regolith_in"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "T_regolith_in")
     plt.scatter(ilmenite_grade_list, result_dict["T_pre_heater"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "T_pre_heater")
     plt.scatter(ilmenite_grade_list, result_dict["enrichment_factor"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "enrichment_factor")
-    plt.scatter(ilmenite_grade_list, result_dict["benef_ilmenite_recovery"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "benef_ilmenite_recovery")'''
-
+    plt.scatter(ilmenite_grade_list, result_dict["benef_ilmenite_recovery"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "benef_ilmenite_recovery")
+    '''
     # plot 10% ilmenite slice
     plt.scatter(10, 100*result_dict["batch_reaction_time_in_hours"][0]
                 [3]/energy[3], marker='x', label="batch_reaction_time_in_hours")
@@ -307,10 +306,10 @@ def monte_carlo_estimation_individual_params():
                 [3]/energy[3], marker='x', label="enrichment_factor")
     plt.scatter(10, 100*result_dict["benef_ilmenite_recovery"][0]
                 [3]/energy[3], marker='x', label="benef_ilmenite_recovery")
-
-    plt.gca().set_title('Errors for different variables')
+    '''
+    plt.gca().set_title('Standard deviation for individual varied parameters')
     plt.xlabel("ilmenite %")
-    plt.ylabel("Relative error of energy consumption in %")
+    plt.ylabel("standard deviation in %")
     plt.grid(axis="y")
     plt.legend()
     plt.show()

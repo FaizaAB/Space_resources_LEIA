@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jun 18 14:02:33 2022
-#H2_R2O2 model:    
-author: DL
+Created on Sat Jun 18 14:08:24 2022
+author: Anton Morlock, Fardin Ghaffari
 
 Version 1.0
 """
@@ -21,8 +20,8 @@ plt.rc('axes', axisbelow=True)
 viridis = cm.get_cmap('viridis', 12)
 muted = sns.color_palette(palette="muted", as_cmap=True)
 
-fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
-fig2, (ax3, ax4) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
+fig, (ax2, ax1) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
+fig2, (ax4, ax3) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
 
 ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
 
@@ -45,7 +44,7 @@ p1 = ax1.bar(energy_consumers_full, energy, color=colors_bars)
 
 '===================================plot options and labels bar plot (total energy)==================================='
 ax1.grid(axis="y")
-ax1.set_title('A', loc='left', fontsize =20)
+ax1.set_title('B', loc='left', fontsize =20)
 ax1.set_ylabel('kWh/kg LOX')
 fig.subplots_adjust(wspace=0.3, hspace=0.5)
 index = -1
@@ -89,7 +88,7 @@ p8 = ax2.bar(ilmenite_grade_list, energy_list[6], bottom=energy_list[0]+energy_l
 
 '====================================plot options stacked bar plot (total energy)====================================='
 ax2.grid(axis="y")
-ax2.set_title('B', loc='left', fontsize =20)
+ax2.set_title('A', loc='left', fontsize =20)
 ax2.set_xlabel("Ilmenite head grade [wt%]")
 ax2.set_ylabel('kWh/kg LOX')
 ax2.set_xticks([1,3,5,7,9,11,13,15])
@@ -118,7 +117,7 @@ p3 = ax3.bar(reactor_energy_sinks, reactor_energies, color = reactor_colors)
 
 '==================================plot options and labels bar plot (reactor energy)=================================='
 ax3.grid(axis="y")
-ax3.set_title('A',loc='left', fontsize =20)
+ax3.set_title('B',loc='left', fontsize =20)
 ax3.set_ylabel('kWh/kg LOX')
 index = -1
 for bar in p3:
@@ -166,7 +165,7 @@ ax4.set_xlabel("Ilmenite head grade [wt%]")
 ax4.set_ylabel('kWh/kg LOX')
 ax4.set_xticks([1,3,5,7,9,11,13,15])
 ax4.set_xlim((0.75, 15.25))
-ax4.set_title('B',loc='left', fontsize =20)
+ax4.set_title('A',loc='left', fontsize =20)
 
 
 '===========================================global plot options/formatting============================================'

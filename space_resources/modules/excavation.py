@@ -1,6 +1,6 @@
 """
 
-author: DD
+author: David Dickson
 
 Version 1.0
 

@@ -2,7 +2,7 @@
 """
 Created on Thu Aug 18 18:24:21 2022
 
-@author: fardi
+@author: Baptiste Valentin
 """
 # imports
 import math

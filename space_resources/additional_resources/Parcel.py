@@ -5,7 +5,7 @@ Description:
     is processed and passed through the various systems to be produce 
     oxygen. 
 
-@author: DL
+@author: Dorian Leger
 @date: 22/07/2021
 """
 import excavation_model_script
