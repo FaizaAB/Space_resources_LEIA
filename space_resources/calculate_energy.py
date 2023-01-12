@@ -6,21 +6,13 @@ author: DL
 
 Version 1.0
 """
-import matplotlib.pyplot as plt
-import numpy
-import seaborn as sns
-from matplotlib import cm
-from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
-import modules.H2_Reactor_1 as H2_Reactor_1
-import modules.Storage as Storage
-from modules.beneficiation_placeholder import *
+from modules.beneficiation import *
 from modules.electrolysis import electrolysis_energy_per_mol_H2O
-from modules.excavation_new import *
-from modules.H2_Reactor_1 import *
+from modules.excavation import *
+from modules.hydrogen_reduction import *
 from modules.liquefaction import liquefaction
 from modules.Storage import *
-#from modules.transportation import *
 from modules.transportation_onlyBeta import *
 
 forloops = False

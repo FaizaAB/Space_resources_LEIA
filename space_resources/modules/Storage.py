@@ -21,7 +21,7 @@ from scipy.optimize import curve_fit, fsolve
 
 
 SOLAR_INPUT = 1361  # [W/m^2]
-sigma = 5.6703744e-8  # [W/(m^2*K^4)] Stefan-Boltzmann-Constant 😀
+sigma = 5.6703744e-8  # [W/(m^2*K^4)] Stefan-Boltzmann-Constant 
 VIEW_FACTOR_SUN_TANK = 0.5  # [-]
 LUNAR_GRAVITY = 1.625  # [m/s^2]
 # [J/(kg*K)] Assumed to be constant (conservative assumption)
@@ -137,6 +137,16 @@ def get_Energy_per_kg_LOX(vip_thickness,vip_thermal_conductivity, vip_emissivity
     heat_flux_into_tank_calculation(vip_thermal_conductivity)
     boil_off_rate_calculation()
     zero_boil_off_system_power_consumption(cryocooler_efficiency)
+
+    "================READOUTS==============="
+    #print("LOX_mass =", LOX_tank["liquid_oxygen"]["mass"])
+    #print("mLOX_produced_in_storage_time = ", zero_boil_off_system["mLOX_produced_in_storage_time"])
+    #print("Q_flux_into_tank_sunlight =", heat_fluxes["Q_flux_into_tank_sunlight"])
+    #print("Q_flux_into_tank_shadow =", heat_fluxes["Q_flux_into_tank_shadow"])
+    #print("Power_consumption =", zero_boil_off_system["Power_consumption"])
+    #print("Energy =", zero_boil_off_system["Energy"])
+    #print("Energy_per_kg_LOX =", zero_boil_off_system["Energy_per_kg_LOX"])
+
 
     return zero_boil_off_system["Energy_per_kg_LOX"]
 
@@ -470,7 +480,7 @@ def zero_boil_off_system_power_consumption(cryocooler_efficiency=0.1):
     zero_boil_off_system["Energy_per_kg_LOX"] = Energy_per_kg_LOX
 
 
-def __main__():
+def main():
 
     lox_tank_geometry_calculation(vip_thickness=0.025)
     heat_transfer_coefficient_calculation()
@@ -481,14 +491,3 @@ def __main__():
     boil_off_rate_calculation()
     zero_boil_off_system_power_consumption()
 
-    "================READOUTS==============="
-    #print("LOX_mass =", LOX_tank["liquid_oxygen"]["mass"])
-    #print("mLOX_produced_in_storage_time = ", zero_boil_off_system["mLOX_produced_in_storage_time"])
-    #print("Q_flux_into_tank_sunlight =", heat_fluxes["Q_flux_into_tank_sunlight"])
-    #print("Q_flux_into_tank_shadow =", heat_fluxes["Q_flux_into_tank_shadow"])
-    #print("Power_consumption =", zero_boil_off_system["Power_consumption"])
-    #print("Energy =", zero_boil_off_system["Energy"])
-    #print("Energy_per_kg_LOX =", zero_boil_off_system["Energy_per_kg_LOX"])
-
-
-__main__()
