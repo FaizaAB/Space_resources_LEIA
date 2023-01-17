@@ -1,9 +1,8 @@
-
 # -*- coding: utf-8 -*-
 """
 Created on Thu Aug 18 18:24:21 2022
 
-@author: fardi
+@author: Baptiste Valentin
 """
 # imports
 import math
@@ -18,10 +17,10 @@ import warnings
 g = 1.62  #1.62  # Gravity (m/s2)
 rho = 1600  #1600  # Density (kg/m3), 1600 is taken as reference.
 n = 1  # Exponent
-kc = 1400  # Cohesion modulus (N/m^n+1) '#2100
+kc = 2100  # Cohesion modulus (N/m^n+1) '#2100
 kphi = 820000  # Friction modulus (N/m^n+2)
 c = 170  # Cohesion (Pa)
-phi = math.radians(37)  # Friction angle (rad) 'CHANGE IT TO 45? 37 before
+phi = math.radians(45)  # Friction angle (rad) 'CHANGED IT TO 45. 37 before
 k = 18e-3  # Shear modulus (m)
 Nc = 70.1  # Coefficient based on phi
 Ny = 68.1  # Coefficient based on phi
@@ -120,7 +119,7 @@ def drawbar_pull(slip, mass, b, r, slope, l, h):
 
 
 # Function that computes the energy requirements for a rover with a given slip, mass, velocity, wheel width, wheel radius, and slope.
-def energy_requirements(slip, mass, velocity, b, r, slope, l, h):
+def energy_requirements(slip, mass, velocity, b, r, slope, l, h, motor_efficiency=0.6):
     sol_theta0_front = root_scalar(fun_to_solve_front, args=(slip, mass, slope, l, h, b, r), method='toms748', bracket=[0, 1])
     z0_front = r * (1 - math.cos(sol_theta0_front.root))
     l0_front = sol_theta0_front.root * r
@@ -146,7 +145,7 @@ def energy_requirements(slip, mass, velocity, b, r, slope, l, h):
     # Traction effort (MF010: page 306)
     Ft_front = b * r * integrate.quad(fun_to_integrate_traction, 0, sol_theta0_front.root, args=(sol_theta0_front.root, slip, b, r))[0]
     Ft_rear = b * r * integrate.quad(fun_to_integrate_traction, 0, sol_theta0_rear.root, args=(sol_theta0_rear.root, slip, b, r))[0]
-    print("Tractive effort on front/rear wheels:", Ft_front, "[N] /", Ft_rear, "[N]")
+    #print("Tractive effort on front/rear wheels:", Ft_front, "[N] /", Ft_rear, "[N]")
 
     # Compaction resistance with these sinkages
     Rc_front = b * (kc / b + kphi) * (z0_front ** (n + 1)) / (n + 1)  # [N]
@@ -304,6 +303,36 @@ if continueBoolean2 == 1:
     plt.xlabel('Regolith mass [kg]')
     plt.show()  # it has the expected shape!
 
+def get_Beta(motor_efficiency=0.6, mRover=67):
+
+    velocity = 0.49  # [m/s], from "RASSOR, the reduced gravity excavator."
+    mRegolith = 90  # [kg] The rover is assumed to transport the maximum amount of regolith each time (from "RASSOR, the reduced gravity excavator.").
+    WheelRadius = 0.4318 / 2  # [m] Wheel radius (17 inches for the full wheel)
+    WheelWidth = 0.1  # [m] Wheel width (from the picture?)
+    wheelbase = 0.5  # [m]
+    heightCOG = 0.1  # [m]
+    Slope = 0  # [rad] The soil is assumed to be flat
+    # The CoG is assumed to be centered
+
+    DistanceToTravel = 1000  # [m]
+    MassOutwardTrip = mRover
+    MassReturnTrip = mRover + mRegolith
+
+    # Outward trip (without regolith)
+    RequiredSlipOutward = slip_required(MassOutwardTrip, WheelWidth, WheelRadius, Slope, wheelbase, heightCOG)
+    EnergyPerDistanceOutward = energy_requirements(RequiredSlipOutward, MassOutwardTrip, velocity, WheelWidth, WheelRadius, Slope, wheelbase, heightCOG,motor_efficiency)  # [J/m]
+    EnergyOutward = EnergyPerDistanceOutward * DistanceToTravel  # [J]
+
+    # Return trip (with regolith)
+    RequiredSlipReturn = slip_required(MassReturnTrip, WheelWidth, WheelRadius, Slope, wheelbase, heightCOG)
+    EnergyPerDistanceReturn = energy_requirements(RequiredSlipReturn, MassReturnTrip, velocity, WheelWidth, WheelRadius, Slope, wheelbase, heightCOG,motor_efficiency)  # [J/m]
+    EnergyReturn = EnergyPerDistanceReturn * DistanceToTravel  # [J]
+
+    # Round trip
+    EnergyRoundTrip = EnergyOutward + EnergyReturn  # [J] for a mass of regolith of 20 [kg] (max load), and a distance of 1 [km]
+    Beta = EnergyRoundTrip/(mRegolith*DistanceToTravel*3600)  # [kWh/kg/km]
+
+    return Beta
 
 if continueBoolean3 == 1:
     velocity = 0.49  # [m/s], from "RASSOR, the reduced gravity excavator."
@@ -323,7 +352,7 @@ if continueBoolean3 == 1:
 
     # Outward trip (without regolith)
     RequiredSlipOutward = slip_required(MassOutwardTrip, WheelWidth, WheelRadius, Slope, wheelbase, heightCOG)
-    EnergyPerDistanceOutward = energy_requirements(RequiredSlipOutward, MassOutwardTrip, velocity, WheelWidth, WheelRadius, Slope, wheelbase, heightCOG)  # [J/m]
+    EnergyPerDistanceOutward = energy_requirements(RequiredSlipOutward, MassOutwardTrip, velocity, WheelWidth, WheelRadius, Slope, wheelbase, heightCOG,motor_efficiency)  # [J/m]
     EnergyOutward = EnergyPerDistanceOutward * DistanceToTravel  # [J]
 
     # Return trip (with regolith)
@@ -334,20 +363,20 @@ if continueBoolean3 == 1:
     # Round trip
     EnergyRoundTrip = EnergyOutward + EnergyReturn  # [J] for a mass of regolith of 20 [kg] (max load), and a distance of 1 [km]
     Beta = EnergyRoundTrip/(mRegolith*DistanceToTravel*3600)  # [kWh/kg/km]
-    print("The total energy required for the round trip is:", EnergyRoundTrip/1000, "[kJ] (", EnergyOutward/1000, "[kJ] for the the outward trip,", EnergyReturn/1000, "[kJ] for the return trip).")
-    print("Hence, beta =", EnergyRoundTrip/(mRegolith*DistanceToTravel*3600), "[kWh/kg/km]")  # Looks good since Dorian got 5.4 [kJ/kg/km] which might be a slight over-estimate.
+    #print("The total energy required for the round trip is:", EnergyRoundTrip/1000, "[kJ] (", EnergyOutward/1000, "[kJ] for the the outward trip,", EnergyReturn/1000, "[kJ] for the return trip).")
+    #print("Hence, beta =", EnergyRoundTrip/(mRegolith*DistanceToTravel*3600), "[kWh/kg/km]")  # Looks good since Dorian got 5.4 [kJ/kg/km] which might be a slight over-estimate.
     
     # N.B.: transporting 40 kg of regolith requires:
             # either two rovers to transport it at the same time (energy required times 2),
             # either the same rover to perform two round trips (energy required times 2 because the distance is multiplied by 2).
 
     # Graph as a function of regolith mass (assume a distance of 1 [km])
-    mRegolithVector = np.arange(0, 50, 1) * 90  # [kg]
+    """mRegolithVector = np.arange(0, 50, 1) * 90  # [kg]
     plt.plot(mRegolithVector, Beta * mRegolithVector, label='Assumptions: \n ')
     plt.ylabel('Locomotion energy requirements [kJ/km]')
     plt.xlabel('Regolith mass [kg]')
     plt.legend(fancybox=True, framealpha=1, shadow=True, borderpad=1)
-    plt.show()  # it has the expected shape!
+    plt.show()  # it has the expected shape!"""
 
 
 if continueBoolean4 == 1:

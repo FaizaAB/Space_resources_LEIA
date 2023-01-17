@@ -2,7 +2,7 @@
 """
 Created on Mon Nov  1 23:43:17 2021
 
-@author: dleger
+@author: dorian leger
 
 testing push2
 """

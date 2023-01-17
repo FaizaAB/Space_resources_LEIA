@@ -4,6 +4,7 @@
 Description:
     This script is a first order model of the energy chain required to 
     produce oxygen from lunar regolith via carbothermal reduction. 
+Author: Dorian Leger
 """
 
 # if theres a problem with WX change your local region on windows to US /English
@@ -23,7 +24,7 @@ from matplotlib.backends.backend_wx import FigureCanvasWx as FigureCanvas
 from matplotlib.figure import Figure
 from numpy import arange, pi, sin
 
-from Parcel import *
+from additional_resources.Parcel import *
 
 
 def clear(): return os.system('cls')
