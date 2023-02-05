@@ -172,6 +172,7 @@ def monte_carlo_estimation_all_params():
     ax2.bar(ilmenite_grade_list, height=energy_as_func_of_ilmenite_list,
             yerr=(abs(energy_w_ilmenite_std+(energy_as_func_of_ilmenite_list -
                                              energy_w_ilmenite_mu)), abs(energy_w_ilmenite_std-(energy_as_func_of_ilmenite_list-energy_w_ilmenite_mu))), capsize=3, width=barwidth)
+    ax2.plot(ilmenite_grade_list, energy_w_ilmenite_mu, 'r.')
     ax2.set_ylabel('kWh/kg LOX')
     ax2.grid(axis="y")
     ax2.set_xticks([1,3,5,7,9,11,13,15])
@@ -315,5 +316,5 @@ def monte_carlo_estimation_individual_params():
     plt.show()
 
 
-#monte_carlo_estimation_all_params()
-monte_carlo_estimation_individual_params()
+monte_carlo_estimation_all_params()
+#monte_carlo_estimation_individual_params()
