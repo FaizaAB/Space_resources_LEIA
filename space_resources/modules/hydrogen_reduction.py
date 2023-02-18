@@ -461,13 +461,13 @@ for i in range(1, 100):
         surface_area_outer_HTMLI, view_factor_lunar_surface_reactor)
 
     T_outer_surface_HTMLI = outer_surface_heat_balance(
-        Q_flux_lunar_surface_sunlight, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI)
+        Q_flux_lunar_surface_shadow, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI)
 
     Q_flux_radiation_HTMLI, Q_flux_out = radiative_and_conductive_heat_flux_calculation(
         T_outer_surface_HTMLI, surface_area_outer_HTMLI, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI)
 
     Q_out_added_heat_up = energy_losses_during_heat_up_calculation(
-        Q_flux_lunar_surface_sunlight, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI, reactor_heat_up_time_in_hours)
+        Q_flux_lunar_surface_shadow, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI, reactor_heat_up_time_in_hours)
 
     energy_to_heat_regolith_batch_per_kg, energy_to_heat_regolith_batch = energy_to_heat_regolith_batch_calculation(
         mass_regolith_batch, T_regolith_in, ilmenite_percentage)
@@ -554,13 +554,13 @@ def create_rego_heat_list(batch_reaction_time_in_hours, CFI_thickness, HTMLI_thi
             surface_area_outer_HTMLI, view_factor_lunar_surface_reactor)
 
         T_outer_surface_HTMLI = outer_surface_heat_balance(
-            Q_flux_lunar_surface_sunlight, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI)
+            Q_flux_lunar_surface_shadow, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI)
 
         Q_flux_radiation_HTMLI, Q_flux_out = radiative_and_conductive_heat_flux_calculation(
             T_outer_surface_HTMLI, surface_area_outer_HTMLI, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI)
 
         Q_out_added_heat_up = energy_losses_during_heat_up_calculation(
-            Q_flux_lunar_surface_sunlight, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI, reactor_heat_up_time_in_hours)
+            Q_flux_lunar_surface_shadow, inner_radius_CFI, outer_radius_CFI, inner_radius_HTMLI, outer_radius_HTMLI, surface_area_outer_HTMLI, reactor_heat_up_time_in_hours)
 
         energy_to_heat_regolith_batch_per_kg, energy_to_heat_regolith_batch = energy_to_heat_regolith_batch_calculation(
             mass_regolith_batch, T_regolith_in, ilmenite_percentage)
@@ -601,6 +601,8 @@ def create_rego_heat_list(batch_reaction_time_in_hours, CFI_thickness, HTMLI_thi
 '=================='
 
 #print('energy_to_heat_hydrogen_at_10_perc_ilm =',energy_to_heat_hydrogen_at_10_perc_ilm)
+#print("Q_flux_lunar_surface_sunlight = ",Q_flux_lunar_surface_sunlight)
+#print("Q_flux_lunar_surface_shadow = ",Q_flux_lunar_surface_shadow)
 #print("Q_out_added_heat_up = ",Q_out_added_heat_up)
 #print("Q_lost_during_reaction = ",Q_lost_during_reaction)
 #print("Q_total_lost = ",Q_total_lost)

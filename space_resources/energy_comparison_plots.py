@@ -23,7 +23,7 @@ muted = sns.color_palette(palette="muted", as_cmap=True)
 fig, (ax2, ax1) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
 fig2, (ax4, ax3) = plt.subplots(nrows=1, ncols=2, figsize=(9, 5))
 
-ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite()
+ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy, total_energy_as_func_of_ilmenite_list, S_out_dioxy_kg_list = energy_as_func_of_ilmenite()
 
 
 '=================================Color palette and lists for bar plot (total energy)================================='
@@ -187,6 +187,13 @@ plt.savefig('Result_figure.png', dpi=200, bbox_inches='tight')
 plt.show()
 plt.close()
 
+'===========================================Total energy and oxygen output over ilmenite plot============================================'
+'''energy_per_kg_LOX = [total_energy_as_func_of_ilmenite_list[i]/S_out_dioxy_kg_list[i] for i in range(0,len(S_out_dioxy_kg_list))]
+plt.plot(ilmenite_grade_list, total_energy_as_func_of_ilmenite_list,
+         ilmenite_grade_list, S_out_dioxy_kg_list,
+         ilmenite_grade_list, energy_per_kg_LOX)
+plt.show()
+plt.close()'''
 
 
 '''
