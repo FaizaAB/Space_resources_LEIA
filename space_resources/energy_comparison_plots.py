@@ -196,8 +196,7 @@ plt.show()
 plt.close()'''
 
 
-'''
-# Define fitting function for energy as function of ilmenite %
+'''# Define fitting function for energy as function of ilmenite %
 def func(i, a, c):
     return a/i + c
 
@@ -207,11 +206,11 @@ def func(i, a, c):
 popt, pcov = curve_fit(func, ilmenite_grade_list,
                        energy_as_func_of_ilmenite_list)
 # Evaluate and plot function with the optimal parameters
-# print(popt[0],popt[1])
+print(popt[0],popt[1])
 funcdata_energy_as_function_of_ilmenite = func(
     ilmenite_grade_list, popt[0], popt[1])
-#plt.plot(ilmenite_grade_list,funcdata_energy_as_function_of_ilmenite,label="energy as function of ilmenite %")
-# plt.show()
-'''
+plt.plot(ilmenite_grade_list,funcdata_energy_as_function_of_ilmenite,label="energy as function of ilmenite %")
+plt.show()'''
+
 
 print("\n end")
