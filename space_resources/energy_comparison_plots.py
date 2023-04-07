@@ -107,16 +107,19 @@ ax2.legend([handles[idx] for idx in order],[labels[idx] for idx in order])
 
 '================================Color palette and lists for bar plot (reactor energy)================================'
 reactor_energy_sinks = ["Hydrogen heating", "Insulation heating",
-                        "Endothermic reaction", "Insulation heat loss", "Regolith heat up"]
-reactor_energies = [energy_to_heat_hydrogen_at_10_perc_ilm, total_energy_to_heat_insulation_at_10_perc_ilm,
-                    energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm, Q_total_lost_at_10_perc_ilm, energy_to_heat_regolith_batch_at_10_perc_ilm]
+                        "Endothermic reaction", "Insulation heat loss", "Regolith heating"]
+reactor_energy_sinks_bar_plot = ["Regolith heating", "Hydrogen heating", "Insulation heating",
+                        "Endothermic reaction", "Insulation heat loss"]
+reactor_energies = [energy_to_heat_regolith_batch_at_10_perc_ilm, energy_to_heat_hydrogen_at_10_perc_ilm, total_energy_to_heat_insulation_at_10_perc_ilm,
+                    energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm, Q_total_lost_at_10_perc_ilm]
 reactor_colors = [muted[3],muted[0],muted[1],muted[2],muted[7]]
+reactor_colors_bar_plot = [muted[7],muted[3],muted[0],muted[1],muted[2]]
 sum_energy_reactor = np.sum(reactor_energies)
 labels_reactor = np.round(reactor_energies/sum_energy_reactor*100, 1)
 
 
 '==============================================bar plot (reactor energy)=============================================='
-p3 = ax3.bar(reactor_energy_sinks, reactor_energies, color = reactor_colors)
+p3 = ax3.bar(reactor_energy_sinks_bar_plot, reactor_energies, color = reactor_colors_bar_plot)
 
 '==================================plot options and labels bar plot (reactor energy)=================================='
 ax3.grid(axis="y")
