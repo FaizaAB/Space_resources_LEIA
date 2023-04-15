@@ -106,14 +106,14 @@ ax2.legend([handles[idx] for idx in order],[labels[idx] for idx in order])
 
 
 '================================Color palette and lists for bar plot (reactor energy)================================'
-reactor_energy_sinks = ["Hydrogen heating", "Insulation heating",
-                        "Endothermic reaction", "Insulation heat loss", "Regolith heating"]
-reactor_energy_sinks_bar_plot = ["Regolith heating", "Hydrogen heating", "Insulation heating",
-                        "Endothermic reaction", "Insulation heat loss"]
-reactor_energies = [energy_to_heat_regolith_batch_at_10_perc_ilm, energy_to_heat_hydrogen_at_10_perc_ilm, total_energy_to_heat_insulation_at_10_perc_ilm,
-                    energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm, Q_total_lost_at_10_perc_ilm]
-reactor_colors = [muted[3],muted[0],muted[1],muted[2],muted[7]]
-reactor_colors_bar_plot = [muted[7],muted[3],muted[0],muted[1],muted[2]]
+reactor_energy_sinks = ["Hydrogen heating", "Insulation heat loss",
+                        "Endothermic reaction", "Regolith heating"]
+reactor_energy_sinks_bar_plot = ["Regolith heating", "Hydrogen heating",
+                        "Insulation heat loss","Endothermic reaction"]
+reactor_energies = [energy_to_heat_regolith_batch_at_10_perc_ilm, energy_to_heat_hydrogen_at_10_perc_ilm, Q_total_lost_at_10_perc_ilm+total_energy_to_heat_insulation_at_10_perc_ilm,
+                    energy_endothermic_ilmenite_H2_reaction_at_10_perc_ilm]
+reactor_colors = ['#82C3EC','#4B56D2','#000000','#A9A9A9']
+reactor_colors_bar_plot = ['#A9A9A9','#82C3EC','#4B56D2','#000000']
 sum_energy_reactor = np.sum(reactor_energies)
 labels_reactor = np.round(reactor_energies/sum_energy_reactor*100, 1)
 
@@ -144,6 +144,7 @@ energy_to_heat_hydrogen_list = np.array(energy_to_heat_hydrogen_list[5:95:3])
 total_energy_to_heat_insulation_list = np.array(total_energy_to_heat_insulation_list[5:95:3])
 energy_endothermic_ilmenite_H2_reaction_list = np.array(energy_endothermic_ilmenite_H2_reaction_list[5:95:3])
 Q_total_lost_list = np.array(Q_total_lost_list[5:95:3])
+Insulation_heat_lost_list = total_energy_to_heat_insulation_list + Q_total_lost_list
 energy_to_heat_regolith_batch_list = np.array(energy_to_heat_regolith_batch_list[5:95:3])
 energy_list_reactor = np.sum([energy_to_heat_hydrogen_list,total_energy_to_heat_insulation_list,energy_endothermic_ilmenite_H2_reaction_list,Q_total_lost_list,energy_to_heat_regolith_batch_list],axis=0)
 
@@ -153,20 +154,18 @@ energy_list_reactor = np.sum([energy_to_heat_hydrogen_list,total_energy_to_heat_
 barwidth_2 = 12/len(ilmenite_grade_list)
 b1 = ax4.bar(ilmenite_grade_list,
              energy_to_heat_hydrogen_list, color=reactor_colors[0], label=reactor_energy_sinks[0], width=barwidth)
-b2 = ax4.bar(ilmenite_grade_list, total_energy_to_heat_insulation_list,
+b2 = ax4.bar(ilmenite_grade_list, Insulation_heat_lost_list,
              bottom=energy_to_heat_hydrogen_list, color=reactor_colors[1], label=reactor_energy_sinks[1], width=barwidth)
 b3 = ax4.bar(ilmenite_grade_list, energy_endothermic_ilmenite_H2_reaction_list, bottom=energy_to_heat_hydrogen_list
-             + total_energy_to_heat_insulation_list, color=reactor_colors[2], label=reactor_energy_sinks[2], width=barwidth)
-b4 = ax4.bar(ilmenite_grade_list, Q_total_lost_list, bottom=energy_to_heat_hydrogen_list + total_energy_to_heat_insulation_list +
+             + Insulation_heat_lost_list, color=reactor_colors[2], label=reactor_energy_sinks[2], width=barwidth)
+b4 = ax4.bar(ilmenite_grade_list, energy_to_heat_regolith_batch_list, bottom=energy_to_heat_hydrogen_list + Insulation_heat_lost_list +
              energy_endothermic_ilmenite_H2_reaction_list, color=reactor_colors[3], label=reactor_energy_sinks[3], width=barwidth)
-b4 = ax4.bar(ilmenite_grade_list, energy_to_heat_regolith_batch_list, bottom=energy_to_heat_hydrogen_list + total_energy_to_heat_insulation_list +
-             energy_endothermic_ilmenite_H2_reaction_list+Q_total_lost_list, color=reactor_colors[4], label=reactor_energy_sinks[4], width=barwidth)
 
 
 '===================================plot options stacked bar plot (reactor energy)===================================='
 
 handles, labels = ax4.get_legend_handles_labels()
-order = [4,3,2,1,0]
+order = [3,2,1,0]
 
 ax4.legend([handles[idx] for idx in order],[labels[idx] for idx in order])
 ax4.grid(axis="y")
@@ -186,7 +185,8 @@ plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,
 plt.setp(ax4.xaxis.get_majorticklabels(), rotation=0,
          ha="center", rotation_mode="anchor")
 fig2.subplots_adjust(wspace=0.3, hspace=0.5)
-plt.savefig('Result_figure.png', dpi=200, bbox_inches='tight')
+fig.savefig('Result_figure_energy_comparison', dpi=1200, bbox_inches='tight')
+fig2.savefig('Result_figure_reactor_energies.png', dpi=1200, bbox_inches='tight')
 plt.show()
 plt.close()
 
