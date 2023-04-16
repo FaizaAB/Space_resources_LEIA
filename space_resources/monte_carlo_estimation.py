@@ -194,6 +194,7 @@ def monte_carlo_estimation_all_params():
     fig.autofmt_xdate()
     plt.setp(ax2.xaxis.get_majorticklabels(), rotation=0,
              ha="center", rotation_mode="anchor")
+    plt.savefig('Total energy with errorbars', dpi=1200, bbox_inches='tight')
     plt.show()
 
     # Plot distributions
@@ -213,7 +214,7 @@ def monte_carlo_estimation_individual_params():
 
     processes = ["Excavation", "Transportation", "Reactor",
                  "Electrolysis", "Liquefaction", "Storage"]
-    N = 40
+    N = 250
     
     # dictionary for the parameters to be varied of structure:  "Name":(lower bound, assumed value, upper bound)
     param_dict = {"batch_reaction_time_in_hours":   [0.5, 2.5, 4.5],
@@ -252,7 +253,7 @@ def monte_carlo_estimation_individual_params():
             param_dict[key][1] = random.uniform(param_dict[key][0], param_dict[key][2])
 
             #calculating the energy for the current parameter variation
-            ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy = energy_as_func_of_ilmenite(
+            ilmenite_grade_list, energy_list, energy_as_func_of_ilmenite_list, energy, total_energy_as_func_of_ilmenite_list, S_out_dioxy_kg_list = energy_as_func_of_ilmenite(
                 batch_reaction_time_in_hours=param_dict["batch_reaction_time_in_hours"][1], CFI_thickness=param_dict["CFI_thickness"][1], HTMLI_thickness=param_dict["HTMLI_thickness"][1], delta_T_insulation=param_dict["delta_T_insulation"][1], reactor_heat_up_time_in_hours=param_dict["reactor_heat_up_time_in_hours"][1], T_regolith_in=param_dict["T_regolith_in"][1], T_pre_heater=param_dict["T_pre_heater"][1], benef_ilmenite_recovery=param_dict["benef_ilmenite_recovery"][1], enrichment_factor=param_dict["enrichment_factor"][1])
             energy_w_ilmenite.append(energy_as_func_of_ilmenite_list)
             energy_slice.append(energy)
@@ -276,7 +277,8 @@ def monte_carlo_estimation_individual_params():
             _ax.set_title(name)
         plt.show()
         '''
-    
+    plt.figure(figsize=(8, 6))
+
     # plot list of total errors for different varied variables
     plt.scatter(ilmenite_grade_list, result_dict["batch_reaction_time_in_hours"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "batch_reaction_time_in_hours")
     plt.scatter(ilmenite_grade_list, result_dict["CFI_thickness"][1]/energy_as_func_of_ilmenite_list, marker = 'x', label = "CFI_thickness")
@@ -308,13 +310,14 @@ def monte_carlo_estimation_individual_params():
     plt.scatter(10, 100*result_dict["benef_ilmenite_recovery"][0]
                 [3]/energy[3], marker='x', label="benef_ilmenite_recovery")
     '''
-    plt.gca().set_title('Standard deviation for individual varied parameters')
+    #plt.gca().set_title('Influence of individual varied parameters')
     plt.xlabel("ilmenite %")
-    plt.ylabel("standard deviation in %")
+    plt.ylabel("Relative uncertainty caused by each parameter")
     plt.grid(axis="y")
     plt.legend()
+    plt.savefig('Influence of individual varied parameters', dpi=1200, bbox_inches='tight')
     plt.show()
 
 
-monte_carlo_estimation_all_params()
-#monte_carlo_estimation_individual_params()
+#monte_carlo_estimation_all_params()
+monte_carlo_estimation_individual_params()
