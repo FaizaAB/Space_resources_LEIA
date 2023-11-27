@@ -235,7 +235,7 @@ MinSlipEmpty = slip_required(mRover + mRegolith, gVal, WheelWidthVal, WheelRadiu
 EnergyReqTptPerDistEmpty = energy_requirements(MinSlipEmpty, mRover + mRegolith, velocityExcavation, WheelWidthVal, WheelRadiusVal, SlopeVal, wheelbaseVal,
                                                heightCOGVal, gVal, nVal, kcVal, kphiVal, cVal, kVal, phiVal, motor_efficiencyVal)  # [J/m] Energy requirements for transport during excavation (empty rover)
 
-EnergyReqTptEmpty = EnergyReqTptPerDistEmpty * digDistance  # [J]
+EnergyReqTptEmpty = EnergyReqTptPerDistEmpty * digDistance/8  # [J]
 
 # Full rover:
 
@@ -247,7 +247,7 @@ MinSlipFull = slip_required(mRover + mRegolith, gVal, WheelWidthVal, WheelRadius
 EnergyReqTptPerDistFull = energy_requirements(MinSlipFull, mRover + mRegolith, velocityExcavation, WheelWidthVal, WheelRadiusVal, SlopeVal, wheelbaseVal,
                                               heightCOGVal, gVal, nVal, kcVal, kphiVal, cVal, kVal, phiVal, motor_efficiencyVal)  # [J/m] Energy requirements for transport during excavation (full rover)
 
-EnergyReqTptFull = EnergyReqTptPerDistFull * digDistance  # [J]
+EnergyReqTptFull = EnergyReqTptPerDistFull * digDistance/8  # [J]
 
 # Mean of empty and full rover:
 
