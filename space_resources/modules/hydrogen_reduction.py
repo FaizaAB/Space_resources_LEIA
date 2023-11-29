@@ -56,7 +56,7 @@ relevant_lunar_surface_area = math.pi * relevant_lunar_surface_radius**2  # [m^2
 T_inner_wall_CFI = 1173  # [K]
 energy_to_heat_regolith_batch = 0  # [kWh]
 fill_level = 0.5
-oxygen_production_rate = 274  # [kg/day] (100 t/year)
+oxygen_production_rate = 274  # [kg/day] (100 t/year)  # check this number
 batch_reaction_time_in_hours = 2.5 
 
 
