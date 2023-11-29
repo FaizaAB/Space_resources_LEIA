@@ -94,7 +94,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.2, system_efficiency=0.
 
     energy_process_per_kg_O2, total_energy_per_kg_O2 = perform_calculation(0.1, rego_exca, rego_tran, rego_heat_list, water_elec, dioxy_liq, storage_cooling, ilmenite_conversion, enrichment_factor, benef_ilmenite_recovery, ilmenite_molar_kg_mass, dioxygen_molar_kg_mass, LUNAR_GRAVITY)
     energy_slice = energy_process_per_kg_O2.copy()
-    print(energy_slice)
+
     '================== loop over increasing ilmenite range ===================='
 
     # lists to include in energy as func of ilmenite graph
