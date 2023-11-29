@@ -21,7 +21,7 @@ vaporization_enthalpy_oxygen = 6800  # [J/mol]
 
 # CALCULATION
 
-def liquefaction(cryocooler_efficiency = 0.1, T_hot_reservoir_carnot_cycle = 233, T_of_incoming_oxygen = 340):
+def liquefaction(cryocooler_efficiency = 0.2, T_hot_reservoir_carnot_cycle = 233, T_of_incoming_oxygen = 340):
     """calculates the energy required to liquefy one mol of O2"""
     COP_carnot = T_cold_reservoir_carnot_cycle / \
         (T_hot_reservoir_carnot_cycle - T_cold_reservoir_carnot_cycle)

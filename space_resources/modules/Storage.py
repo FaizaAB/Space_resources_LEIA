@@ -84,7 +84,7 @@ LOX_tank = {"steel_wall": {  # steel tank wall
 }
 
 
-zero_boil_off_system = {"cryocooler_efficiency": 0.1,  # [-]
+zero_boil_off_system = {"cryocooler_efficiency": 0.2,  # [-]
                         "T_cold_reservoir_carnot_cycle": 80,  # [-]
                         # [-] Based on ISS radiators
                         "T_hot_reservoir_carnot_cycle": 233,
@@ -449,7 +449,7 @@ def boil_off_rate_calculation():
     LOX_tank["boil_off_rate_%_per_month_shadow"] = boil_off_rate_percent_per_month_shadow
 
 
-def zero_boil_off_system_power_consumption(cryocooler_efficiency=0.1):
+def zero_boil_off_system_power_consumption(cryocooler_efficiency=0.2):
     """calculates the power consumption of the zero boil off system of the LOX tank"""
 
     # VARIABLE INITIALIZATION

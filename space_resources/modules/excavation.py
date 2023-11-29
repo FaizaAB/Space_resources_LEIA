@@ -25,7 +25,7 @@ trenchDepthM = 0.1  # m
 
 radiusM = 0.15  # m
 
-extAngle = 10  # deg
+extAngle = 12.5  # deg
 
 intAngle = math.degrees(phiVal)  # 45  # deg
 

@@ -390,7 +390,7 @@ if continueBoolean4 == 1:
 
     velocity = 0.2  # [m/s], see "Regolith Advanced Surface Systems Operations Robot (RASSOR)"
     motor_efficiency = 0.6  #
-    mRover = 66  # [kg] Total mass of RASSOR2 + mass of regolith carried
+    mRover = 67  # [kg] Total mass of RASSOR2 + mass of regolith carried
     mRegolith = 20  # [kg] The rover is assumed to transport the maximum amount of regolith each time.
     WheelRadius = 0.4318 / 2  # [m] Wheel radius (17 inches for the full wheel)
     WheelWidth = 0.1  # [m] Wheel width (from the picture?)
