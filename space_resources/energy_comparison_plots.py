@@ -65,14 +65,15 @@ colors_stackplot = [viridis(0.2), "grey", "orange", "red", viridis(0.6), viridis
 
 energy_rearranged = np.array([energy_list[6], energy_list[5], energy_list[4], energy_list[1], energy_list[0], energy_list[2], energy_list[3]])
 legend_rearranged = np.array([legend_stackplot[6], legend_stackplot[5], legend_stackplot[4], legend_stackplot[1], legend_stackplot[0], legend_stackplot[2], legend_stackplot[3]])
-color_rearranged = np.flip(np.array([viridis(0.2), "grey", "orange", "red", viridis(0.45), viridis(0.6), viridis(0.95)]))
+
+colors = [viridis(0.95), viridis(0.6), viridis(0.45), "red", "orange", "grey", viridis(0.2)]
 
 '===========================================stacked bar plot (total energy)==========================================='
 barwidth = 12/len(ilmenite_grade_list)
 
 prev_energy = np.zeros(len(ilmenite_grade_list))
 bars = []
-for energy, legend, c in zip(energy_rearranged, legend_rearranged, color_rearranged):
+for energy, legend, c in zip(energy_rearranged, legend_rearranged, colors):
     bars.append(ax2.bar(ilmenite_grade_list, energy, bottom=prev_energy, color=c, label=legend, width=barwidth))
     prev_energy = prev_energy + energy
 
