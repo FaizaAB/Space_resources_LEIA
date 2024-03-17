@@ -431,9 +431,9 @@ Q_total_lost_list = []
 energy_to_heat_regolith_batch_list = []
 
 
-for i in range(1, 100):
+for i in range(1, 200):
 
-    ilmenite_percentage = i/100  # convert from percent to ratio
+    ilmenite_percentage = i/200  # convert from percent to ratio
 
     # Assign the values of the calculated in the function to use them later on
     ilmenite_conversion_percentage = ilmenite_to_water_conversion(
@@ -523,9 +523,9 @@ def create_rego_heat_list(batch_reaction_time_in_hours, CFI_thickness, HTMLI_thi
         computes energy requirements as a function of post beneficiation ilmenite percentage"""
 
     rego_heat_list = []
-    for i in range(1, 100):
+    for i in range(1, 200):
 
-        ilmenite_percentage = i/100  # convert from percent to ratio
+        ilmenite_percentage = i/200  # convert from percent to ratio
 
         # Assign the values of the calculated in the function to use them later on
         ilmenite_conversion_percentage = ilmenite_to_water_conversion(

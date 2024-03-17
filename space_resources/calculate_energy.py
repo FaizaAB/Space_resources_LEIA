@@ -9,6 +9,8 @@ Version 1.0
 DL test commit Dec 2nd 2023
 """
 
+#If new values for parameters are tried, modify the function call, not the function definition, as the function call overrites the default value from the function definition.
+#So it is safer to change the function call, if you want to make sure that the new value actually gets used. 
 
 from modules.beneficiation import *
 from modules.electrolysis import electrolysis_energy_per_mol_H2O
@@ -115,7 +117,7 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.2, system_efficiency=0.
     
     S_out_dioxy_kg_list = []
 
-    ilmenite_wt = np.linspace(0.01, 0.16, 31)
+    ilmenite_wt = np.linspace(enrichment_factor*2,199-199%enrichment_factor,199//enrichment_factor-1)/(enrichment_factor*200)
 
     for i, pre_benef_ilmenite_grade_loop in enumerate(ilmenite_wt):
 
