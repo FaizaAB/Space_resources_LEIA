@@ -502,7 +502,7 @@ for i in range(1, 200):
 
     # We want to compare the energy sinks in the reactor to each other at 10% ilmenite. With enrichment factor of 6,
     # we need to get the values from ilmenite percentage = 60%
-    if i == 60:
+    if i == 120:
         energy_to_heat_hydrogen_at_10_perc_ilm = energy_to_heat_hydrogen/oxygen_out_kg_batch
         total_energy_to_heat_insulation_at_10_perc_ilm = total_energy_to_heat_insulation / \
             oxygen_out_kg_batch
