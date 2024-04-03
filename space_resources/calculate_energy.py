@@ -4,9 +4,9 @@ Created on Sat Jun 18 14:02:33 2022
 #H2_R2O2 model:    
 author: Fardin Ghaffari, Anton Morlock, Dorian Leger
 
-Version 1.0
+Version 1.1
 
-DL test commit Dec 2nd 2023
+test april 3rd 2024
 """
 
 #If new values for parameters are tried, modify the function call, not the function definition, as the function call overrites the default value from the function definition.
