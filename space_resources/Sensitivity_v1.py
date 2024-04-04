@@ -199,7 +199,7 @@ print("plot")
 
 # Assuming 'matrix' is your DataFrame
 # Filtering out the rows for the specified parameters
-filtered_matrix = matrix[matrix['Parameter'].isin(['enrichment_factor', 'system_efficiency', 'batch_reaction_time_in_hours', 'CFI_thickness', 'delta_T_insulation'])]
+filtered_matrix = matrix[matrix['Parameter'].isin(['enrichment_factor', 'system_efficiency', 'batch_reaction_time_in_hours', 'CFI_thickness', 'T_pre_heater'])]
 
 colors = ['b', 'g', 'r', 'C1', 'm']  # Different colors for each parameter line
 
