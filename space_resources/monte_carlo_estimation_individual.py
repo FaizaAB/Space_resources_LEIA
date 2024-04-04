@@ -103,11 +103,15 @@ def simulate_events_simultaneous(range_dict, N=10, epsilon=0.00001):
         energy_total.append(energy_as_func_of_ilmenite_list)
         energy_per_process.append(energy_list)
 
+        print("i in C: ", i)
+
     energy_per_process = np.array(energy_per_process)
     energy_total = np.array(energy_total)
 
     result_dict = [energy_per_process, energy_total]
-
+    
+    
+    
     return ilmenite_grade_list, result_dict
 
 
@@ -131,6 +135,6 @@ def monte_carlo_estimation_all_params(N=10):
     return
 
 
-N = 5
+N = 1000
 #monte_carlo_estimation_individual(N=N)
 monte_carlo_estimation_all_params(N=N)
