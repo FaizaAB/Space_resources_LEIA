@@ -239,7 +239,7 @@ def heat_transfer_coefficient_calculation():
     # CALCULATION
     prandtl_number = LOX_DYNAMIC_VISCOSITY * \
         LOX_HEAT_CAPACITY/LOX_THERMAL_CONDUCTIVITY
-    grashof_number = (1/LOX_temperature) * LUNAR_GRAVITY * LOX_DENSITY**2 * (
+    grashof_number = 0.002 * LUNAR_GRAVITY * LOX_DENSITY**2 * (
         steel_wall_inner_temperature - LOX_temperature) * steel_wall_inner_radius**3/LOX_DYNAMIC_VISCOSITY**2
     nusselt_number = 0.00053 * (prandtl_number * grashof_number)**(1/2)
     heat_transfer_coefficient = nusselt_number * \
@@ -477,12 +477,12 @@ def zero_boil_off_system_power_consumption(cryocooler_efficiency=0.2):
         1000  # /1000 to convert from Wh to kWh
     Energy_per_kg_LOX = Energy/mLOX_produced_in_storage_time
 
-
+    print("ZBO", Energy_per_kg_LOX)
     # RETURNING VALUES TO DICTIONARY
     zero_boil_off_system["COP_Carnot"] = COP_Carnot
     zero_boil_off_system["COP"] = COP
     zero_boil_off_system["Power_consumption"] = Power_consumption
     zero_boil_off_system["Energy"] = Energy
     zero_boil_off_system["Energy_per_kg_LOX"] = Energy_per_kg_LOX
-
+    #print("ZBO", Energy_per_kg_LOX)
 

@@ -29,5 +29,6 @@ def electrolysis_energy_per_mol_H2O(system_efficiency = 0.6, verbose=False):
     electrolysis_energy_per_mol_H2O = electrolysis_energy_per_mol_H2
 
     if verbose:
-        print('electrolysis_energy_per_mol_H2O', electrolysis_energy_per_mol_H2O)
+        print('electrolysis_energy_per_mol_H2O', electrolysis_energy_per_mol_H2O, "en per kg LOX", electrolysis_energy_per_mol_H2O*2*1000/32)
+    print('electr_en_per_mol_H2O', electrolysis_energy_per_mol_H2O, "en per kg water", electrolysis_energy_per_mol_H2O*1000/18)
     return electrolysis_energy_per_mol_H2O

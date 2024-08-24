@@ -2,11 +2,11 @@
 """
 Created on Sat Jun 18 14:02:33 2022
 #H2_R2O2 model:    
-author: Fardin Ghaffari, Anton Morlock, Dorian Leger
+author: Dorian Leger, Fardin Ghaffari, Anton Morlock, 
 
-Version 1.1
+Version 2.0
 
-test april 3rd 2024
+test Aug 24 2024
 """
 
 #If new values for parameters are tried, modify the function call, not the function definition, as the function call overrites the default value from the function definition.
@@ -75,7 +75,7 @@ def perform_calculation(pre_benef_ilmenite_grade, rego_exca, rego_tran, rego_hea
     
 
     #for testing in April 2024 - DL
-    if pre_benef_ilmenite_grade==pre_benef_ilmenite_grade:
+    if pre_benef_ilmenite_grade==0.1:
         #print(water_elec)
         print("pre_ilm% :", pre_benef_ilmenite_grade*100, "post_ilm% :", post_benef_ilmenite_grade,"energy: ", round(total_energy_per_kg_O2,4), "kWh/kg LOX","\n")
         '''
@@ -196,6 +196,6 @@ def energy_as_func_of_ilmenite(cryocooler_efficiency = 0.2, system_efficiency=0.
     return ilmenite_grade_list, energy_list_per_kg_LOX, energy_as_func_of_ilmenite_list, energy_slice, total_energy_as_func_of_ilmenite_list, S_out_dioxy_kg_list
 
 
-test=False
+test=True
 if test==True:
     energy_as_func_of_ilmenite()

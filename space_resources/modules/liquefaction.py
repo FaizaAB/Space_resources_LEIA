@@ -29,4 +29,5 @@ def liquefaction(cryocooler_efficiency = 0.2, T_hot_reservoir_carnot_cycle = 233
     heat_removed_per_mol_O2 = heat_capacity_oxygen * \
         (T_of_incoming_oxygen - boiling_point_oxygen) + vaporization_enthalpy_oxygen
     work_per_mol_O2 = heat_removed_per_mol_O2/(COP*3.6*10**6)
+    print("Liq",work_per_mol_O2, " ", work_per_mol_O2*1000/32)
     return work_per_mol_O2
