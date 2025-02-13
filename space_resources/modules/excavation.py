@@ -8,14 +8,10 @@ Testing mod
 
 """
 
-
 import math as ma
-
-# To import !! ONLY WHEN USED IN calculate_energy.py!!
-from modules.transportation_onlyBeta import *
-# from transportation_onlyBeta import *  # To import  !! ONLY WHEN run locally!!
-
 import numpy as np
+
+from modules.transportation_onlyBeta import *
 
 
 # Excavation parameters
@@ -78,27 +74,16 @@ def Balovnev(reg_vars, reg_vars2, exc_vars, exc_vars2):
     r_scoop = 3.125/5.3125*R        # Length of side
 
     # bucket_excavation_arc = ma.acos((R - depth)/R)
-
     # bucket_drum_volume = (w*ma.pi*(R**2)*(bucket_excavation_arc/360) -
-
     #                1/2*w*(R**2)*ma.sin(bucket_excavation_arc)*
-
     #                cos(bucket_excavation_arc))
-
     # scoop_volume = (w*ma.pi*(r_scoop**2)*(62/360) -
-
     #                1/2*w*(r_scoop**2)*ma.sin(62*ma.pi/180)*ma.cos(62*ma.pi/180))
-
     # shovel_excavation_arc = ma.acos((r - depth)/r)
-
     # bucket_shovel_volume = (w*ma.pi*(r**2)*(shovel_excavation_arc) -
-
     #                1/2*w*(r**2)*ma.sin(shovel_excavation_arc)*
-
     #                ma.cos(shovel_excavation_arc))
-
     # prism_volume = bucket_shovel_volume - scoop_volume - bucket_drum_volume;
-
     # q = prism_volume*gam
 
     D = depth    # Length of side
@@ -139,8 +124,6 @@ def Balovnev(reg_vars, reg_vars2, exc_vars, exc_vars2):
 
 
 # Balovnev functions
-
-
 def A(x, f):
     ans = ((1 - ma.sin(f)*ma.cos(2*x))/(1 - ma.sin(f)))
     return ans
@@ -156,16 +139,11 @@ digOutputs = excavationMechanics(
     depthM, trenchDepthM, radiusM, extAngle, intAngle, cohCoeff, gVal, mRegolith)
 AlphaExc = 2.77778e-7*digOutputs[1]  # kWh/kg
 
-# Part added by Baptiste for adding the "transportation energy requirement while excavating"
-
 # [m/s] TO CROSSCHECK (the velocity during excavation)
 velocityExcavation = 0.01
 
-
 # Empty rover:
-
 mRegolith = 0  # [kg]
-
 MinSlipEmpty = slip_required(mRover + mRegolith, gVal, WheelWidthVal, WheelRadiusVal, SlopeVal, wheelbaseVal,
                              # The minimum slip when the rover is empty
                              heightCOGVal, nVal, kcVal, kphiVal, cVal, kVal, phiVal)
@@ -191,22 +169,15 @@ EnergyReqTptPerDistFull = energy_requirements(MinSlipFull, mRover + mRegolith, v
 EnergyReqTptFull = EnergyReqTptPerDistFull * digDistance/8  # [J]
 
 # Mean of empty and full rover:
-
 EnergyReqTpt = (EnergyReqTptEmpty+EnergyReqTptFull)/2  # [J]
-
 EnergyReqTpt = EnergyReqTpt * 2.77778e-7  # [kWh]
-
 AlphaTpt = EnergyReqTpt/mRegolith  # [kWh/kg]
 
-
 # Alpha taking into account both the excavation and the transportation during excavation
-
 Alpha = AlphaExc + AlphaTpt  # [kWh/kg]
 
 
 def get_Alpha(cohCoeff_input, intAngle_input, extAngle_input, motor_efficiency_input, mRover_input):
-
-    # print("in X alpha", cohCoeff_input) # for testing
     # empty rover
     mRegolith = 0  # [kg]
     MinSlipEmpty = slip_required(mRover_input + mRegolith, gVal, WheelWidthVal, WheelRadiusVal, SlopeVal, wheelbaseVal,
@@ -239,10 +210,3 @@ def get_Alpha(cohCoeff_input, intAngle_input, extAngle_input, motor_efficiency_i
 
     alpha_return = AlphaExc_out + AlphaTpt_out
     return alpha_return
-# Just to have an idea of their relative importance:
-
-# print("AlphaExc:", AlphaExc, "[kWh/kg]")
-
-# print("AlphaTpt:", AlphaTpt, "[kWh/kg]")
-
-# print("Alpha:", Alpha, "[kWh/kg]")
