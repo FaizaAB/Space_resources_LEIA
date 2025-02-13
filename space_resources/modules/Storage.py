@@ -58,14 +58,14 @@ This script can be used to assess the thermal performance of cryogenic storage s
 lunar environments and assist in designing thermal insulation strategies for space missions.
 """
 
-import math
 import csv
+import math
+
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
-from scipy.optimize import curve_fit, fsolve
 from scipy import integrate
-
+from scipy.optimize import curve_fit, fsolve
 
 "=================CONSTANTS=================="
 
