@@ -42,10 +42,10 @@ trip with a rover full of regolith.
 
 
 from scipy.optimize import root_scalar
-import warnings
 import scipy.integrate as integrate
 import numpy as np
 import math
+import warnings
 
 
 #################################### Definition of useful functions ##############################################
