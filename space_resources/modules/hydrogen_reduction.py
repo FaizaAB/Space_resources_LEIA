@@ -24,6 +24,7 @@ Outputs
 import csv
 import math
 import os
+from pathlib import Path
 
 import numpy as np
 import pandas
@@ -99,7 +100,13 @@ def ilmenite_to_water_conversion(batch_reaction_time_in_hours):
     """Calculation of how much ilmenite is converted/reacted to water inside the reactor"""
 
     # Import the ilmenite conversion csv file
-    with open(os.path.join("data", "Ilmenite_conversion.csv"), "r") as i:
+    # Build a repo-relative path (works when module is imported from elsewhere)
+    csv_path = Path(__file__).resolve().parents[2] / "data" / "Ilmenite_conversion.csv"
+    # Fallback: try current working directory 'data' if repo-relative path doesn't exist
+    if not csv_path.exists():
+        csv_path = Path("data") / "Ilmenite_conversion.csv"
+
+    with open(str(csv_path), "r", encoding="utf-8") as i:
         # save data into list
         ilmenite_conversion_rawdata = list(csv.reader(i, delimiter=";"))
 
@@ -317,13 +324,21 @@ def energy_losses_during_heat_up_calculation(Q_flux_lunar_surface_shadow, inner_
 def energy_to_heat_regolith_batch_calculation(mass_regolith_batch, T_regolith_in, ilmenite_percentage):
     """Energy to heat regolith batch"""
 
-    # Import Cp(T) data of lunar regolith
-    with open(os.path.join("data", "Cp_Data_Lunar_Regolith.csv"), "r") as i:
+    # Import Cp(T) data of lunar regolith and ilmenite
+    base_data_dir = Path(__file__).resolve().parents[2] / "data"
+    cp_regolith_path = base_data_dir / "Cp_Data_Lunar_Regolith.csv"
+    cp_ilmenite_path = base_data_dir / "Cp_Data_Ilmenite.csv"
+    # Fallback to working-directory 'data/' if repo-relative files aren't found
+    if not cp_regolith_path.exists():
+        cp_regolith_path = Path("data") / "Cp_Data_Lunar_Regolith.csv"
+    if not cp_ilmenite_path.exists():
+        cp_ilmenite_path = Path("data") / "Cp_Data_Ilmenite.csv"
+
+    with open(str(cp_regolith_path), "r", encoding="utf-8") as i:
         # save data into list
         Cp_rawdata = list(csv.reader(i, delimiter=";"))
 
-    # Import Cp(T) data of ilmenite
-    with open(os.path.join("data", "Cp_Data_Ilmenite.csv"), "r") as i:
+    with open(str(cp_ilmenite_path), "r", encoding="utf-8") as i:
         # save data into list
         Cp_ilmenite_rawdata = list(csv.reader(i, delimiter=";"))
 
@@ -539,9 +554,17 @@ for i in range(1, 200):
 # cwd = os.getcwd()
 df = pandas.DataFrame(
     data={"ilmenite_head_grade": ilmenite_grade_list, "rego_heat": rego_heat_list})
-# file_path = cwd+"/rego_heat_list.csv"
-df.to_csv(os.path.join("data", "rego_heat_list.csv"), sep=';', index=False)
-# print(file_path)
+# Ensure repo 'data' directory exists and write the CSV there (fall back to cwd/data)
+base_data_dir = Path(__file__).resolve().parents[2] / "data"
+if not base_data_dir.exists():
+    # attempt to create the directory; if that fails, fall back to './data'
+    try:
+        base_data_dir.mkdir(parents=True, exist_ok=True)
+    except Exception:
+        base_data_dir = Path("data")
+
+csv_out_path = base_data_dir / "rego_heat_list.csv"
+df.to_csv(str(csv_out_path), sep=';', index=False)
 
 
 def create_rego_heat_list(batch_reaction_time_in_hours, CFI_thickness, HTMLI_thickness, delta_T_insulation, reactor_heat_up_time_in_hours, T_regolith_in, T_pre_heater):
